@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AkunController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\LoginController;
@@ -27,5 +28,9 @@ Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('register', [RegisterController::class, 'index'])->name('register');
 Route::post('register/store', [RegisterController::class, 'store'])->name('register.store');
 
+// kategori
 Route::get('kategori', [KategoriController::class, 'index'])->name('kategori');
 Route::get('kategori/{id}/show', [KategoriController::class, 'show'])->name('kategori.show');
+
+// akun
+Route::get('akun', [AkunController::class, 'index'])->name('akun');

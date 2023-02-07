@@ -11,17 +11,21 @@
 
   @yield('style')
 </head>
-<body>
+<body class="font-sans">
   <div class="pb-16">
-    <div id="header-wrapper" class="w-full h-12 border-b flex justify-center items-center bg-white sticky top-0">
-      <div class="w-full flex justify-between items-center">
-        <div class="relative mx-1">
-          <input type="text" name="cari" id="cari" placeholder="Cari produk" class="h-8 w-52 pl-3 border rounded-3xl text-sm">
-          <i class="fa fa-search absolute right-3 top-1.5 text-slate-400 text-sm"></i>
-        </div>
-        <i class="fa fa-envelope mx-1 text-xl"></i>
-        <i class="fa fa-bell mx-1 text-xl"></i>
-        <i class="fa fa-bars mr-2 text-xl"></i>
+    <div id="menu_id" class="w-0 min-h-screen fixed z-10 top-0 overflow-x-hidden bg-white transition-all delay-150 duration-700">
+    {{-- <div id="menu_id" class="w-full fixed min-h-screen z-10 top-0 bg-slate-50 transition-all delay-150 duration-700"> --}}
+      <div id="btn_close" class="text-right mt-5">
+        <span class="text-2xl m-3 px-4 py-2 rounded-full border-b">X</span>
+      </div>
+      <div class="mt-5 border-b p-3">
+        <a href="{{ route('kategori') }}"><i class="fa fa-folder-tree w-8 text-center text-slate-500"></i> Kategori</a>
+      </div>
+      <div class="border-b p-3">
+        <a href="#"><i class="fa fa-list w-8 text-center text-slate-500"></i> Transaksi</a>
+      </div>
+      <div class="border-b p-3">
+        <a href="#"><i class="fa fa-money-bill-wave w-8 text-center text-slate-500"></i> Konfirmasi Pembayaran</a>
       </div>
     </div>
     @yield('content')
@@ -33,17 +37,28 @@
       <span class="text-xs">Home</span>
     </a>
     <a href="#" class="flex flex-col text-center w-full">
-      <i class="fa fa-list"></i>
+      <i class="fa-solid fa-rectangle-list"></i>
       <span class="text-xs">Transaksi</span>
     </a>
-    <a href="#" class="flex flex-col text-center w-full">
-      <i class="fa fa-sign-in"></i>
-      <span class="text-xs">Login</span>
-    </a>
-    <a href="#" class="flex flex-col text-center w-full">
-      <i class="fa fa-user-plus"></i>
-      <span class="text-xs">Register</span>
-    </a>
+    @auth
+      <a href="#" class="flex flex-col text-center w-full">
+        <i class="fa fa-comment-dots"></i>
+        <span class="text-xs">Chat</span>
+      </a>
+      <a href="{{ route('akun') }}" class="flex flex-col text-center w-full">
+        <i class="fa fa-user"></i>
+        <span class="text-xs">Akun</span>
+      </a>
+    @else
+      <a href="{{ route('login') }}" class="flex flex-col text-center w-full">
+        <i class="fa fa-sign-in"></i>
+        <span class="text-xs">Login</span>
+      </a>
+      <a href="{{ route('register') }}" class="flex flex-col text-center w-full">
+        <i class="fa fa-user-plus"></i>
+        <span class="text-xs">Register</span>
+      </a>
+    @endauth
   </div>
 
   {{-- swiper --}}
@@ -83,6 +98,22 @@
       } else {
         header.classList.remove("sticky");
       }
+    }
+
+    // menu
+    document.getElementById('menu').onclick = function() {
+      bukaNavigasi();
+    }
+    document.getElementById('btn_close').onclick = function() {
+      tutupNavigasi();
+    }
+
+    function bukaNavigasi() {
+      document.getElementById("menu_id").style.width = "100%";
+    }
+
+    function tutupNavigasi() {
+      document.getElementById("menu_id").style.width = "0%";
     }
   </script>
 </body>

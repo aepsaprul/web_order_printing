@@ -1,6 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
+
+@include('layouts.header')
+
 <div>
   <h1 class="text-center font-bold my-5 text-xl text-slate-500">Kategori {{ $kategori->nama }}</h1>
   <ul id="paginated-list" class="grid grid-cols-2 gap-2 m-2">

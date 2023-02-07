@@ -1,6 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
+
+@include('layouts.header')
+
 <div>
   <div class="swiper gambarSlider">
     <div class="swiper-wrapper">
