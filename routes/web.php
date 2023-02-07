@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
 use Illuminate\Support\Facades\Route;
@@ -16,9 +17,7 @@ use Monolog\Registry;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('login', [LoginController::class, 'index'])->name('login');
 Route::post('login/auth', [LoginController::class, 'auth'])->name('login.auth');
