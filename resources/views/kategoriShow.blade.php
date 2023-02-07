@@ -2,59 +2,22 @@
 
 @section('content')
 <div>
-  <div class="swiper gambarSlider">
-    <div class="swiper-wrapper">
-      @foreach ($slide as $item)
-        <div class="swiper-slide">
-          <img src="{{ url('http://localhost/abata_web_order_admin/public/img_slide/' . $item->gambar) }}" alt="slide">
-        </div>            
-      @endforeach
-    </div>
-  </div>
-</div>
-<div>
-  <h1 class="text-center font-bold my-5 text-xl text-slate-500">Kategori Produk</h1>
-  <div class="grid grid-cols-4 gap-3">
-    @foreach ($kategori as $item)
-      <a href="{{ route('kategori.show', $item->id) }}">
+  <h1 class="text-center font-bold my-5 text-xl text-slate-500">Kategori {{ $kategori->nama }}</h1>
+  <ul id="paginated-list" class="grid grid-cols-2 gap-2 m-2">
+    @foreach ($produk as $item)
+      <li>
         <div>
-          <div class="flex justify-center">
-            <img src="{{ url('http://localhost/abata_web_order_admin/public/img_kategori/' . $item->gambar) }}" alt="kategori" class="w-20">
-          </div>
-          <div class="text-center font-semibold mt-2">{{ $item->nama }}</div>
+          <img src="{{ $item->gambar }}" alt="gambar" class="w-48">
         </div>
-      </a>
+        <div class="text-sm text-center">{{ $item->nama }}</div>
+        <div class="text-sm text-center">{{ $item->harga }}</div>
+      </li>
     @endforeach
-  </div>
-</div>
-<div>
-  <h1 id="produk" class="text-center font-bold my-5 text-xl text-slate-500">Produk</h1>
-  <div>
-    <ul id="paginated-list" class="grid grid-cols-2 gap-2 m-2">
-      @foreach ($produk as $item)
-        <li>
-          <div>
-            <img src="{{ $item->gambar }}" alt="gambar" class="w-48">
-          </div>
-          <div class="text-sm text-center">{{ $item->nama }}</div>
-          <div class="text-sm text-center">{{ $item->harga }}</div>
-        </li>
-      @endforeach
-    </ul>  
-    <nav class="pagination-container">  
-      <div id="pagination-numbers" class="text-center">  
-      </div>
-    </nav>
-  </div>
-</div>
-<div>
-  <h1 class="text-center font-bold my-5 text-xl text-slate-500">Cara Pesan</h1>
-  <div><img src="{{ url('http://localhost/abata_web_order_admin/public/img_cara_pesan_gambar/' . $cara_pesan_gambar->gambar) }}" alt="gambar cara pesan" class="hidden"></div>
-  <div>
-    @foreach ($cara_pesan as $key => $item)
-      <div class="bg-slate-600 text-white m-3 p-2 rounded-sm"><p>{{ $key + 1 }}. {{ $item->nama }}</p></div>
-    @endforeach
-  </div>
+  </ul>  
+  <nav class="pagination-container">  
+    <div id="pagination-numbers" class="text-center">  
+    </div>
+  </nav>
 </div>
 @endsection
 

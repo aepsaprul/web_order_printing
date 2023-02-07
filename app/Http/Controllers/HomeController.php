@@ -15,7 +15,7 @@ class HomeController extends Controller
   {
     $slide = Slide::get();
     $kategori = Kategori::get();
-    $produk = Produk::limit(10)->get();
+    $produk = Produk::get();
     $cara_pesan = CaraPesan::get();
     $cara_pesan_gambar = CaraPesanGambar::first();
 
