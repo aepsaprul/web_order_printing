@@ -22,8 +22,8 @@ class RegisterController extends Controller
   {
     $validated = $request->validate([
       'nama_lengkap' => 'required|min:3|max:30',
-      'username' => 'required|alpha_dash|min:3|max:30',
-      'telepon' => 'required|numeric|digits_between:10,13|unique:customers',
+      // 'username' => 'required|alpha_dash|min:3|max:30',
+      // 'telepon' => 'required|numeric|digits_between:10,13|unique:customers',
       'email' => 'required|email|unique:customers',
       'password' => [
         'required',

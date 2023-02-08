@@ -9,3 +9,21 @@
     <i id="menu" class="fa fa-bars mr-2 text-xl"></i>
   </div>
 </div>
+
+<script>
+  // menu
+  document.getElementById('menu').onclick = function() {
+    bukaNavigasi();
+  }
+  document.getElementById('btn_close').onclick = function() {
+    tutupNavigasi();
+  }
+
+  function bukaNavigasi() {
+    document.getElementById("menu_id").style.width = "100%";
+  }
+
+  function tutupNavigasi() {
+    document.getElementById("menu_id").style.width = "0%";
+  }
+</script>

@@ -59,10 +59,47 @@
     @endforeach
   </div>
 </div>
+
+@include('layouts.navBawah')
+
 @endsection
 
 @section('script')
 <script>
+  // slider
+  var swiper = new Swiper(".gambarSlider", {
+    pagination: {
+      el: ".swiper-pagination",
+      clickable: true
+    },
+    loop: true,
+    autoplay: {
+      delay: 2500,
+      disableOnInteraction: false
+    },
+    navigation: {
+      nextEl: ".swiper-button-next",
+      prevEl: ".swiper-button-prev",
+    },
+  });
+
+  window.onscroll = function() {
+    myFunction();
+  };
+  
+  // header sticky
+  var header = document.getElementById("header-wrapper");
+  var sticky = header.offsetTop;
+
+  function myFunction() {
+    if (window.pageYOffset >= sticky) {
+      header.classList.add("sticky")
+    } else {
+      header.classList.remove("sticky");
+    }
+  }
+
+  // pagination
   const paginationNumbers = document.getElementById("pagination-numbers");
   const paginatedList = document.getElementById("paginated-list");
   const listItems = paginatedList.querySelectorAll("li");

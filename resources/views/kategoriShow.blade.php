@@ -22,6 +22,9 @@
     </div>
   </nav>
 </div>
+
+@include('layouts.navBawah')
+
 @endsection
 
 @section('script')

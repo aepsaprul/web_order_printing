@@ -19,4 +19,7 @@
     @endforeach
   </div>
 </div>
+
+@include('layouts.navBawah')
+
 @endsection

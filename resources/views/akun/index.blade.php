@@ -55,4 +55,6 @@
     <p class="p-2">Lorem ipsum dolor, sit amet consectetur adipisicing elit. A, nisi.</p>
   </div>
 </div>
+
+@include('layouts.navBawah')
 @endsection
