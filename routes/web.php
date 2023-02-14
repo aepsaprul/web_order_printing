@@ -4,6 +4,7 @@ use App\Http\Controllers\AkunController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\RegisterController;
 use Illuminate\Support\Facades\Route;
 use Monolog\Registry;
@@ -31,6 +32,10 @@ Route::post('register/store', [RegisterController::class, 'store'])->name('regis
 // kategori
 Route::get('kategori', [KategoriController::class, 'index'])->name('kategori');
 Route::get('kategori/{id}/show', [KategoriController::class, 'show'])->name('kategori.show');
+
+// produk detail
+Route::get('produk', [ProdukController::class, 'index'])->name('produk');
+Route::get('produk/{id}/show', [ProdukController::class, 'show'])->name('produk.show');
 
 // akun
 Route::get('akun', [AkunController::class, 'index'])->name('akun');

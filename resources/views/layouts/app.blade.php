@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Selamat Datang</title>
 
-  @vite('resources/css/app.css')
+  @vite(['resources/css/app.css', 'resources/js/app.js'])
   <link rel="stylesheet" href="{{ asset('swiper/swiper.css') }}">
 
   @yield('style')

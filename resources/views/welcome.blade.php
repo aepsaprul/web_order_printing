@@ -17,7 +17,7 @@
 </div>
 <div>
   <h1 class="text-center font-bold my-5 text-xl text-slate-500">Kategori Produk</h1>
-  <div class="grid grid-cols-4 gap-3">
+  <div class="grid grid-cols-4 gap-3 m-2">
     @foreach ($kategori as $item)
       <a href="{{ route('kategori.show', $item->id) }}">
         <div>
@@ -36,11 +36,13 @@
     <ul id="paginated-list" class="grid grid-cols-2 gap-2 m-2">
       @foreach ($produk as $item)
         <li>
-          <div>
-            <img src="{{ $item->gambar }}" alt="gambar" class="w-48">
-          </div>
-          <div class="text-sm text-center">{{ $item->nama }}</div>
-          <div class="text-sm text-center">{{ $item->harga }}</div>
+          <a href="{{ route('produk.show', [$item->id]) }}">
+            <div>
+              <img src="{{ $item->gambar }}" alt="gambar" class="w-48">
+            </div>
+            <div class="text-sm text-center">{{ $item->nama }}</div>
+            <div class="text-sm text-center">{{ $item->harga }}</div>
+          </a>
         </li>
       @endforeach
     </ul>  
