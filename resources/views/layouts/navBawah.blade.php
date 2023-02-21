@@ -1,4 +1,4 @@
-<div class="w-full fixed bottom-0 bg-white flex justify-between border-t py-2">
+<div class="w-full fixed bottom-0 bg-white flex justify-between border-t py-2 lg:hidden">
   <a href="{{ url('/') }}" class="flex flex-col text-center w-full">
     <i class="fa fa-home"></i>
     <span class="text-xs">Home</span>

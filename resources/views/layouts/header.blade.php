@@ -1,4 +1,4 @@
-<div id="header-wrapper" class="w-full h-12 border-b flex justify-center items-center bg-white sticky top-0">
+<div id="header-wrapper" class="w-full h-12 border-b flex justify-center items-center bg-white sticky top-0 lg:hidden">
   <div class="w-full flex justify-between items-center">
     <div class="relative mx-1">
       <input type="text" name="cari" id="cari" placeholder="Cari produk" class="h-8 w-64 pl-3 border rounded-3xl text-sm">
