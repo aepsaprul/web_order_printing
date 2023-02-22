@@ -3,6 +3,7 @@
 use App\Http\Controllers\AkunController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\KategoriController;
+use App\Http\Controllers\KeranjangController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\RegisterController;
@@ -36,6 +37,10 @@ Route::get('kategori/{id}/show', [KategoriController::class, 'show'])->name('kat
 // produk detail
 Route::get('produk', [ProdukController::class, 'index'])->name('produk');
 Route::get('produk/{id}/show', [ProdukController::class, 'show'])->name('produk.show');
+
+// keranjang
+Route::get('keranjang', [KeranjangController::class, 'index'])->name('keranjang');
+Route::post('keranjang/store', [KeranjangController::class, 'store'])->name('keranjang.store');
 
 // akun
 Route::get('akun', [AkunController::class, 'index'])->name('akun');

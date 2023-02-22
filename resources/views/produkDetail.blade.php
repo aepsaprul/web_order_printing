@@ -5,6 +5,9 @@
 @include('layouts.headerArrow')
 @include('layouts.headerLg')
 
+{{-- data --}}
+<input type="hidden" name="produk_id" id="produk_id" value="{{ $produk->id }}">
+
 <div class="lg:flex lg:justify-center">
   <div class="lg:w-4/5 lg:flex">
     <div class="lg:w-2/4">
@@ -77,8 +80,18 @@
         </div>
       </div>
       <div class="hidden w-full mt-2 lg:grid grid-cols-2 gap-4">
-        <button class="w-full p-1 rounded font-bold border-2 border-sky-600">Beli</button>
-        <button class="w-full bg-sky-600 text-white p-1 rounded font-bold"><i class="fa fa-shopping-cart"></i> Keranjang</button>
+        <div class="relative flex items-center justify-center">
+          <div id="loading_beli" class="hidden absolute">
+            <div class="flex items-center">
+              <div class="flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-tr from-indigo-500 to-slate-100 animate-spin mr-3">
+                <div class="h-2 w-2 rounded-full bg-white"></div>
+              </div>
+              <span>Loading. . .</span>
+            </div>
+          </div>
+          <button class="btn_beli w-full p-1 rounded font-bold border-2 border-sky-600">Beli</button>
+        </div>
+        <button id="btn_keranjang" class="w-full bg-sky-600 text-white p-1 rounded font-bold"><i class="fa fa-shopping-cart"></i> Keranjang</button>
       </div>
     </div>
   </div>
@@ -100,8 +113,19 @@
   </div>
 </div>
 <div class="w-full fixed bottom-0 bg-white border-t flex lg:hidden">
-  <button class="w-full m-3 p-1 rounded border-2 border-sky-600 font-bold">Beli</button>
-  <button class="w-full bg-sky-600 m-3 p-1 rounded text-white font-bold"><i class="fa fa-shopping-cart"></i> Keranjang</button>
+  <div class="w-full relative flex items-center justify-center">
+    <div id="loading_beli_sm" class="hidden absolute">
+      <div class="flex items-center">
+        <div class="flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-tr from-indigo-500 to-slate-100 animate-spin mr-3">
+          <div class="h-2 w-2 rounded-full bg-white"></div>
+        </div>
+        <span>Loading. . .</span>
+      </div>
+    </div>
+    {{-- <button class="btn_beli w-full p-1 rounded font-bold border-2 border-sky-600">Beli</button> --}}
+    <button class="btn_beli w-full m-3 p-1 rounded border-2 border-sky-600 font-bold">Beli</button>
+  </div>
+  <button id="btn_keranjang" class="w-full bg-sky-600 m-3 p-1 rounded text-white font-bold"><i class="fa fa-shopping-cart"></i> Keranjang</button>
 </div>
 
 @include('layouts.footer')
@@ -111,6 +135,12 @@
 @section('script')
 <script type="module">
   $(document).ready(function () {
+    $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
+
     const nominal_harga = $('.nominal_harga').text();
     $('.nominal_harga').html(afRupiah(nominal_harga));
     const nominal_total = $('.nominal_total').text();
@@ -121,7 +151,6 @@
         sisa 	= number_string.length % 3,
         rupiah 	= number_string.substr(0, sisa),
         ribuan 	= number_string.substr(sisa).match(/\d{3}/g);
-          
       if (ribuan) {
         let separator = sisa ? '.' : '';
         rupiah += separator + ribuan.join('.');
@@ -236,6 +265,42 @@
     })
     $('#input_counter').on('change', function () {
       console.log('input counter');
+    })
+
+    // btn beli
+    $('.btn_beli').on('click', function (e) {
+      e.preventDefault();
+      const produk_id = $('#produk_id').val();
+      const keterangan = $('#keterangan').val();
+      const input_counter = $('#input_counter').val();
+      const total = $('.nominal_total').text().replace('.','');
+
+      let formData = {
+        customer_id: 1,
+        produk_id: produk_id,
+        keterangan: keterangan,
+        qty: input_counter,
+        total: total
+      }
+      
+      $.ajax({
+        url: "{{ URL::route('keranjang.store') }}",
+        type: "post",
+        data: formData,
+        beforeSend: function () {
+          $('#loading_beli').removeClass('hidden');
+          $('#loading_beli_sm').removeClass('hidden');
+          $('.btn_beli').addClass('text-white');
+        },
+        success: function (response) {
+          setTimeout(() => {
+            $('#loading_beli').addClass('hidden');
+            $('#loading_beli_sm').addClass('hidden');
+            $('.btn_beli').removeClass('text-white');
+            window.location = "{{ URL::route('keranjang') }}";
+          }, 3000);
+        }
+      })
     })
   })
 </script>
