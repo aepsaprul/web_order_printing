@@ -5,8 +5,8 @@
         <img src="{{ asset('assets/logo.png') }}" alt="logo" class="w-16">
       </div>
       <div class="ml-10">
-        <a href="#" class="font-semibold mx-2">Home</a>
-        <a href="#" class="font-semibold mx-2">Produk</a>
+        <a href="{{ url('/') }}" class="font-semibold mx-2">Home</a>
+        <a href="{{ route('produk') }}" class="font-semibold mx-2">Produk</a>
         <a href="#" class="font-semibold mx-2">Cara Pesan</a>
         <a href="#" class="font-semibold mx-2">Konfirmasi Bayar</a>
       </div>

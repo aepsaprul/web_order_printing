@@ -3,27 +3,31 @@
 @section('content')
 
 @include('layouts.header')
+@include('layouts.headerLg')
 
-<div>
-  <h1 class="text-center font-bold my-5 text-xl text-slate-500">Kategori {{ $kategori->nama }}</h1>
-  <ul id="paginated-list" class="grid grid-cols-2 gap-2 m-2">
-    @foreach ($produk as $item)
-      <li>
-        <div>
-          <img src="{{ $item->gambar }}" alt="gambar" class="w-48">
-        </div>
-        <div class="text-sm text-center">{{ $item->nama }}</div>
-        <div class="text-sm text-center">{{ $item->harga }}</div>
-      </li>
-    @endforeach
-  </ul>  
-  <nav class="pagination-container">  
-    <div id="pagination-numbers" class="text-center">  
-    </div>
-  </nav>
+<div class="lg:flex lg:justify-center">
+  <div class="lg:w-4/5">
+    <h1 class="text-center font-bold my-5 text-xl lg:text-2xl text-slate-500">Kategori {{ $kategori->nama }}</h1>
+    <ul id="paginated-list" class="grid grid-cols-2 lg:grid-cols-5 2xl:grid-cols-6 gap-2 m-2">
+      @foreach ($produk as $item)
+        <li>
+          <div>
+            <img src="{{ $item->gambar }}" alt="gambar" class="w-48">
+          </div>
+          <div class="text-sm text-center">{{ $item->nama }}</div>
+          <div class="text-sm text-center">{{ $item->harga }}</div>
+        </li>
+      @endforeach
+    </ul>  
+    <nav class="pagination-container">  
+      <div id="pagination-numbers" class="text-center">  
+      </div>
+    </nav>
+  </div>
 </div>
 
 @include('layouts.navBawah')
+@include('layouts.footer')
 
 @endsection
 

@@ -3,66 +3,121 @@
 @section('content')
 
 @include('layouts.headerArrow')
+@include('layouts.headerLg')
 
-<div>
-  <div>
-    <img src="{{ $produk->gambar }}" alt="">
-  </div>
-  <div class="mx-3 my-2">
-    <div class="my-3 text-xl font-bold">{{ $produk->nama }}</div>
-    <div>
-      <p class="text-slate-500">Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis sequi ea iusto ipsum? Sequi, voluptates corporis nihil aperiam laborum quibusdam!</p>
+<div class="lg:flex lg:justify-center">
+  <div class="lg:w-4/5 lg:flex">
+    <div class="lg:w-2/4">
+      <img src="{{ $produk->gambar }}" alt="gambar produk" class="my-2">
     </div>
-    <div class="mt-4">
-      <label for="keterangan" class="font-semibold">Keterangan</label>
-      <textarea name="keterangan" id="keterangan" rows="4" class="w-full border border-sky-600 rounded p-3 mt-2 outline-0" placeholder="Maksimal 200 karakter"></textarea>
+    <div class="mx-3 my-2 lg:w-2/4">
+      <div class="my-3 lg:my-0 text-xl font-bold">{{ $produk->nama }}</div>
+      <div>
+        <p class="text-slate-500">Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis sequi ea iusto ipsum? Sequi, voluptates corporis nihil aperiam laborum quibusdam!</p>
+      </div>
+      <div class="mt-4">
+        <label for="keterangan" class="font-semibold">Keterangan</label>
+        <textarea name="keterangan" id="keterangan" rows="4" class="w-full border border-sky-600 rounded p-3 mt-2 outline-0" placeholder="Maksimal 200 karakter"></textarea>
+      </div>
+      <div class="mt-2">
+        <div class="flex justify-between lg:block">
+          <button id="btn_upload" class="border border-sky-300 w-full lg:w-32 py-1 rounded bg-sky-500 text-white">Upload</button>
+          <button id="btn_link" class="border border-sky-300 w-full lg:w-32 py-1 rounded">Link</button>
+        </div>
+        <div id="tab_upload" class="w-full h-36 mt-1 bg-slate-100">
+          <div class="flex justify-center items-center">
+            <div>
+              <div class="text-center mt-2">
+                <label for="upload">(PDF, JPG, ZIP, RAR max 50Mb)</label>
+              </div>
+              <div class="text-center border border-slate-400">
+                <input type="file" name="upload" id="upload">
+              </div>
+            </div>
+          </div>
+          <div>
+            <p class="text-sm px-2 mt-4 text-slate-600">*Jika ukuran file lebih dari 50Mb, silahkan upload file di dropbox / google drive dan masukkkan link file anda <a href="#" id="btn_disini" class="text-sky-600">disini</a>.</p>
+          </div>
+        </div>
+        <div id="tab_link" class="w-full h-36 mt-1 bg-slate-100 hidden">
+          <div class="h-full flex justify-center items-center">
+            <div>
+              <div>
+                <input type="text" name="link" id="link" class="w-60 border p-2" placeholder="Masukkan Link">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mt-5">
+        <div class="flex justify-between border">
+          <div>
+            <button id="btn_minus" class="bg-sky-500 w-10 h-10 text-white"><i class="fa fa-minus"></i></button>
+          </div>
+          <div class="w-full">
+            <input type="text" name="input_counter" id="input_counter" value="1" minlength="1" maxlength="6" class="w-full h-full outline-0 text-center">
+          </div>
+          <div>
+            <button id="btn_plus" class="bg-sky-500 w-10 h-10 text-white"><i class="fa fa-plus"></i></button>
+          </div>
+        </div>
+      </div>
+      <div class="mt-4">
+        <div class="flex justify-between py-1">
+          <div>Harga Barang</div>
+          <div>Rp <span class="nominal_harga">{{ $produk->harga }}</span></div>
+        </div>
+        <div class="flex justify-between py-1">
+          <div>Jumlah</div>
+          <div><span id="nominal_jumlah">1</span></div>
+        </div>
+        <div class="flex justify-between py-1">
+          <div class="font-bold">Total</div>
+          <div class="font-bold">Rp <span class="nominal_total">{{ $produk->harga }}</span></div>
+        </div>
+      </div>
+      <div class="hidden w-full mt-2 lg:grid grid-cols-2 gap-4">
+        <button class="w-full p-1 rounded font-bold border-2 border-sky-600">Beli</button>
+        <button class="w-full bg-sky-600 text-white p-1 rounded font-bold"><i class="fa fa-shopping-cart"></i> Keranjang</button>
+      </div>
     </div>
-    <div class="mt-4">
-      <div class="flex justify-between py-1">
-        <div>Harga Barang</div>
-        <div>Rp 95.000</div>
-      </div>
-      <div class="flex justify-between py-1">
-        <div>Jumlah</div>
-        <div>100 pcs</div>
-      </div>
-      <div class="flex justify-between py-1">
-        <div class="font-bold">Total</div>
-        <div>Rp 105.000</div>
-      </div>
-    </div>
-    <div class="mt-5">
-      <div class="tab grid grid-cols-2">
-        <button id="btn-rincian" class="linktab rounded-tl py-1" id="default">Rincian</button>
-        <button id="btn-ulasan" class="linktab rounded-tr py-1">Ulasan</button>
-      </div>
-      
-      <div id="rincian" class="mt-3">
-        <h3>Rincian</h3>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi, molestiae.</p>
-      </div>      
-      <div id="ulasan" class="hidden mt-3">
-        <h3>Ulasan</h3>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci voluptatibus in labore iusto autem dolorum sed. Exercitationem ducimus natus expedita.</p> 
-      </div>
-    </div>
-  </div>
-  <div class="w-full fixed bottom-0 bg-white border-t flex">
-    <button class="w-full m-3 p-1 rounded border-2 border-sky-600 font-bold">Beli</button>
-    <button class="w-full bg-sky-600 m-3 p-1 rounded text-white font-bold"><i class="fa fa-plus"></i> Keranjang</button>
   </div>
 </div>
+<div class="lg:flex lg:justify-center pb-20 lg:pb-5">
+  <div class="lg:w-4/5 mx-3">
+    <div class="mt-5">
+      <div class="tab flex justify-between lg:block">
+        <button id="btn-rincian" class="linktab w-full lg:w-44 rounded py-1" id="default">Rincian</button>
+        <button id="btn-ulasan" class="linktab w-full lg:w-44 rounded py-1">Ulasan</button>
+      </div>      
+      <div id="rincian" class="mt-3">
+        <p>{{ $produk->deskripsi }}</p>
+      </div>      
+      <div id="ulasan" class="hidden mt-3">
+        
+      </div>
+    </div>
+  </div>
+</div>
+<div class="w-full fixed bottom-0 bg-white border-t flex lg:hidden">
+  <button class="w-full m-3 p-1 rounded border-2 border-sky-600 font-bold">Beli</button>
+  <button class="w-full bg-sky-600 m-3 p-1 rounded text-white font-bold"><i class="fa fa-shopping-cart"></i> Keranjang</button>
+</div>
+
+@include('layouts.footer')
 
 @endsection
 
 @section('script')
 <script type="module">
   $(document).ready(function () {
-    const harga = $('.harga').text();
-    $('.harga').html(afRupiah(harga))
+    const nominal_harga = $('.nominal_harga').text();
+    $('.nominal_harga').html(afRupiah(nominal_harga));
+    const nominal_total = $('.nominal_total').text();
+    $('.nominal_total').html(afRupiah(nominal_total));
     
-    function afRupiah(bilangan) {
-      var	number_string = harga.toString(),
+    function afRupiah(nominal) {
+      var	number_string = nominal.toString(),
         sisa 	= number_string.length % 3,
         rupiah 	= number_string.substr(0, sisa),
         ribuan 	= number_string.substr(sisa).match(/\d{3}/g);
@@ -71,9 +126,57 @@
         let separator = sisa ? '.' : '';
         rupiah += separator + ribuan.join('.');
       }
-
       return rupiah;
     }
+
+    // tab upload
+    const btn = [];
+    $('#btn_upload').on('click', function (e) {
+      e.preventDefault();
+      btn.pop();
+    
+      if (btn[0] != 'btn_upload') {
+        $('#btn_link').addClass('bg-white');
+        $('#btn_link').removeClass('bg-sky-500 text-white');
+        $('#btn_upload').removeClass('bg-white');
+        $('#btn_upload').addClass('bg-sky-500 text-white');
+
+        $('#tab_upload').removeClass('hidden');
+        $('#tab_link').addClass('hidden');
+      }
+    })
+    $('#btn_link').on('click', function (e) {
+      e.preventDefault();
+      btn.pop();
+      btn.push('btn_link');
+    
+      if (btn[0] == 'btn_link') {
+        $('#btn_link').removeClass('bg-white');
+        $('#btn_link').addClass('bg-sky-500 text-white');
+        $('#btn_upload').removeClass('bg-sky-500 text-white');
+        $('#btn_upload').addClass('bg-white');
+
+        $('#tab_upload').addClass('hidden');
+        $('#tab_link').removeClass('hidden');
+      }
+    })
+    $('#btn_disini').on('click', function (e) {
+      e.preventDefault();
+      btn.pop();
+      btn.push('btn_link');
+    
+      if (btn[0] == 'btn_link') {
+        $('#btn_link').removeClass('bg-white');
+        $('#btn_link').addClass('bg-sky-500 text-white');
+        $('#btn_upload').removeClass('bg-sky-500 text-white');
+        $('#btn_upload').addClass('bg-white');
+
+        $('#tab_upload').addClass('hidden');
+        $('#tab_link').removeClass('hidden');
+      }
+    })
+    $('#btn_upload').addClass('bg-sky-500 text-white');
+    $('#btn_link').addClass('bg-white');
 
     // tab detail
     const tab = [];
@@ -86,7 +189,7 @@
       if (tab[0] == 'ulasan') {
         $('#btn-ulasan').removeClass('bg-slate-100');
         $('#btn-ulasan').addClass('bg-sky-500 text-white');
-        $('#btn-rincian').removeClass('bg-slate-100 text-white');
+        $('#btn-rincian').removeClass('bg-sky-500 text-white');
         $('#btn-rincian').addClass('bg-slate-100');
 
         $('#rincian').addClass('hidden');
@@ -109,6 +212,31 @@
     })
     $('#btn-rincian').addClass('bg-sky-500 text-white');
     $('#btn-ulasan').addClass('bg-slate-100');
+
+    // counter
+    let input_counter = $('#input_counter').val();
+    if (input_counter <= "1") {
+      $('#btn_minus').prop('disabled', true);
+    }
+    $('#btn_plus').on('click', function (e) {
+      e.preventDefault();
+      let input_counter = $('#input_counter').val();
+      $('#input_counter').val(parseInt(input_counter) + 1);
+      $('#btn_minus').prop('disabled', false);
+      $('#nominal_jumlah').html(parseInt(input_counter) + 1);
+    })
+    $('#btn_minus').on('click', function (e) {
+      e.preventDefault();
+      let input_counter = $('#input_counter').val();
+      if (input_counter <= 2) {
+        $('#btn_minus').prop('disabled', true);
+      }
+      $('#input_counter').val(parseInt(input_counter) - 1);
+      $('#nominal_jumlah').html(parseInt(input_counter) - 1);
+    })
+    $('#input_counter').on('change', function () {
+      console.log('input counter');
+    })
   })
 </script>
 @endsection

@@ -3,6 +3,7 @@
 @section('content')
 
 @include('layouts.header')
+@include('layouts.headerLg')
 
 <div>
   <h1 class="text-center font-bold my-5 text-xl text-slate-500">Kategori Produk</h1>
@@ -21,5 +22,6 @@
 </div>
 
 @include('layouts.navBawah')
+@include('layouts.footer')
 
 @endsection
