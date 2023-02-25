@@ -1,4 +1,6 @@
-import './bootstrap';
+import "./bootstrap";
 
-import jQuery from 'jquery';
+import jQuery from "jquery";
 window.$ = jQuery;
+
+import * as te from "tw-elements";

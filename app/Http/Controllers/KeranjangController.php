@@ -72,8 +72,8 @@ class KeranjangController extends Controller
 
       $keranjang->total = $keranjang->total + $calcHarga; // update qty
     } else {
-      $calc = $keranjang->qty - $qty;
-      $calcHarga = $calc * $harga;
+      $calc = $keranjang->qty - $qty; // qty yg ada di DB di kurangi value qty
+      $calcHarga = $calc * $harga; // qty yg yg sudah dikurangi kemudian di kali harga produk
       
       $keranjang->total = $keranjang->total - $calcHarga; // update qty
     }
@@ -88,6 +88,15 @@ class KeranjangController extends Controller
   }
   public function hapus(Request $request)
   {
+    $keranjang = Keranjang::find($request->id);
+    $keranjang->delete();
 
+    return response()->json([
+      'status' => 200
+    ]);
+  }
+  public function hapusAll()
+  {
+    
   }
 }
