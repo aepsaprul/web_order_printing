@@ -53,15 +53,15 @@
         </div>
       </div>
       <div class="mt-5">
-        <div class="flex justify-between border">
+        <div class="flex justify-between">
           <div>
-            <button id="btn_minus" class="bg-sky-500 w-10 h-10 text-white"><i class="fa fa-minus"></i></button>
+            <button id="btn_minus" class="bg-rose-400 w-10 h-10 text-white rounded-l-full text-sm"><i class="fa fa-minus"></i></button>
           </div>
           <div class="w-full">
-            <input type="text" name="input_counter" id="input_counter" value="1" minlength="1" maxlength="6" class="w-full h-full outline-0 text-center">
+            <input type="text" name="input_counter" id="input_counter" value="1" minlength="1" maxlength="6" class="w-full h-full outline-0 text-center border">
           </div>
           <div>
-            <button id="btn_plus" class="bg-sky-500 w-10 h-10 text-white"><i class="fa fa-plus"></i></button>
+            <button id="btn_plus" class="bg-emerald-400 w-10 h-10 text-white rounded-r-full text-sm"><i class="fa fa-plus"></i></button>
           </div>
         </div>
       </div>

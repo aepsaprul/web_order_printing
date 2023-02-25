@@ -13,7 +13,7 @@
     </div>
     <div class="flex">
       <div>
-        <i class="fa fa-shopping-cart text-xl"></i>
+        <a href="{{ route('keranjang') }}"><i class="fa fa-basket-shopping text-xl"></i></a>
       </div>
       <div class="flex ml-10">
         <a href="#">Register</a>

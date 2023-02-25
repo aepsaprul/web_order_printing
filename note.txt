@@ -2,3 +2,6 @@ install font awesome
 - npm install @fortawesome/fontawesome-free
 - in the file /resources/css/app.css: @import "@fortawesome/fontawesome-free/css/all.css";
 - run -> npm run build or npm run dev
+
+request update
+- header jadi satu file

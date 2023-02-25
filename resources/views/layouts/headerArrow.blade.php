@@ -5,7 +5,7 @@
       <input type="text" name="cari" id="cari" placeholder="Cari produk" class="h-8 w-64 pl-3 border rounded-3xl text-sm">
       <i class="fa fa-search absolute right-3 top-1.5 text-slate-400 text-sm"></i>
     </div>
-    <i class="fa fa-basket-shopping mx-1 text-xl"></i>
+    <a href="{{ route('keranjang') }}"><i class="fa fa-basket-shopping mx-1 text-xl"></i></a>
     <i id="menu" class="fa fa-bars mr-2 text-xl"></i>
   </div>
 </div>
