@@ -2,16 +2,17 @@
 
 @section('content')
 
-@include('layouts.header')
+@include('layouts.headerArrow')
 @include('layouts.headerLg')
 
-<div class="flex justify-center">
+<div class="flex justify-center pb-24">
   <div class="w-full lg:w-4/5 lg:flex lg:justify-between mt-5">
     {{-- produk --}}
     <div class="lg:w-4/6 relative">
-      @foreach ($keranjang as $item)
+      <input type="hidden" name="total_query" id="total_query" value="{{ count($keranjang) }}">
+      @foreach ($keranjang as $key => $item)
         {{-- data hidden --}}
-        <input type="hidden" name="harga_produk" id="harga_produk_{{ $item->id }}" value="{{ $item->produk->harga }}">
+        <input type="hidden" name="harga_produk" id="harga_produk_{{ $key }}" value="{{ $item->produk->harga }}">
 
         <div class="shadow-md m-3 lg:m-0 lg:mr-5 rounded">
           <div class="flex">
@@ -29,13 +30,13 @@
             </div>
             <div class="mx-3 my-3 flex">
               <div>
-                <button class="btn-minus bg-rose-400 px-4 py-1 text-white rounded-l-full text-sm" data-id="{{ $item->id }}"><i class="fa fa-minus"></i></button>
+                <button id="btn_minus_{{ $key }}" class="btn-minus-{{ $key }} bg-rose-600 px-4 py-1 text-white rounded-l-full text-sm" data-id="{{ $item->id }}"><i class="fa fa-minus"></i></button>
               </div>
               <div>
-                <input type="text" name="input_counter" id="input_counter" value="1" minlength="1" maxlength="6" class="w-16 h-full outline-0 text-center text-sm text-slate-500 border">
+                <input type="text" name="input_counter" id="input_counter_{{ $key }}" value="{{ $item->qty }}" minlength="1" maxlength="6" class="w-16 h-full outline-0 text-center text-sm text-slate-500 border" data-id="{{ $item->id }}">
               </div>
               <div>
-                <button class="btn-plus bg-emerald-400 px-4 py-1 text-white rounded-r-full text-sm" data-id="{{ $item->id }}"><i class="fa fa-plus"></i></button>
+                <button id="btn_plus_{{ $key }}" class="btn-plus-{{ $key }} bg-emerald-600 px-4 py-1 text-white rounded-r-full text-sm" data-id="{{ $item->id }}"><i class="fa fa-plus"></i></button>
               </div>
             </div>
           </div>
@@ -62,14 +63,19 @@
   </div>
 </div>
 
-{{-- @include('layouts.navBawah')
-@include('layouts.footer') --}}
+{{-- @include('layouts.navBawah') --}}
+@include('layouts.footer')
 
 @endsection
 
 @section('script')
 <script type="module">
   $(document).ready(function () {
+    $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
     function afRupiah(nominal) {
       var	number_string = nominal.toString(),
         sisa 	= number_string.length % 3,
@@ -82,30 +88,117 @@
       return rupiah;
     }
     
-    $('.btn-minus').on('click', function (e) {
-      e.preventDefault();
-      const id = $(this).attr('data-id');
-      const harga = $('#harga_produk_' + id).val();
-      const total_harga = $('#total_harga').text();
-      const total_harga_ = total_harga.replace(/\./g,'');
-      const calcHarga = parseInt(total_harga_) - parseInt(harga);
+    // counter
+    const total_query = $('#total_query').val();
 
-      $('#total_harga').html(afRupiah(calcHarga));
-      console.log(id, harga, total_harga_, afRupiah(harga));
-    })
-    $('.btn-plus').on('click', function (e) {
-      e.preventDefault();
-      const id = $(this).attr('data-id');
-      const harga = $('#harga_produk_' + id).val();
-      const total_harga = $('#total_harga').text();
-      const total_harga_ = total_harga.replace(/\./g,'');
-      const calcHarga = parseInt(total_harga_) + parseInt(harga);
+    for (let id = 0; id < total_query; id++) {
+      const input_counter = $('#input_counter_' + id).val();
+      if (input_counter <= "1") {
+        $('#btn_minus_' + id).prop('disabled', true);
+        $('#btn_minus_' + id).removeClass('bg-rose-600');
+        $('#btn_minus_' + id).addClass('bg-rose-400');
+      }
+  
+      // btn minus
+      $('.btn-minus-' + id).on('click', function (e) {
+        e.preventDefault();
+        const keranjang_id = $(this).attr('data-id');
+        const harga = $('#harga_produk_' + id).val();
 
-      $('#total_harga').html(afRupiah(calcHarga));
+        // ubah value input
+        const input_counter = $('#input_counter_' + id).val();
+        const input_counter_minus = parseInt(input_counter) - 1;
+        $('#input_counter_' + id).val(input_counter_minus);
 
+        if (input_counter <= 2) {
+          $('#btn_minus_' + id).prop('disabled', true);
+          $('#btn_minus_' + id).removeClass('bg-rose-600');
+          $('#btn_minus_' + id).addClass('bg-rose-400');
+        }
+        
+        let formData = {
+          id: keranjang_id,
+          harga: harga,
+          qty: input_counter_minus
+        }
 
-      console.log(id, harga, total_harga_, afRupiah(calcHarga));
-    })
+        $.ajax({
+          url: "{{ URL::route('keranjang.kurang') }}",
+          type: "post",
+          data: formData,
+          success: function (response) {      
+            $('#total_harga').html(afRupiah(response.total_harga));
+          }
+        })
+      })
+
+      // btn plus
+      $('.btn-plus-' + id).on('click', function (e) {
+        e.preventDefault();
+        const keranjang_id = $(this).attr('data-id');
+        const harga = $('#harga_produk_' + id).val();
+
+        // ubah value input
+        const input_counter = $('#input_counter_' + id).val();
+        const input_counter_plus = parseInt(input_counter) + 1;
+        $('#input_counter_' + id).val(input_counter_plus);
+        $('#btn_minus_' + id).prop('disabled', false);
+        $('#btn_minus_' + id).removeClass('bg-rose-400');
+        $('#btn_minus_' + id).addClass('bg-rose-600');
+
+        let formData = {
+          id: keranjang_id,
+          harga: harga,
+          qty: input_counter_plus
+        }
+
+        $.ajax({
+          url: "{{ URL::route('keranjang.tambah') }}",
+          type: "post",
+          data: formData,
+          success: function (response) {      
+            $('#total_harga').html(afRupiah(response.total_harga));
+          }
+        })        
+      })
+      
+      // input
+      $('#input_counter_' + id).on('keyup', function () {
+        const val = $(this).val();
+        const keranjang_id = $(this).attr('data-id');
+        const harga = $('#harga_produk_' + id).val();
+        let updateVal;
+
+        if (!val || isNaN(val) || parseInt(val) < 1) {
+          $('#input_counter_' + id).val(1);
+
+          $('#btn_minus_' + id).prop('disabled', true);
+          $('#btn_minus_' + id).removeClass('bg-rose-600');
+          $('#btn_minus_' + id).addClass('bg-rose-400');
+
+          updateVal = 1;
+        } else {
+          updateVal = val;
+        }
+
+        let formData = {
+          id: keranjang_id,
+          harga: harga,
+          qty: updateVal
+        }
+
+        $.ajax({
+          url: "{{ URL::route('keranjang.inputText') }}",
+          type: "post",
+          data: formData,
+          success: function (response) {
+            setTimeout(() => {
+              $('#total_harga').html(afRupiah(response.total_harga));
+            }, 2000);
+          }
+        })
+      })
+    }
   })
 </script>
 @endsection

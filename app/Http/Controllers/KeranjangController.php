@@ -31,4 +31,63 @@ class KeranjangController extends Controller
       'status' => 200
     ]);
   }
+  public function tambah(Request $request)
+  {
+    $keranjang = Keranjang::find($request->id);
+    $keranjang->qty = $request->qty;
+    $keranjang->total = $keranjang->total + $request->harga;
+    $keranjang->save();
+
+    $keranjang_total = Keranjang::select(DB::raw('SUM(total) as total_harga'))->first();
+
+    return response()->json([
+      'total_harga' => $keranjang_total->total_harga
+    ]);
+  }
+  public function kurang(Request $request)
+  {
+    $keranjang = Keranjang::find($request->id);
+    $keranjang->qty = $request->qty;
+    $keranjang->total = $keranjang->total - $request->harga;
+    $keranjang->save();
+
+    $keranjang_total = Keranjang::select(DB::raw('SUM(total) as total_harga'))->first();
+
+    return response() ->json([
+      'total_harga' => $keranjang_total->total_harga
+    ]);
+  }
+  public function inputText(Request $request)
+  {
+    $id = $request->id;
+    $harga = $request->harga;
+    $qty = $request->qty;
+
+    $keranjang = Keranjang::find($id);
+    $diffQty = $qty > $keranjang->qty; // jika qty lebih besar dari yg ada di DB
+
+    if ($diffQty) {
+      $calcQty = $qty - $keranjang->qty; // value qty di kurangi qty yg ada di DB untuk mendapatkan qty yg baru
+      $calcHarga = $calcQty * $harga; // qty yg baru kemudian dikali harga produk
+
+      $keranjang->total = $keranjang->total + $calcHarga; // update qty
+    } else {
+      $calc = $keranjang->qty - $qty;
+      $calcHarga = $calc * $harga;
+      
+      $keranjang->total = $keranjang->total - $calcHarga; // update qty
+    }
+    $keranjang->qty = $request->qty;
+    $keranjang->save();
+
+    $keranjang_total = Keranjang::select(DB::raw('SUM(total) as total_harga'))->first();
+
+    return response() ->json([
+      'total_harga' => $keranjang_total->total_harga
+    ]);
+  }
+  public function hapus(Request $request)
+  {
+
+  }
 }

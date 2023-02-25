@@ -55,13 +55,13 @@
       <div class="mt-5">
         <div class="flex justify-between">
           <div>
-            <button id="btn_minus" class="bg-rose-400 w-10 h-10 text-white rounded-l-full text-sm"><i class="fa fa-minus"></i></button>
+            <button id="btn_minus" class="bg-rose-600 w-10 h-10 text-white rounded-l-full text-sm"><i class="fa fa-minus"></i></button>
           </div>
           <div class="w-full">
             <input type="text" name="input_counter" id="input_counter" value="1" minlength="1" maxlength="6" class="w-full h-full outline-0 text-center border">
           </div>
           <div>
-            <button id="btn_plus" class="bg-emerald-400 w-10 h-10 text-white rounded-r-full text-sm"><i class="fa fa-plus"></i></button>
+            <button id="btn_plus" class="bg-emerald-600 w-10 h-10 text-white rounded-r-full text-sm"><i class="fa fa-plus"></i></button>
           </div>
         </div>
       </div>
@@ -246,12 +246,16 @@
     let input_counter = $('#input_counter').val();
     if (input_counter <= "1") {
       $('#btn_minus').prop('disabled', true);
+      $('#btn_minus').removeClass('bg-rose-600');
+      $('#btn_minus').addClass('bg-rose-400');
     }
     $('#btn_plus').on('click', function (e) {
       e.preventDefault();
       let input_counter = $('#input_counter').val();
       $('#input_counter').val(parseInt(input_counter) + 1);
       $('#btn_minus').prop('disabled', false);
+      $('#btn_minus').removeClass('bg-rose-400');
+      $('#btn_minus').addClass('bg-rose-600');
       $('#nominal_jumlah').html(parseInt(input_counter) + 1);
     })
     $('#btn_minus').on('click', function (e) {
@@ -259,6 +263,8 @@
       let input_counter = $('#input_counter').val();
       if (input_counter <= 2) {
         $('#btn_minus').prop('disabled', true);
+        $('#btn_minus').removeClass('bg-rose-600');
+        $('#btn_minus').addClass('bg-rose-400');
       }
       $('#input_counter').val(parseInt(input_counter) - 1);
       $('#nominal_jumlah').html(parseInt(input_counter) - 1);

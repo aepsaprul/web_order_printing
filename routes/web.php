@@ -41,6 +41,10 @@ Route::get('produk/{id}/show', [ProdukController::class, 'show'])->name('produk.
 // keranjang
 Route::get('keranjang', [KeranjangController::class, 'index'])->name('keranjang');
 Route::post('keranjang/store', [KeranjangController::class, 'store'])->name('keranjang.store');
+Route::post('keranjang/tambah', [KeranjangController::class, 'tambah'])->name('keranjang.tambah');
+Route::post('keranjang/kurang', [KeranjangController::class, 'kurang'])->name('keranjang.kurang');
+Route::post('keranjang/inputText', [KeranjangController::class, 'inputText'])->name('keranjang.inputText');
+Route::post('keranjang/hapus', [KeranjangController::class, 'hapus'])->name('keranjang.hapus');
 
 // akun
 Route::get('akun', [AkunController::class, 'index'])->name('akun');

@@ -1,5 +1,5 @@
-<div id="header-wrapper" class="w-full h-12 border-b flex justify-center items-center bg-white sticky top-0 lg:hidden">
-  <div class="w-full flex justify-between items-center">
+<div id="header-wrapper" class="w-full h-12 border-b flex justify-center items-center bg-white sticky top-0 lg:hidden z-20">
+  <div class="bg-white w-full flex justify-between items-center">
     <a href="{{ url('/') }}"><i class="fa fa-arrow-left pl-3 text-xl text-slate-500"></i></a>
     <div class="relative mx-1">
       <input type="text" name="cari" id="cari" placeholder="Cari produk" class="h-8 w-64 pl-3 border rounded-3xl text-sm">
