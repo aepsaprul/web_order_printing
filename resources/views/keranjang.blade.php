@@ -13,6 +13,7 @@
       @foreach ($keranjang as $key => $item)
         {{-- data hidden --}}
         <input type="hidden" name="harga_produk" id="harga_produk_{{ $key }}" value="{{ $item->produk->harga }}">
+        <input type="hidden" name="keranjang_id[]" id="keranjang_id_{{ $key }}" value="{{ $item->id }}">
 
         <div class="shadow-md m-3 lg:m-0 lg:mr-5 rounded">
           <div class="flex">
@@ -26,7 +27,20 @@
           </div>
           <div class="flex justify-between">
             <div class="mx-3 my-3">
-              <i class="fa fa-trash-alt text-slate-500"></i>
+              {{-- btn hapus --}}
+              <div class="space-y-2">
+                <button
+                  id="btn_hapus_{{ $key }}"
+                  type="button"
+                  class="text-md"
+                  data-id="{{ $item->id }}"
+                  data-te-toggle="modal"
+                  data-te-target="#exampleModalCenter"
+                  data-te-ripple-init
+                  data-te-ripple-color="light">
+                  <i class="fa fa-trash-alt text-slate-500"></i>
+                </button>
+              </div>
             </div>
             <div class="mx-3 my-3 flex">
               <div>
@@ -54,8 +68,71 @@
               <div class="text-lg font-semibold">Rp <span id="total_harga">@currency($keranjang_total->total_harga)</span></div>
             </div>
             <div class="w-full mt-3">
-              <button class="bg-sky-500 text-center text-white w-full h-full lg:h-10 rounded">Beli</button>
+              <div class="relative flex items-center justify-center">
+                <div id="loading_beli" class="hidden absolute">
+                  <div class="flex items-center justify-center">
+                    <div class="flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-tr from-sky-500 to-slate-100 animate-spin">
+                      <div class="h-2 w-2 rounded-full bg-white"></div>
+                    </div>
+                  </div>
+                </div>
+                <button id="btn_beli" class="bg-sky-500 border text-center text-white w-full h-full lg:h-10 rounded">Beli</button>
+              </div>
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{-- modal --}}
+<div
+  data-te-modal-init
+  class="fixed top-0 left-0 z-[1055] hidden h-full w-full overflow-y-auto overflow-x-hidden outline-none"
+  id="exampleModalCenter"
+  data-te-backdrop="static"
+  data-te-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="exampleModalCenterTitle"
+  aria-modal="true"
+  role="dialog">
+  <div
+    data-te-modal-dialog-ref
+    class="pointer-events-none relative flex min-h-[calc(100%-1rem)] w-auto translate-y-[-50px] items-center opacity-0 transition-all duration-300 ease-in-out min-[576px]:mx-auto min-[576px]:mt-7 min-[576px]:min-h-[calc(100%-3.5rem)] min-[576px]:max-w-[500px]">
+    <div class="border border-rose-300 rounded w-full">
+      <div
+        class="pointer-events-auto relative flex w-full flex-col rounded-md border-none bg-white bg-clip-padding text-current shadow-lg outline-none dark:bg-neutral-600">
+        <div class="relative p-4">
+          <input type="hidden" name="hapus_id" id="hapus_id">
+          <p>Yakin akan dihapus?</p>
+        </div>
+        <div
+          class="flex flex-shrink-0 flex-wrap items-center justify-end rounded-b-md border-t-2 border-neutral-100 border-opacity-100 p-4 dark:border-opacity-50">
+          <button
+            type="button"
+            class="inline-block rounded bg-primary-100 px-6 pt-2.5 pb-2 text-xs font-medium uppercase leading-normal text-primary-700 transition duration-150 ease-in-out hover:bg-primary-accent-100 focus:bg-primary-accent-100 focus:outline-none focus:ring-0 active:bg-primary-accent-200"
+            data-te-modal-dismiss
+            data-te-ripple-init
+            data-te-ripple-color="light">
+            Batal
+          </button>
+          <div class="relative flex items-center justify-center">
+            <div id="loading_hapus" class="hidden absolute">
+              <div class="flex items-center justify-center">
+                <div class="flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-tr from-rose-500 to-slate-100 animate-spin">
+                  <div class="h-2 w-2 rounded-full bg-white"></div>
+                </div>
+              </div>
+            </div>
+            <button
+              type="button"
+              id="btn_hapus_submit"
+              class="ml-1 inline-block rounded bg-danger px-6 pt-2.5 pb-2 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)]"
+              data-te-ripple-init
+              data-te-ripple-color="light">
+              Hapus
+            </button>
           </div>
         </div>
       </div>
@@ -198,7 +275,51 @@
           }
         })
       })
-    }
+
+      // btn hapus
+      $('#btn_hapus_' + id).on('click', function (e) {
+        e.preventDefault();
+        const id = $(this).attr('data-id');
+        $('#hapus_id').val(id);
+      })
+
+      $('#btn_hapus_submit').on('click', function (e) {
+        e.preventDefault();
+        const id = $('#hapus_id').val();
+
+        let formData = {
+          id: id
+        }
+
+        $.ajax({
+          url: "{{ URL::route('keranjang.hapus') }}",
+          type: "post",
+          data: formData,
+          beforeSend: function () {
+            $('#loading_hapus').removeClass('hidden');
+            $('#btn_hapus_submit').removeClass('bg-danger');
+            $('#btn_hapus_submit').addClass('bg-white');
+          },
+          success: function (response) {
+            setTimeout(() => {
+              window.location.reload(1);
+            }, 1000);
+          }
+        })
+      })
+    } // end for
+
+    // btn beli
+    $('#btn_beli').on('click', function (e) {
+      e.preventDefault();
+
+      $('#loading_beli').removeClass('hidden');
+      $('#btn_beli').removeClass('bg-sky-500');
+
+      setTimeout(() => {
+        window.location.href = "{{ URL::route('keranjang.checkout') }}";
+      }, 1000);
+    })
   })
 </script>
 @endsection

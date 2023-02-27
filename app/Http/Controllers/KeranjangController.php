@@ -95,8 +95,14 @@ class KeranjangController extends Controller
       'status' => 200
     ]);
   }
-  public function hapusAll()
+  public function checkout()
   {
-    
+    $keranjang = Keranjang::get();
+    $keranjang_total = Keranjang::select(DB::raw('SUM(total) as total_harga'))->first();
+
+    return view('checkout', [
+      'keranjang' => $keranjang,
+      'keranjang_total' => $keranjang_total
+    ]);
   }
 }
