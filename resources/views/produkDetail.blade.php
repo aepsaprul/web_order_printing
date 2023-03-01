@@ -305,6 +305,11 @@
             $('.btn_beli').removeClass('text-white');
             window.location = "{{ URL::route('keranjang') }}";
           }, 3000);
+        },
+        error: function (response) {
+          if (response.status == 401) {
+            window.location.href = "{{ URL::route('login') }}";
+          }
         }
       })
     })

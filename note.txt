@@ -5,3 +5,11 @@ install font awesome
 
 request update
 - header jadi satu file
+
+halaman akun yg perlu di update
+- ubah kata sandi
+- ubah foto
+- validasi
+- halaman transaksi
+- halaman ulasan
+- gambar profil

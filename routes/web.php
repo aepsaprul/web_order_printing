@@ -9,6 +9,7 @@ use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\RegisterController;
 use Illuminate\Support\Facades\Route;
 use Monolog\Registry;
+use Whoops\Run;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,14 +39,25 @@ Route::get('kategori/{id}/show', [KategoriController::class, 'show'])->name('kat
 Route::get('produk', [ProdukController::class, 'index'])->name('produk');
 Route::get('produk/{id}/show', [ProdukController::class, 'show'])->name('produk.show');
 
-// keranjang
-Route::get('keranjang', [KeranjangController::class, 'index'])->name('keranjang');
-Route::post('keranjang/store', [KeranjangController::class, 'store'])->name('keranjang.store');
-Route::post('keranjang/tambah', [KeranjangController::class, 'tambah'])->name('keranjang.tambah');
-Route::post('keranjang/kurang', [KeranjangController::class, 'kurang'])->name('keranjang.kurang');
-Route::post('keranjang/inputText', [KeranjangController::class, 'inputText'])->name('keranjang.inputText');
-Route::post('keranjang/hapus', [KeranjangController::class, 'hapus'])->name('keranjang.hapus');
-Route::get('keranjang/checkout', [KeranjangController::class, 'checkout'])->name('keranjang.checkout');
+Route::middleware(['auth'])->group(function() {
+  
+  // keranjang
+  Route::get('keranjang', [KeranjangController::class, 'index'])->name('keranjang');
+  Route::post('keranjang/store', [KeranjangController::class, 'store'])->name('keranjang.store');
+  Route::post('keranjang/tambah', [KeranjangController::class, 'tambah'])->name('keranjang.tambah');
+  Route::post('keranjang/kurang', [KeranjangController::class, 'kurang'])->name('keranjang.kurang');
+  Route::post('keranjang/inputText', [KeranjangController::class, 'inputText'])->name('keranjang.inputText');
+  Route::post('keranjang/hapus', [KeranjangController::class, 'hapus'])->name('keranjang.hapus');
+  Route::get('keranjang/checkout', [KeranjangController::class, 'checkout'])->name('keranjang.checkout');
+  
+  // akun
+  Route::get('akun', [AkunController::class, 'index'])->name('akun');
+  Route::get('akun/{id}/editDataDiri', [AkunController::class, 'editDataDiri'])->name('akun.editDataDiri');
+  Route::post('akun/updateDataDiri', [AkunController::class, 'updateDataDiri'])->name('akun.updateDataDiri');
+  Route::get('akun/{id}/editAlamat', [AkunController::class, 'editAlamat'])->name('akun.editAlamat');
+  Route::get('akun/{id}/editAlamatKota', [AkunController::class, 'editAlamatKota'])->name('akun.editAlamatKota');
+  Route::get('akun/{id}/editAlamatKecamatan', [AkunController::class, 'editAlamatKecamatan'])->name('akun.editAlamatKecamatan');
+  Route::get('akun/transaksi', [AkunController::class, 'transaksi'])->name('akun.transaksi');
+  Route::get('akun/ulasan', [AkunController::class, 'ulasan'])->name('akun.ulasan');
+});
 
-// akun
-Route::get('akun', [AkunController::class, 'index'])->name('akun');
