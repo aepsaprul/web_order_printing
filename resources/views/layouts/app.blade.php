@@ -37,6 +37,49 @@
   {{-- swiper --}}
   <script src="{{ asset('swiper/swiper.js') }}"></script>
 
+  <script>
+    function afRupiah(nominal) {
+      var	number_string = nominal.toString(),
+        sisa 	= number_string.length % 3,
+        rupiah 	= number_string.substr(0, sisa),
+        ribuan 	= number_string.substr(sisa).match(/\d{3}/g);
+      if (ribuan) {
+        let separator = sisa ? '.' : '';
+        rupiah += separator + ribuan.join('.');
+      }
+      return rupiah;
+    }
+    // menu
+    if (document.getElementById('menu')) {
+      document.getElementById('menu').onclick = function() {
+        bukaNavigasi();
+      }      
+    }
+    document.getElementById('btn_close').onclick = function() {
+      tutupNavigasi();
+    }
+  
+    function bukaNavigasi() {
+      document.getElementById("menu_id").style.width = "100%";
+    }
+  
+    function tutupNavigasi() {
+      document.getElementById("menu_id").style.width = "0%";
+    }
+
+    // header sticky
+    var header = document.getElementById("header-wrapper");
+    var sticky = header.offsetTop;
+
+    function myFunction() {
+      if (window.pageYOffset >= sticky) {
+        header.classList.add("sticky")
+      } else {
+        header.classList.remove("sticky");
+      }
+    }
+  </script>
+
   @yield('script')
 </body>
 </html>

@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Ekspedisi;
 use App\Models\Keranjang;
+use App\Models\Rekening;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class KeranjangController extends Controller
 {
   public function index()
   {
-    $keranjang = Keranjang::get();
+    $keranjang = Keranjang::where('customer_id', Auth::user()->id)->get();
     $keranjang_total = Keranjang::select(DB::raw('SUM(total) as total_harga'))->first();
 
     return view('keranjang', [
@@ -95,14 +98,43 @@ class KeranjangController extends Controller
       'status' => 200
     ]);
   }
-  public function checkout()
+  public function beli()
   {
-    $keranjang = Keranjang::get();
-    $keranjang_total = Keranjang::select(DB::raw('SUM(total) as total_harga'))->first();
+    $session_checkout = session('checkout');
+    session(['checkout' => "true"]);
 
-    return view('checkout', [
-      'keranjang' => $keranjang,
-      'keranjang_total' => $keranjang_total
+    return response()->json([
+      'status' => 200
+    ]);
+  }
+  public function checkout(Request $request)
+  {
+    if ($request->session()->has('checkout')) {
+      $keranjang = Keranjang::where('customer_id', Auth::user()->id)->get();
+      $keranjang_total = Keranjang::select(DB::raw('SUM(total) as total_harga'))->first();
+      $ekspedisi = Ekspedisi::get();
+      $rekening = Rekening::get();
+      $rekening_bank = Rekening::where('grup', 'bank')->get();
+      $rekening_ewallet = Rekening::where('grup', 'e-wallet')->get();
+      
+      return view('checkout', [
+        'keranjang' => $keranjang,
+        'keranjang_total' => $keranjang_total,
+        'ekspedisi' => $ekspedisi,
+        'rekening' => $rekening,
+        'rekening_bank' => $rekening_bank,
+        'rekening_ewallet' => $rekening_ewallet
+      ]);
+    } else {
+      return redirect()->route('home');
+    }
+  }
+  public function bayar(Request $request)
+  {
+    $request->session()->forget('checkout');
+    
+    return response()->json([
+      'status' => $request->all()
     ]);
   }
 }

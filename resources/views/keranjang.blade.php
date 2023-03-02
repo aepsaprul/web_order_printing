@@ -68,7 +68,7 @@
               <div class="text-lg font-semibold">Rp <span id="total_harga">@currency($keranjang_total->total_harga)</span></div>
             </div>
             <div class="w-full mt-3">
-              <div class="relative flex items-center justify-center">
+              <div class="relative flex items-center justify-center h-full">
                 <div id="loading_beli" class="hidden absolute">
                   <div class="flex items-center justify-center">
                     <div class="flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-tr from-sky-500 to-slate-100 animate-spin">
@@ -76,7 +76,7 @@
                     </div>
                   </div>
                 </div>
-                <button id="btn_beli" class="bg-sky-500 border text-center text-white w-full h-full lg:h-10 rounded">Beli</button>
+                <button id="btn_beli" class="bg-sky-500 border text-center text-white w-full h-full lg:h-10 rounded-md">Beli</button>
               </div>
             </div>
           </div>
@@ -313,12 +313,19 @@
     $('#btn_beli').on('click', function (e) {
       e.preventDefault();
 
-      $('#loading_beli').removeClass('hidden');
-      $('#btn_beli').removeClass('bg-sky-500');
-
-      setTimeout(() => {
-        window.location.href = "{{ URL::route('keranjang.checkout') }}";
-      }, 1000);
+      $.ajax({
+        url: "{{ URL::route('keranjang.beli') }}",
+        type: "get",
+        beforeSend: function () {
+          $('#loading_beli').removeClass('hidden');
+          $('#btn_beli').removeClass('bg-sky-500');
+        },
+        success: function (response) {
+          setTimeout(() => {
+            window.location.href = "{{ URL::route('keranjang.checkout') }}";
+          }, 1000);
+        }
+      })
     })
   })
 </script>
