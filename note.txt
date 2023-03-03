@@ -3,6 +3,21 @@ install font awesome
 - in the file /resources/css/app.css: @import "@fortawesome/fontawesome-free/css/all.css";
 - run -> npm run build or npm run dev
 
+prevent back history
+- php artisan make:middleware PreventBackHistory
+
+  public function handle($request, Closure $next)
+    {
+        $response = $next($request);
+        return $response->header('Cache-Control','nocache, no-store, max-age=0, must-revalidate')
+            ->header('Pragma','no-cache')
+            ->header('Expires','Sun, 02 Jan 1990 00:00:00 GMT');
+    }
+
+- app/Http/Kernel.php
+
+  'prevent-back-history' => \App\Http\Middleware\PreventBackHistory::class,
+
 request update
 - header jadi satu file
 
@@ -13,3 +28,9 @@ halaman akun yg perlu di update
 - halaman transaksi
 - halaman ulasan
 - gambar profil
+
+
+
+----------------------- pertanyaan -----------------
+* kode unik riba atau gak?
+* kata2 untuk kode unik sebaiknya seperti apa?

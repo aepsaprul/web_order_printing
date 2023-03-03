@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer;
 use App\Models\Ekspedisi;
 use App\Models\Keranjang;
 use App\Models\Rekening;
+use App\Models\Transaksi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class KeranjangController extends Controller
 {
@@ -131,10 +134,30 @@ class KeranjangController extends Controller
   }
   public function bayar(Request $request)
   {
+    $customer = Customer::find($request->customer_id);
+    $ekspedisi = Ekspedisi::find($request->ekspedisi);
+
+    $transaksi = new Transaksi;
+    $transaksi->kode = Str::random(8);
+    $transaksi->customer_id = $request->customer_id;
+    $transaksi->status = 1;
+    $transaksi->penerima = $customer->nama_lengkap;
+    $transaksi->total = $request->total_harga;
+    $transaksi->kode_unik = rand(000, 333);
+    $transaksi->rekening_id = $request->rekening;
+    $transaksi->alamat = $customer->alamat;
+    $transaksi->provinsi = $customer->provinsi;
+    $transaksi->kabupaten = $customer->kabupaten;
+    $transaksi->kecamatan = $customer->kecamatan;
+    $transaksi->kodepos = $customer->kodepos;
+    $transaksi->ekspedisi = $ekspedisi->nama;
+    $transaksi->ongkir = $ekspedisi->harga;
+    $transaksi->save();
+
     $request->session()->forget('checkout');
     
     return response()->json([
-      'status' => $request->all()
+      'status' => $transaksi->kode
     ]);
   }
 }

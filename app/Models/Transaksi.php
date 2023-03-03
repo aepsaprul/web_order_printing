@@ -7,5 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Transaksi extends Model
 {
-    use HasFactory;
+  use HasFactory;
+
+  public function dataRekening() {
+    return $this->belongsTo(Rekening::class, 'rekening_id', 'id');
+  }
 }

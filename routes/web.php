@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AkunController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\KeranjangController;
 use App\Http\Controllers\LoginController;
@@ -49,8 +50,13 @@ Route::middleware(['auth'])->group(function() {
   Route::post('keranjang/inputText', [KeranjangController::class, 'inputText'])->name('keranjang.inputText');
   Route::post('keranjang/hapus', [KeranjangController::class, 'hapus'])->name('keranjang.hapus');
   Route::get('keranjang/beli', [KeranjangController::class, 'beli'])->name('keranjang.beli');
-  Route::get('keranjang/checkout', [KeranjangController::class, 'checkout'])->name('keranjang.checkout');
-  Route::post('keranjang/bayar', [KeranjangController::class, 'bayar'])->name('keranjang.bayar');
+
+  Route::middleware(['back-page'])->group(function () {
+    Route::get('keranjang/checkout', [KeranjangController::class, 'checkout'])->name('keranjang.checkout');
+    Route::post('keranjang/bayar', [KeranjangController::class, 'bayar'])->name('keranjang.bayar');
+  
+    Route::get('invoice/{kode}', [InvoiceController::class, 'index'])->name('invoice');
+  });
   
   // akun
   Route::get('akun', [AkunController::class, 'index'])->name('akun');

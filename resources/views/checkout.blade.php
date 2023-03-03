@@ -16,7 +16,7 @@
     <div class="lg:w-4/6 relative">
       {{-- alamat pengiriman --}}
       <div class="mb-5 lg:mr-5">
-        <p class="font-semibold text-sm border-b px-3 lg:px-0 py-3">Alamat Pengirimanfeere</p>
+        <p class="font-semibold text-sm border-b px-3 lg:px-0 py-3">Alamat Pengiriman</p>
         <div class="px-3 lg:px-0 py-3 rounded">
           <input type="hidden" id="customer_id" value="{{ Auth::user()->id }}">
           <p class="font-bold capitalize">{{ Auth::user()->nama_lengkap }}</p>
@@ -67,7 +67,8 @@
                           type="radio"
                           name="radio_ekspedisi"
                           id="radio_ekspedisi_{{ $key }}"
-                          value="{{ $item->harga }}" />
+                          value="{{ $item->harga }}"
+                          data-id="{{ $item->id }}" />
                         <label
                           class="mt-px inline-block pl-[0.15rem] hover:cursor-pointer bg-white"
                           for="radio_ekspedisi_{{ $key }}">
@@ -90,6 +91,8 @@
         <div class="ml-3 mr-3 lg:mr-0 my-2 lg:w-2/4">
           {{-- data hidden --}}
           <input type="hidden" id="total_rekening" value="{{ count($rekening) }}">
+          <input type="hidden" id="total_rekening_bank" value="{{ count($rekening_bank) }}">
+          <input type="hidden" id="total_rekening_ewallet" value="{{ count($rekening_ewallet) }}">
 
           <div>
             <p class="font-semibold text-sm border-b py-3">Pilih Pembayaran</p>
@@ -163,27 +166,16 @@
               <div class="text-sm lg:text-lg lg:font-semibold">Total Harga</div>
               <div class="text-lg font-semibold"><span class="text-sm">Rp</span> <span id="total_harga">@currency($keranjang_total->total_harga)</span></div>
             </div>
-            <div class="w-full mt-2">
+            <div class="w-full mt-3">
               <div class="relative flex items-center justify-center h-full">
-                <div id="loading_beli" class="hidden absolute">
+                <div id="loading" class="hidden absolute">
                   <div class="flex items-center justify-center">
                     <div class="flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-tr from-sky-500 to-slate-100 animate-spin">
                       <div class="h-2 w-2 rounded-full bg-white"></div>
                     </div>
                   </div>
                 </div>
-                <div class="w-full mt-3">
-                  <div class="relative flex items-center justify-center h-full">
-                    <div id="loading" class="hidden absolute">
-                      <div class="flex items-center justify-center">
-                        <div class="flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-tr from-sky-500 to-slate-100 animate-spin">
-                          <div class="h-2 w-2 rounded-full bg-white"></div>
-                        </div>
-                      </div>
-                    </div>
-                    <button id="btn_bayar" class="bg-sky-500 border text-center text-white w-full h-full lg:h-10 rounded-md font-bold">Bayar</button>
-                  </div>
-                </div>
+                <button id="btn_bayar" disabled class="bg-sky-300 border text-center text-white w-full h-full lg:h-10 rounded-md font-bold">Bayar</button>
               </div>
             </div>
           </div>
@@ -213,13 +205,51 @@
         
         $('#total_ongkos_kirim').html(afRupiah(val));
         $('#total_harga').html(afRupiah(calcTotal));
+
+        const rekening_check = $('input[name="radio_rekening"]:checked').val();
+        if (rekening_check) {
+          $('#btn_bayar').prop('disabled', false);
+          $('#btn_bayar').removeClass('bg-sky-300').addClass('bg-sky-500');
+        } else {
+          $('#btn_bayar').prop('disabled', true);
+          $('#btn_bayar').removeClass('bg-sky-500').addClass('bg-sky-300');
+        }
       })
     }
 
+    const total_rekening_bank = $('#total_rekening_bank').val();
+    for (let index_bank = 0; index_bank < total_rekening_bank; index_bank++) {
+      $('#radio_rekening_bank_' + index_bank).on('change', function () {
+        const ekspedisi_check = $('input[name="radio_ekspedisi"]:checked').val();
+        if (ekspedisi_check) {
+          $('#btn_bayar').prop('disabled', false);
+          $('#btn_bayar').removeClass('bg-sky-300').addClass('bg-sky-500');
+        } else {
+          $('#btn_bayar').prop('disabled', true);
+          $('#btn_bayar').removeClass('bg-sky-500').addClass('bg-sky-300');
+        }
+      })
+    }
+
+    const total_rekening_ewallet = $('#total_rekening_ewallet').val();
+    for (let index_ewallet = 0; index_ewallet < total_rekening_ewallet; index_ewallet++) {
+      $('#radio_rekening_ewallet_' + index_ewallet).on('change', function () {
+        const ekspedisi_check = $('input[name="radio_ekspedisi"]:checked').val();
+        if (ekspedisi_check) {
+          $('#btn_bayar').prop('disabled', false);
+          $('#btn_bayar').removeClass('bg-sky-300').addClass('bg-sky-500');
+        } else {
+          $('#btn_bayar').prop('disabled', true);
+          $('#btn_bayar').removeClass('bg-sky-500').addClass('bg-sky-300');
+        }
+      })
+    }
+    
     $('#btn_bayar').on('click', function (e) {
       const customer_id = $('#customer_id').val();
       const keranjang_id_total = $('#total_query').val();
-      const eskpedisi_val = $('input[name="radio_ekspedisi"]:checked').val();
+      const total_harga = $('#total_harga').text().replace(/\./g, '');
+      const eskpedisi_id = $('input[name="radio_ekspedisi"]:checked').attr('data-id');
       const rekening_val = $('input[name="radio_rekening"]:checked').val();
       const keranjang_id = [];
 
@@ -231,8 +261,9 @@
       let formData = {
         customer_id: customer_id,
         keranjang_id: keranjang_id,
-        ekspedisi: eskpedisi_val,
-        rekening: rekening_val
+        ekspedisi: eskpedisi_id,
+        rekening: rekening_val,
+        total_harga: total_harga
       }
 
       $.ajax({
@@ -244,7 +275,10 @@
           $('#btn_bayar').removeClass('bg-sky-500');
         },
         success: function (response) {
-          console.log(response);
+          var kode = response.status;
+          var url = '{{ route("invoice", ":kode") }}';
+          url = url.replace(':kode', kode);
+          window.location.href = url;
           setTimeout(() => {
             $('#loading').addClass('hidden');
             $('#btn_bayar').addClass('bg-sky-500');
