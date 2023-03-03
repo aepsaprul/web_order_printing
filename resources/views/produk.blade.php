@@ -6,7 +6,7 @@
 @include('layouts.headerLg')
 
 <div class="lg:flex lg:justify-center mt-4">
-  <div class="lg:w-4/5">
+  <div class="lg:w-4/5 2xl:w-3/5">
     <h1 id="produk" class="text-center font-bold my-5 text-xl lg:text-2xl text-slate-500"></h1>
     <div>
       <ul id="paginated-list" class="grid grid-cols-2 lg:grid-cols-5 2xl:grid-cols-6 gap-2 m-2 lg:m-0">

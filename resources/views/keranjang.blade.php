@@ -6,7 +6,7 @@
 @include('layouts.headerLg')
 
 <div class="flex justify-center pb-24">
-  <div class="w-full lg:w-4/5 lg:flex lg:justify-between mt-5">
+  <div class="w-full lg:w-4/5 2xl:w-3/5 lg:flex lg:justify-between mt-5">
     {{-- produk --}}
     <div class="lg:w-4/6 relative">
       <input type="hidden" name="total_query" id="total_query" value="{{ count($keranjang) }}">
@@ -60,7 +60,7 @@
 
     {{-- total --}}
     <div class="w-full lg:w-2/6">
-      <div class="lg:fixed lg:w-1/4 lg:right-32">
+      <div class="lg:fixed lg:w-1/4 lg:right-32 2xl:right-64">
         <div class="bg-white w-full fixed lg:relative bottom-0 lg:shadow">
           <div class="border-t lg:border-0 flex lg:block justify-between m-3 lg:m-0 lg:px-5 lg:py-3">
             <div class="w-full mt-3 lg:flex lg:justify-between">

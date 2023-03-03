@@ -12,7 +12,7 @@
   </div>
 </div>
 <div class="flex justify-center pb-24">
-  <div class="w-full lg:w-4/5 lg:flex lg:justify-between lg:mt-5">
+  <div class="w-full lg:w-4/5 2xl:w-3/5 lg:flex lg:justify-between lg:mt-5">
     <div class="lg:w-4/6 relative">
       {{-- alamat pengiriman --}}
       <div class="mb-5 lg:mr-5">
@@ -145,7 +145,7 @@
 
     {{-- total --}}
     <div class="w-full lg:w-2/6">
-      <div class="lg:fixed lg:w-1/4 lg:right-32">
+      <div class="lg:fixed lg:w-1/4 lg:right-32 2xl:right-60">
         <div class="bg-white w-full fixed lg:relative bottom-0 lg:shadow">
           <div class="mx-3 pt-3 hidden lg:block">
             <div class="flex justify-between">

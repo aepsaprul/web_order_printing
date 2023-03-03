@@ -62,7 +62,7 @@
 </div>
 
 <div class="hidden lg:flex lg:justify-center">
-  <div class="lg:w-4/5 flex mt-5">
+  <div class="lg:w-4/5 2xl:w-3/5 flex mt-5">
     <div class="w-1/5 border rounded-md">
       <div class="flex items-center p-3 border-b">
         <div class="mr-3">

@@ -9,7 +9,7 @@
 <input type="hidden" name="produk_id" id="produk_id" value="{{ $produk->id }}">
 
 <div class="lg:flex lg:justify-center">
-  <div class="lg:w-4/5 lg:flex">
+  <div class="lg:w-4/5 lg:flex 2xl:w-3/5">
     <div class="lg:w-2/4">
       <img src="{{ $produk->gambar }}" alt="gambar produk" class="my-2">
     </div>
@@ -97,7 +97,7 @@
   </div>
 </div>
 <div class="lg:flex lg:justify-center pb-20 lg:pb-5">
-  <div class="lg:w-4/5 mx-3">
+  <div class="lg:w-4/5 2xl:w-3/5 mx-3">
     <div class="mt-5">
       <div class="tab flex justify-between lg:block">
         <button id="btn-rincian" class="linktab w-full lg:w-44 rounded py-1" id="default">Rincian</button>
