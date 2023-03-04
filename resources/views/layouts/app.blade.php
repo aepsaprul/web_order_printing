@@ -69,7 +69,9 @@
 
     // header sticky
     var header = document.getElementById("header-wrapper");
-    var sticky = header.offsetTop;
+    if (header) {
+      var sticky = header.offsetTop;      
+    }
 
     function myFunction() {
       if (window.pageYOffset >= sticky) {
