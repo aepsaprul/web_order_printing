@@ -11,13 +11,39 @@
 <div class="lg:flex lg:justify-center">
   <div class="lg:w-4/5 lg:flex 2xl:w-3/5">
     <div class="lg:w-2/4">
-      <img src="{{ $produk->gambar }}" alt="gambar produk" class="my-2">
+      <img src="{{ url('http://localhost/abata_web_order_admin/public/img_produk/' . $produk->gambar) }}" alt="gambar produk" class="my-2">
     </div>
     <div class="mx-3 my-2 lg:w-2/4">
       <div class="my-3 lg:my-0 text-xl font-bold">{{ $produk->nama }}</div>
       <div>
-        <p class="text-slate-500">Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis sequi ea iusto ipsum? Sequi, voluptates corporis nihil aperiam laborum quibusdam!</p>
+        <p class="text-slate-500 text-sm my-2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis sequi ea iusto ipsum? Sequi, voluptates corporis nihil aperiam laborum quibusdam!</p>
       </div>
+
+      {{-- template --}}
+      <input type="hidden" name="template_total" id="template_total" value="{{ count($produk_template) }}"> <!-- jumlah total query template -->
+      @foreach ($template as $key => $item) <!-- loop tabel template -->
+        <div class="my-3">
+          @foreach ($produk_template as $item_produk_template) <!-- loop tabel produk_template -->
+            @if ($item_produk_template->template_id == $item->id) <!-- jika template_id yg ada di tabel produk_template sama dengan template_id yg ada di tabel template -->
+              {{-- <input type="text" name="{{ strtolower(str_replace(' ', '_', $item->nama)) }}" id="{{ strtolower(str_replace(' ', '_', $item->nama)) }}" value="{{ strtolower(str_replace(' ', '_', $item->nama)) }}"> --}}
+              <div class="font-semibold my-1">{{ $item->nama }}</div>
+              <select name="template[]" id="template_{{ $key }}" class="border text-slate-700 w-full p-2 rounded border-sky-600 outline-0 cursor-pointer">
+                <option value="0" class="text-slate-700">Pilih {{ $item->nama }}</option>
+                @foreach ($template_detail as $item_detail) <!-- loop tabel template_detail -->
+                  @if ($item_detail->template_id == $item->id) <!-- jika template_id yg ada di tabel template_detail sama dengan id yg ada di tabel template -->
+                    @foreach ($produk_template_detail as $item_produk_template_detail) <!-- loop tabel produk_template_detail -->
+                      @if ($item_produk_template_detail->template_detail_id == $item_detail->id) <!-- jika template_detail_id yg ada id tabel produk_template_detail sama dengan id yg ada di tabel template_detail -->
+                        <option value="{{ $item_detail->harga }}" class="text-slate-900">{{ $item_detail->nama }}</option>                                                  
+                      @endif
+                    @endforeach
+                  @endif
+                @endforeach
+              </select>                 
+            @endif
+          @endforeach
+        </div>
+      @endforeach
+
       <div class="mt-4">
         <label for="keterangan" class="font-semibold">Keterangan</label>
         <textarea name="keterangan" id="keterangan" rows="4" class="w-full border border-sky-600 rounded p-3 mt-2 outline-0" placeholder="Maksimal 200 karakter"></textarea>
@@ -67,6 +93,7 @@
       </div>
       <div class="mt-4">
         <div class="flex justify-between py-1">
+          <input type="hidden" name="produk_harga" id="produk_harga" value="{{ $produk->harga }}">
           <div>Harga Barang</div>
           <div>Rp <span class="nominal_harga">{{ $produk->harga }}</span></div>
         </div>
@@ -104,7 +131,7 @@
         <button id="btn-ulasan" class="linktab w-full lg:w-44 rounded py-1">Ulasan</button>
       </div>      
       <div id="rincian" class="mt-3">
-        <p>{{ $produk->deskripsi }}</p>
+        <p>{!! $produk->deskripsi !!}</p>
       </div>      
       <div id="ulasan" class="hidden mt-3">
         
@@ -156,6 +183,30 @@
         rupiah += separator + ribuan.join('.');
       }
       return rupiah;
+    }
+
+    // template
+    const template_total = parseInt($('#template_total').val());
+    const template_awal = [];
+
+    for (let i_template = 0; i_template < template_total; i_template++) { // output [0,0,0] untuk array dasar
+      template_awal[i_template] = 0;
+    }
+
+    for (let index = 0; index < template_total; index++) { // loop produk template      
+      $('#template_' + index).on('change', function () { // onchange template
+        const val_this = $('#template_' + index).val(); // value template ketika onchange
+        template_awal[index] = val_this; // override array dasar dengan value template
+        
+        let template_hasil = 0;
+        for (let i_template_hasil = 0; i_template_hasil < template_awal.length; i_template_hasil++) { // perhitungan tambah untuk array dasar yg sudah di override
+          template_hasil += parseInt(template_awal[i_template_hasil]);
+        }
+
+        const templateCalc = parseInt($('#produk_harga').val()) + template_hasil;
+        $('.nominal_harga').html(afRupiah(templateCalc));
+        $('.nominal_total').html(afRupiah(templateCalc));
+      })
     }
 
     // tab upload

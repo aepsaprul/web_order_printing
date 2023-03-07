@@ -42,10 +42,10 @@
           <li>
             <a href="{{ route('produk.show', [$item->id]) }}">
               <div>
-                <img src="{{ $item->gambar }}" alt="gambar" class="w-48 lg:w-full 2xl:w-full">
+                <img src="{{ url('http://localhost/abata_web_order_admin/public/img_produk/' . $item->gambar) }}" alt="gambar" class="w-48 lg:w-full 2xl:w-full">
               </div>
               <div class="text-sm text-center">{{ $item->nama }}</div>
-              <div class="text-sm text-center">{{ $item->harga }}</div>
+              <div class="text-sm text-center font-semibold"><span>Rp</span> <span class="text-lg">@currency($item->harga)</span></div>
             </a>
           </li>
         @endforeach

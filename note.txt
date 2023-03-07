@@ -34,3 +34,5 @@ halaman akun yg perlu di update
 ----------------------- pertanyaan -----------------
 * kode unik riba atau gak?
 * kata2 untuk kode unik sebaiknya seperti apa?
+* untuk ukuran banner atau spanduk ada standar ukurannya atau tidak?
+* untuk ukurannya mau di tentukan di produk langsung atau custom?
