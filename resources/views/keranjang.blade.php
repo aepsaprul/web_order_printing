@@ -9,53 +9,70 @@
   <div class="w-full lg:w-4/5 2xl:w-3/5 lg:flex lg:justify-between mt-5">
     {{-- produk --}}
     <div class="lg:w-4/6 relative">
-      <input type="hidden" name="total_query" id="total_query" value="{{ count($keranjang) }}">
-      @foreach ($keranjang as $key => $item)
-        {{-- data hidden --}}
-        <input type="hidden" name="harga_produk" id="harga_produk_{{ $key }}" value="{{ $item->produk->harga }}">
-        <input type="hidden" name="keranjang_id[]" id="keranjang_id_{{ $key }}" value="{{ $item->id }}">
+      @if ($keranjang->count())
+        <input type="hidden" name="total_query" id="total_query" value="{{ count($keranjang) }}">
+        @foreach ($keranjang as $key => $item)
+          {{-- data hidden --}}
+          <input type="hidden" name="harga_produk" id="harga_produk_{{ $key }}" value="{{ $item->harga }}">
+          <input type="hidden" name="keranjang_id[]" id="keranjang_id_{{ $key }}" value="{{ $item->id }}">
 
-        <div class="shadow-md m-3 lg:m-0 lg:mr-5 rounded">
-          <div class="flex">
-            <div class="m-3">
-              <img src="{{ $item->produk->gambar }}" alt="gambar produk" class="w-20 h-20">
+          <div class="shadow-md m-3 lg:m-0 lg:mr-5 rounded">
+            <div class="flex">
+              <div class="m-3">
+                @if ($item->gambar)
+                  <img src="{{ url('http://localhost/abata_web_order_admin/public/img_produk/' . $item->produk->gambar) }}" alt="gambar produk" class="w-20 h-20">                    
+                @endif
+              </div>
+              <div class="m-3">
+                <div class="text-slate-800 font-semibold">
+                  @if ($item->gambar)
+                    {{ $item->produk->nama }}                      
+                  @endif
+                </div>
+                <div class="text-slate-800">Rp <span class="nominal_harga">@currency($item->harga)</span></div>
+              </div>
             </div>
-            <div class="m-3">
-              <div class="text-slate-800 font-semibold">{{ $item->produk->nama }}</div>
-              <div class="text-slate-800">Rp <span class="nominal_harga">@currency($item->produk->harga)</span></div>
+            <div class="flex justify-between">
+              <div class="mx-3 my-3">
+                {{-- btn hapus --}}
+                <div class="space-y-2">
+                  <button
+                    id="btn_hapus_{{ $key }}"
+                    type="button"
+                    class="text-md"
+                    data-id="{{ $item->id }}"
+                    data-te-toggle="modal"
+                    data-te-target="#exampleModalCenter"
+                    data-te-ripple-init
+                    data-te-ripple-color="light">
+                    <i class="fa fa-trash-alt text-slate-500"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="mx-3 my-3 flex">
+                <div>
+                  <button id="btn_minus_{{ $key }}" class="btn-minus-{{ $key }} bg-rose-600 px-4 py-1 text-white rounded-l-full text-sm" data-id="{{ $item->id }}"><i class="fa fa-minus"></i></button>
+                </div>
+                <div>
+                  <input type="text" name="input_counter" id="input_counter_{{ $key }}" value="{{ $item->qty }}" minlength="1" maxlength="6" class="w-16 h-full outline-0 text-center text-sm text-slate-500 border" data-id="{{ $item->id }}">
+                </div>
+                <div>
+                  <button id="btn_plus_{{ $key }}" class="btn-plus-{{ $key }} bg-emerald-600 px-4 py-1 text-white rounded-r-full text-sm" data-id="{{ $item->id }}"><i class="fa fa-plus"></i></button>
+                </div>
+              </div>
             </div>
+          </div>          
+        @endforeach          
+      @else
+        <div>
+          <div class="flex justify-center">
+            <img src="{{ asset('assets/empty.png') }}" alt="empty logo" class="w-1/3">
           </div>
-          <div class="flex justify-between">
-            <div class="mx-3 my-3">
-              {{-- btn hapus --}}
-              <div class="space-y-2">
-                <button
-                  id="btn_hapus_{{ $key }}"
-                  type="button"
-                  class="text-md"
-                  data-id="{{ $item->id }}"
-                  data-te-toggle="modal"
-                  data-te-target="#exampleModalCenter"
-                  data-te-ripple-init
-                  data-te-ripple-color="light">
-                  <i class="fa fa-trash-alt text-slate-500"></i>
-                </button>
-              </div>
-            </div>
-            <div class="mx-3 my-3 flex">
-              <div>
-                <button id="btn_minus_{{ $key }}" class="btn-minus-{{ $key }} bg-rose-600 px-4 py-1 text-white rounded-l-full text-sm" data-id="{{ $item->id }}"><i class="fa fa-minus"></i></button>
-              </div>
-              <div>
-                <input type="text" name="input_counter" id="input_counter_{{ $key }}" value="{{ $item->qty }}" minlength="1" maxlength="6" class="w-16 h-full outline-0 text-center text-sm text-slate-500 border" data-id="{{ $item->id }}">
-              </div>
-              <div>
-                <button id="btn_plus_{{ $key }}" class="btn-plus-{{ $key }} bg-emerald-600 px-4 py-1 text-white rounded-r-full text-sm" data-id="{{ $item->id }}"><i class="fa fa-plus"></i></button>
-              </div>
-            </div>
+          <div class="text-center mt-5">
+            <a href="{{ route('home') }}" class="bg-sky-500 px-5 py-2 text-white font-bold rounded">Belanja Lagi</a>
           </div>
-        </div>          
-      @endforeach
+        </div>
+      @endif
     </div>
 
     {{-- total --}}
@@ -64,7 +81,7 @@
         <div class="bg-white w-full fixed lg:relative bottom-0 lg:shadow">
           <div class="border-t lg:border-0 flex lg:block justify-between m-3 lg:m-0 lg:px-5 lg:py-3">
             <div class="w-full mt-3 lg:flex lg:justify-between">
-              <div class="text-sm lg:text-lg lg:font-semibold">Total Harga</div>
+              <div class="text-sm lg:text-lg">Total Harga</div>
               <div class="text-lg font-semibold">Rp <span id="total_harga">@currency($keranjang_total->total_harga)</span></div>
             </div>
             <div class="w-full mt-3">
@@ -76,7 +93,7 @@
                     </div>
                   </div>
                 </div>
-                <button id="btn_beli" class="bg-sky-500 border text-center text-white w-full h-full lg:h-10 rounded-md">Beli</button>
+                <button id="btn_beli" class="bg-sky-500 border text-center text-white font-bold w-full h-full lg:h-10 rounded-md">Beli</button>
               </div>
             </div>
           </div>

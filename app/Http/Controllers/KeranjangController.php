@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use App\Models\Ekspedisi;
 use App\Models\Keranjang;
+use App\Models\KeranjangTemplate;
 use App\Models\Rekening;
 use App\Models\Transaksi;
 use Illuminate\Http\Request;
@@ -17,7 +18,9 @@ class KeranjangController extends Controller
   public function index()
   {
     $keranjang = Keranjang::where('customer_id', Auth::user()->id)->get();
-    $keranjang_total = Keranjang::select(DB::raw('SUM(total) as total_harga'))->first();
+    $keranjang_total = Keranjang::select(DB::raw('SUM(total) as total_harga'))
+      ->where('customer_id', Auth::user()->id)
+      ->first();
 
     return view('keranjang', [
       'keranjang' => $keranjang,
@@ -27,11 +30,24 @@ class KeranjangController extends Controller
   public function store(Request $request)
   {
     $keranjang = new Keranjang;
-    $keranjang->customer_id = 1;
+    $keranjang->customer_id = Auth::user()->id;
     $keranjang->produk_id = $request->produk_id;
+    $keranjang->harga = $request->harga;
     $keranjang->qty = $request->qty;
     $keranjang->total = $request->total;
+    $keranjang->keterangan = $request->keterangan;
     $keranjang->save();
+
+    $template = $request->template;
+    $template_detail = $request->template_detail;
+
+    foreach ($template as $key => $value) {
+      $keranjang_template = new KeranjangTemplate;
+      $keranjang_template->template_id = $value;
+      $keranjang_template->template_detail_id = $template_detail[$key];
+      $keranjang_template->keranjang_id = $keranjang->id;
+      $keranjang_template->save();
+    }
 
     return response()->json([
       'status' => 200
@@ -95,6 +111,10 @@ class KeranjangController extends Controller
   public function hapus(Request $request)
   {
     $keranjang = Keranjang::find($request->id);
+
+    $keranjang_template = KeranjangTemplate::where('keranjang_id', $request->id);
+    $keranjang_template->delete();
+
     $keranjang->delete();
 
     return response()->json([

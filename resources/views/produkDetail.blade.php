@@ -24,16 +24,17 @@
         <input type="hidden" name="template_total" id="template_total" value="{{ count($produk_template) }}"> <!-- jumlah total query template -->
         @foreach ($template as $key => $item) <!-- loop tabel template -->
           <div class="my-3">
-            @foreach ($produk_template as $item_produk_template) <!-- loop tabel produk_template -->
+            @foreach ($produk_template as $key => $item_produk_template) <!-- loop tabel produk_template -->
               @if ($item_produk_template->template_id == $item->id) <!-- jika template_id yg ada di tabel produk_template sama dengan template_id yg ada di tabel template -->
+                <input type="hidden" name="template[]" value="{{ $item->id }}">
                 <div class="font-semibold my-1">{{ $item->nama }}</div>
-                <select name="template[]" id="template_{{ $key }}" class="border text-slate-700 w-full p-2 rounded border-sky-600 outline-0 cursor-pointer">
-                  <option value="0" class="text-slate-700">Pilih {{ $item->nama }}</option>
+                <select name="template_detail[]" id="template_{{ $key }}" class="border text-slate-700 w-full p-2 rounded border-sky-600 outline-0 cursor-pointer">
+                  <option value="0" data-id="0" class="text-slate-700">Pilih {{ $item->nama }}</option>
                   @foreach ($template_detail as $item_detail) <!-- loop tabel template_detail -->
                     @if ($item_detail->template_id == $item->id) <!-- jika template_id yg ada di tabel template_detail sama dengan id yg ada di tabel template -->
                       @foreach ($produk_template_detail as $item_produk_template_detail) <!-- loop tabel produk_template_detail -->
                         @if ($item_produk_template_detail->template_detail_id == $item_detail->id) <!-- jika template_detail_id yg ada id tabel produk_template_detail sama dengan id yg ada di tabel template_detail -->
-                          <option value="{{ $item_detail->harga }}" class="text-slate-900">{{ $item_detail->nama }}</option>                                                  
+                          <option value="{{ $item_detail->harga }}" data-id="{{ $item_detail->id }}" class="text-slate-900">{{ $item_detail->nama }}</option>                                                  
                         @endif
                       @endforeach
                     @endif
@@ -48,7 +49,9 @@
           <label for="keterangan" class="font-semibold">Keterangan</label>
           <textarea name="keterangan" id="keterangan" rows="4" class="w-full border border-sky-600 rounded p-3 mt-2 outline-0" placeholder="Maksimal 200 karakter"></textarea>
         </div>
-        <div class="mt-2">
+
+        {{-- upload --}}
+        {{-- <div class="mt-2">
           <div class="flex justify-between lg:block">
             <button id="btn_upload" class="border border-sky-300 w-full lg:w-32 py-1 rounded bg-sky-500 text-white">Upload</button>
             <button id="btn_link" class="border border-sky-300 w-full lg:w-32 py-1 rounded">Link</button>
@@ -77,7 +80,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> --}}
         <div class="mt-5">
           <div class="flex justify-between">
             <div>
@@ -189,14 +192,24 @@
     // template
     const template_total = parseInt($('#template_total').val());
     const template_awal = [];
+    const template_detail_val = [];
 
     for (let i_template = 0; i_template < template_total; i_template++) { // output [0,0,0] untuk array dasar
       template_awal[i_template] = 0;
+      template_detail_val[i_template] = 0;
     }
 
     for (let index = 0; index < template_total; index++) { // loop produk template      
       $('#template_' + index).on('change', function () { // onchange template
         const val_this = $('#template_' + index).val(); // value template ketika onchange
+        const id_this = $(this).find('option:selected', this);
+
+        let result = 0;
+        id_this.each(function (index_, item) {
+          result = $(this).data('id');
+        })
+
+        template_detail_val[index] = result; // override array data-id dari select
         template_awal[index] = val_this; // override array dasar dengan value template
         
         let template_hasil = 0;
@@ -368,11 +381,19 @@
       const produk_id = $('#produk_id').val();
       const keterangan = $('#keterangan').val();
       const input_counter = $('#input_counter').val();
-      const total = $('.nominal_total').text().replace('.','');
+      const harga = $('.nominal_harga').text().replace(/\./g, '');
+      const total = $('.nominal_total').text().replace(/\./g,'');
+
+      const template_val = new Array();
+      $('input[name="template[]"]').each(function () {
+        template_val.push($(this).val());
+      })
 
       let formData = {
-        customer_id: 1,
         produk_id: produk_id,
+        harga: harga,
+        template: template_val,
+        template_detail: template_detail_val,
         keterangan: keterangan,
         qty: input_counter,
         total: total
