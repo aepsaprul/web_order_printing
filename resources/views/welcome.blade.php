@@ -23,7 +23,7 @@
       @foreach ($kategori as $item)
         <a href="{{ route('kategori.show', $item->id) }}">
           <div>
-            <div class="flex justify-center">
+            <div class="flex justify-center p-10">
               <img src="{{ url('http://localhost/abata_web_order_admin/public/img_kategori/' . $item->gambar) }}" alt="kategori" class="w-20 lg:w-full">
             </div>
             <div class="text-center font-semibold mt-2 lg:text-xl">{{ $item->nama }}</div>
