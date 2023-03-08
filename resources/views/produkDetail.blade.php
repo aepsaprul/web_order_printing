@@ -4,8 +4,12 @@
 
 @include('layouts.headerArrow')
 @include('layouts.headerLg')
-<form>
-  
+
+<div id="notif" class="hidden fixed right-10 mt-10">
+  <div class="bg-emerald-500 w-72 py-2 px-5 rounded text-center text-white ease-in-out duration-300">Berhasil masuk keranjang <i class="fa fa-check font-bold text-xl text-lime-300 ml-3"></i></div>
+</div>
+
+<form>  
   {{-- data --}}
   <input type="hidden" name="produk_id" id="produk_id" value="{{ $produk->id }}">
 
@@ -82,6 +86,7 @@
           </div>
         </div> --}}
         <div class="mt-5">
+          <div class="ml-5 text-xs italic mb-1">Minimal Pembelian: {{ $produk->min_beli }} <span class="capitalize">{{ $produk->satuan }}</span></div>
           <div class="flex justify-between">
             <div>
               <button id="btn_minus" class="bg-rose-600 w-10 h-10 text-white rounded-l-full text-sm"><i class="fa fa-minus"></i></button>
@@ -119,9 +124,20 @@
                 <span>Loading. . .</span>
               </div>
             </div>
-            <button class="btn_beli w-full p-1 rounded font-bold border-2 border-sky-600">Beli</button>
+            <button class="btn-beli w-full p-2 rounded font-bold border-2 border-sky-600">Beli</button>
           </div>
-          <button id="btn_keranjang" class="w-full bg-sky-600 text-white p-1 rounded font-bold"><i class="fa fa-shopping-cart"></i> Keranjang</button>
+          <div class="relative flex items-center justify-center">
+            <div id="loading_keranjang" class="hidden absolute">
+              <div class="flex items-center">
+                <div class="flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-tr from-indigo-500 to-slate-100 animate-spin mr-3">
+                  <div class="h-2 w-2 rounded-full bg-white"></div>
+                </div>
+                <span class="text-white">Loading. . .</span>
+              </div>
+            </div>
+            <button class="btn-keranjang w-full bg-sky-600 text-white p-2 rounded font-bold"><i class="fa fa-shopping-cart"></i> Keranjang</button>
+          </div>
+          {{-- <button class="btn-keranjang w-full bg-sky-600 text-white p-1 rounded font-bold"><i class="fa fa-shopping-cart"></i> Keranjang</button> --}}
         </div>
       </div>
     </div>
@@ -152,10 +168,20 @@
           <span>Loading. . .</span>
         </div>
       </div>
-      {{-- <button class="btn_beli w-full p-1 rounded font-bold border-2 border-sky-600">Beli</button> --}}
-      <button class="btn_beli w-full m-3 p-1 rounded border-2 border-sky-600 font-bold">Beli</button>
+      <button class="btn-beli w-full m-3 p-2 rounded border-2 border-sky-600 font-bold text-sm">Beli</button>
     </div>
-    <button id="btn_keranjang" class="w-full bg-sky-600 m-3 p-1 rounded text-white font-bold"><i class="fa fa-shopping-cart"></i> Keranjang</button>
+    <div class="w-full relative flex items-center justify-center">
+      <div id="loading_keranjang_sm" class="hidden absolute">
+        <div class="flex items-center">
+          <div class="flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-tr from-indigo-500 to-slate-100 animate-spin mr-3">
+            <div class="h-2 w-2 rounded-full bg-white"></div>
+          </div>
+          <span class="text-white">Loading. . .</span>
+        </div>
+      </div>
+      <button class="btn-keranjang w-full bg-sky-600 m-3 p-2 rounded text-white font-bold text-sm"><i class="fa fa-shopping-cart"></i> Keranjang</button>
+    </div>
+    {{-- <button class="btn-keranjang w-full bg-sky-600 m-3 p-1 rounded text-white font-bold"><i class="fa fa-shopping-cart"></i> Keranjang</button> --}}
   </div>
 </form>
 
@@ -376,7 +402,7 @@
       })
 
     // btn beli
-    $('.btn_beli').on('click', function (e) {
+    $('.btn-beli').on('click', function (e) {
       e.preventDefault();
       const produk_id = $('#produk_id').val();
       const keterangan = $('#keterangan').val();
@@ -406,14 +432,73 @@
         beforeSend: function () {
           $('#loading_beli').removeClass('hidden');
           $('#loading_beli_sm').removeClass('hidden');
-          $('.btn_beli').addClass('text-white');
+          $('.btn-beli').addClass('text-white');
         },
         success: function (response) {
           setTimeout(() => {
             $('#loading_beli').addClass('hidden');
             $('#loading_beli_sm').addClass('hidden');
-            $('.btn_beli').removeClass('text-white');
+            $('.btn-beli').removeClass('text-white');
             window.location = "{{ URL::route('keranjang') }}";
+          }, 3000);
+        },
+        error: function (response) {
+          if (response.status == 401) {
+            window.location.href = "{{ URL::route('login') }}";
+          }
+        }
+      })
+    })
+
+    // btn keranjang
+    $('.btn-keranjang').on('click', function (e) {
+      e.preventDefault();
+      $('#notif').removeClass('hidden');
+      setTimeout(() => {
+        $('#notif').addClass('hidden');        
+      }, 2000);
+
+      const produk_id = $('#produk_id').val();
+      const keterangan = $('#keterangan').val();
+      const input_counter = $('#input_counter').val();
+      const harga = $('.nominal_harga').text().replace(/\./g, '');
+      const total = $('.nominal_total').text().replace(/\./g,'');
+
+      const template_val = new Array();
+      $('input[name="template[]"]').each(function () {
+        template_val.push($(this).val());
+      })
+
+      let formData = {
+        produk_id: produk_id,
+        harga: harga,
+        template: template_val,
+        template_detail: template_detail_val,
+        keterangan: keterangan,
+        qty: input_counter,
+        total: total
+      }
+      
+      $.ajax({
+        url: "{{ URL::route('keranjang.store') }}",
+        type: "post",
+        data: formData,
+        beforeSend: function () {
+          $('#loading_keranjang').removeClass('hidden');
+          $('#loading_keranjang_sm').removeClass('hidden');
+          $('.btn-keranjang').removeClass('text-white');
+          $('.btn-keranjang').addClass('text-sky-600');
+        },
+        success: function (response) {
+          setTimeout(() => {
+            $('#loading_keranjang').addClass('hidden');
+            $('#loading_keranjang_sm').addClass('hidden');
+            $('.btn-keranjang').addClass('text-white');
+            $('.btn-keranjang').removeClass('text-sky-600');
+            $('#notif').removeClass('hidden');
+          }, 1000);
+          setTimeout(() => {
+            $('#notif').addClass('hidden');        
           }, 3000);
         },
         error: function (response) {

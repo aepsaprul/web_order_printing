@@ -36,3 +36,4 @@ halaman akun yg perlu di update
 * kata2 untuk kode unik sebaiknya seperti apa?
 * untuk ukuran banner atau spanduk ada standar ukurannya atau tidak?
 * untuk ukurannya mau di tentukan di produk langsung atau custom?
+* produk yg sama ketika diinput lagi akan menambah qty atau dihitung produk yg berbeda?

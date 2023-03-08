@@ -76,7 +76,8 @@
     // kode unik
     const nominal_bayar = $('#nominal_bayar').text();
     const kode_unik = nominal_bayar.substr(nominal_bayar.length - 3);
-    const nominal = nominal_bayar.slice(0, 6);
+    const nominal = nominal_bayar.slice(0, nominal_bayar.length - 3);
+    
     let nominal_merge = `<span>${nominal}</span><span class="text-rose-600">${kode_unik}</span>`;
     $('#nominal_bayar').html(nominal_merge);
 

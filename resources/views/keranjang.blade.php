@@ -19,13 +19,13 @@
           <div class="shadow-md m-3 lg:m-0 lg:mr-5 rounded">
             <div class="flex">
               <div class="m-3">
-                @if ($item->gambar)
+                @if ($item->produk)
                   <img src="{{ url('http://localhost/abata_web_order_admin/public/img_produk/' . $item->produk->gambar) }}" alt="gambar produk" class="w-20 h-20">                    
                 @endif
               </div>
               <div class="m-3">
                 <div class="text-slate-800 font-semibold">
-                  @if ($item->gambar)
+                  @if ($item->produk)
                     {{ $item->produk->nama }}                      
                   @endif
                 </div>

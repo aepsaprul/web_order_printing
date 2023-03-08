@@ -36,7 +36,7 @@
           <div class="border-2 mx-3 lg:mx-0 my-3 rounded">
             <div class="flex">
               <div class="m-3">
-                <img src="{{ $item->produk->gambar }}" alt="gambar produk" class="w-20 h-20">
+                <img src="{{ url('http://localhost/abata_web_order_admin/public/img_produk/' . $item->produk->gambar) }}" alt="gambar produk" class="w-20 h-20">
               </div>
               <div class="m-3 w-full">
                 <div class="text-slate-800 font-semibold">{{ $item->produk->nama }}</div>
