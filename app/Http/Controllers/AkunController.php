@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Models\Transaksi;
 use App\Models\WilayahCity;
 use App\Models\WilayahDistrict;
 use App\Models\WilayahProvince;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AkunController extends Controller
 {
@@ -74,7 +76,9 @@ class AkunController extends Controller
   }
   public function transaksi()
   {
-    return view('akun.transaksi');
+    $transaksi = Transaksi::where('customer_id', Auth::user()->id)->limit(10)->get();
+
+    return view('akun.transaksi', ['transaksi' => $transaksi]);
   }
   public function ulasan()
   {

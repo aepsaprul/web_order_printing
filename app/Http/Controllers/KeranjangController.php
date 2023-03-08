@@ -174,6 +174,13 @@ class KeranjangController extends Controller
     $transaksi->ongkir = $ekspedisi->harga;
     $transaksi->save();
 
+    $keranjang_id = $request->keranjang_id;
+    foreach ($keranjang_id as $key => $value) {
+      $keranjang = Keranjang::find($value);
+      $keranjang->transaksi_id = $transaksi->id;
+      $keranjang->save();
+    }
+
     $request->session()->forget('checkout');
     
     return response()->json([

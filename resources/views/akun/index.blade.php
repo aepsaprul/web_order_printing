@@ -77,9 +77,9 @@
         <div class="capitalize">{{ Auth::user()->nama_lengkap }}</div>
       </div>
       <div class="p-2">
-        <div class="px-3 py-2 text-sm font-light cursor-pointer bg-sky-200 rounded"><a href="{{ route('akun') }}">Data Diri</a></div>
-        <div class="px-3 py-2 text-sm font-light cursor-pointer"><a href="{{ route('akun.transaksi') }}">Transaksi</a></div>
-        <div class="px-3 py-2 text-sm font-light cursor-pointer"><a href="{{ route('akun.ulasan') }}">Ulasan</a></div>
+        <div class="px-3 py-2 text-sm font-light cursor-pointer {{ request()->is(['akun']) ? 'bg-sky-200' : '' }} rounded"><a href="{{ route('akun') }}">Data Diri</a></div>
+        <div class="px-3 py-2 text-sm font-light cursor-pointer {{ request()->is(['akun/transaksi']) ? 'bg-sky-200' : '' }}"><a href="{{ route('akun.transaksi') }}">Transaksi</a></div>
+        <div class="px-3 py-2 text-sm font-light cursor-pointer {{ request()->is(['akun/ulasan']) ? 'bg-sky-200' : '' }}"><a href="{{ route('akun.ulasan') }}">Ulasan</a></div>
         <div class="px-3 py-2 text-sm font-semibold cursor-pointer underline"><a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></div>
       </div>
     </div>

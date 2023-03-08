@@ -12,4 +12,12 @@ class Transaksi extends Model
   public function dataRekening() {
     return $this->belongsTo(Rekening::class, 'rekening_id', 'id');
   }
+
+  public function dataStatus() {
+    return $this->belongsTo(Status::class, 'status', 'id');
+  }
+
+  public function dataKeranjang() {
+    return $this->hasMany(Keranjang::class, 'transaksi_id', 'id');
+  }
 }
