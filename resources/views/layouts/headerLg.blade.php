@@ -12,8 +12,13 @@
       </div>
     </div>
     <div class="flex">
-      <div>
-        <a href="{{ route('keranjang') }}"><i class="fa fa-basket-shopping text-xl"></i></a>
+      <div class="relative w-10 h-10">
+        <div class="w-8 h-10 flex items-center">
+          <a href="{{ route('keranjang') }}"><i class="fa fa-basket-shopping text-2xl"></i></a>
+        </div>
+        <div class="bg-red-600 absolute h-6 w-6 top-0 right-0 rounded-full flex items-center justify-center font-semibold text-white text-xs">
+          <span class="py-2 px-2">1</span>
+        </div>
       </div>
       <div class="flex ml-10 items-center">
         @auth

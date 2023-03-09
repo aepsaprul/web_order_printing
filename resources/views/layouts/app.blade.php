@@ -37,7 +37,7 @@
   {{-- swiper --}}
   <script src="{{ asset('swiper/swiper.js') }}"></script>
 
-  <script>
+  <script type="module">
     function afRupiah(nominal) {
       var	number_string = nominal.toString(),
         sisa 	= number_string.length % 3,
@@ -79,6 +79,22 @@
       } else {
         header.classList.remove("sticky");
       }
+    }
+
+    // notif keranjang
+    notifKeranjang();
+    function notifKeranjang() {
+      $.ajax({
+        url: "{{ URL::route('keranjang.ajaks') }}",
+        type: "get",
+        success: function (response) {
+          const jml_keranjang = response.keranjang.length;
+          if (jml_keranjang > 0) {
+            $('.notif-keranjang').removeClass('hidden');
+            $('.notif-keranjang-jml').html(jml_keranjang);            
+          }
+        }
+      })
     }
   </script>
 

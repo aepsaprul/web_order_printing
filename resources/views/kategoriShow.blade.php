@@ -3,7 +3,7 @@
 @section('content')
 
 @include('layouts.header')
-@include('layouts.headerLg')
+{{-- @include('layouts.headerLg') --}}
 
 <div class="lg:flex lg:justify-center">
   <div class="lg:w-4/5 2xl:w-3/5">
@@ -12,7 +12,7 @@
       @foreach ($produk as $item)
         <li>
           <div>
-            <img src="{{ $item->gambar }}" alt="gambar" class="w-48">
+            <img src="{{ url('http://localhost/abata_web_order_admin/public/img_produk/' . $item->gambar) }}" alt="gambar" class="w-48">
           </div>
           <div class="text-sm text-center">{{ $item->nama }}</div>
           <div class="text-sm text-center">{{ $item->harga }}</div>

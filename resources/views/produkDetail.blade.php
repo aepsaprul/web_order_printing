@@ -2,8 +2,9 @@
 
 @section('content')
 
-@include('layouts.headerArrow')
-@include('layouts.headerLg')
+@include('layouts.header')
+{{-- @include('layouts.headerArrow')
+@include('layouts.headerLg') --}}
 
 <div id="notif" class="hidden fixed right-10 mt-10">
   <div class="bg-emerald-500 w-72 py-2 px-5 rounded text-center text-white ease-in-out duration-300">Berhasil masuk keranjang <i class="fa fa-check font-bold text-xl text-lime-300 ml-3"></i></div>
@@ -490,6 +491,12 @@
           $('.btn-keranjang').addClass('text-sky-600');
         },
         success: function (response) {
+          const jml_keranjang = response.jml_keranjang.length;          
+          if (jml_keranjang > 0) {
+            $('.notif-keranjang').removeClass('hidden');
+            $('.notif-keranjang-jml').html(jml_keranjang);            
+          }
+
           setTimeout(() => {
             $('#loading_keranjang').addClass('hidden');
             $('#loading_keranjang_sm').addClass('hidden');

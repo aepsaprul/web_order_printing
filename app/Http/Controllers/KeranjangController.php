@@ -17,7 +17,9 @@ class KeranjangController extends Controller
 {
   public function index()
   {
-    $keranjang = Keranjang::where('customer_id', Auth::user()->id)->get();
+    $keranjang = Keranjang::where('customer_id', Auth::user()->id)
+      ->where('transaksi_id', null)
+      ->get();
     $keranjang_total = Keranjang::select(DB::raw('SUM(total) as total_harga'))
       ->where('customer_id', Auth::user()->id)
       ->first();
@@ -25,6 +27,16 @@ class KeranjangController extends Controller
     return view('keranjang', [
       'keranjang' => $keranjang,
       'keranjang_total' => $keranjang_total
+    ]);
+  }
+  public function ajaks()
+  {
+    $keranjang = Keranjang::where('customer_id', Auth::user()->id)
+      ->where('transaksi_id', null)
+      ->get();
+
+    return response()->json([
+      'keranjang' => $keranjang
     ]);
   }
   public function store(Request $request)
@@ -49,8 +61,13 @@ class KeranjangController extends Controller
       $keranjang_template->save();
     }
 
+    $jml_keranjang = Keranjang::where('customer_id', Auth::user()->id)
+    ->where('transaksi_id', null)
+    ->get();
+
     return response()->json([
-      'status' => 200
+      'status' => 200,
+      'jml_keranjang' => $jml_keranjang
     ]);
   }
   public function tambah(Request $request)

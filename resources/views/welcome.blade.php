@@ -3,7 +3,7 @@
 @section('content')
 
 @include('layouts.header')
-@include('layouts.headerLg')
+{{-- @include('layouts.headerLg') --}}
 
 <div class="flex justify-center w-full">
   <div class="swiper gambarSlider lg:w-4/5 2xl:w-3/5">
@@ -23,7 +23,7 @@
       @foreach ($kategori as $item)
         <a href="{{ route('kategori.show', $item->id) }}">
           <div>
-            <div class="flex justify-center p-10">
+            <div class="flex justify-center lg:p-10">
               <img src="{{ url('http://localhost/abata_web_order_admin/public/img_kategori/' . $item->gambar) }}" alt="kategori" class="w-20 lg:w-full border-4 rounded-full">
             </div>
             <div class="text-center font-semibold mt-2 lg:text-xl">{{ $item->nama }}</div>
@@ -95,9 +95,9 @@
     }
   });
 
-  window.onscroll = function() {
-    myFunction();
-  };
+  // window.onscroll = function() {
+  //   myFunction();
+  // };
 
   // pagination
   const paginationNumbers = document.getElementById("pagination-numbers");

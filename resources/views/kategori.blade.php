@@ -3,7 +3,7 @@
 @section('content')
 
 @include('layouts.header')
-@include('layouts.headerLg')
+{{-- @include('layouts.headerLg') --}}
 
 <div>
   <h1 class="text-center font-bold my-5 text-xl text-slate-500">Kategori Produk</h1>

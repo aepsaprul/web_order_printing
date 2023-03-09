@@ -2,8 +2,9 @@
 
 @section('content')
 
-@include('layouts.headerArrow')
-@include('layouts.headerLg')
+@include('layouts.header')
+{{-- @include('layouts.headerArrow') --}}
+{{-- @include('layouts.headerLg') --}}
 
 <div class="flex justify-center pb-24">
   <div class="w-full lg:w-4/5 2xl:w-3/5 lg:flex lg:justify-between mt-5">
