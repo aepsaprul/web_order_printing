@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Models\Keranjang;
 use App\Models\Transaksi;
 use App\Models\WilayahCity;
 use App\Models\WilayahDistrict;
 use App\Models\WilayahProvince;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class AkunController extends Controller
 {
@@ -80,8 +82,58 @@ class AkunController extends Controller
 
     return view('akun.transaksi', ['transaksi' => $transaksi]);
   }
+  // public function transaksiDetail($id)
+  // {
+  //   $transaksi = Transaksi::find($id);
+
+  //   $keranjang_total = Keranjang::select(DB::raw('SUM(total) as total_harga'))
+  //     ->where('customer_id', Auth::user()->id)
+  //     ->where('transaksi_id', $id)
+  //     ->first();
+
+  //   return view('akun.transaksiDetail', [
+  //     'transaksi' => $transaksi,
+  //     'keranjang_total' => $keranjang_total
+  //   ]);
+  // }
   public function ulasan()
   {
     return view('akun.ulasan');
+  }
+
+  // mobile
+  public function mAkun()
+  {
+    $customer = Customer::find(Auth::user()->id);
+
+    return view('akun.mobile.index', ['customer' => $customer]);
+  }
+  public function mTransaksi()
+  {
+    $transaksi = Transaksi::where('customer_id', Auth::user()->id)->limit(10)->get();
+
+    return view('akun.mobile.transaksi', ['transaksi' => $transaksi]);
+  }
+  public function mTransaksiDetail($id)
+  {
+    $transaksi = Transaksi::with([
+        'dataKeranjang', 
+        'dataKeranjang.produk',
+        'dataKecamatan',
+        'dataKabupaten',
+        'dataProvinsi',
+        'dataRekening'
+      ])
+      ->find($id);
+    
+    $keranjang_total = Keranjang::select(DB::raw('SUM(total) as total_harga'))
+      ->where('customer_id', Auth::user()->id)
+      ->where('transaksi_id', $id)
+      ->first();
+
+    return response()->json([
+      'transaksi' => $transaksi,
+      'keranjang_total' => $keranjang_total
+    ]);
   }
 }

@@ -80,6 +80,13 @@
       </div>            
     </div>
     <div>
+      @if (Auth::user()->segmen == "member")
+        <div class="capitalize font-bold text-emerald-500">{{ Auth::user()->segmen }}</div>
+      @else
+        👉 <button class="bg-emerald-600 text-white text-sm font-semibold rounded py-1 px-3">Daftar Member</button>
+      @endif
+    </div>
+    <div class="mt-5">
       <h5 class="font-semibold">Alamat</h5>
       <div>
         <p class="text-sm uppercase">{{ Auth::user()->alamat ? Auth::user()->alamat : '-' }}, Kecamatan {{ Auth::user()->kecamatan ? Auth::user()->dataKecamatan->dis_name : '-' }}, Kabupaten/Kota {{ Auth::user()->kabupaten ? Auth::user()->dataKabupaten->city_name : '-' }}, Provinsi {{ Auth::user()->provinsi ? Auth::user()->dataProvinsi->prov_name : '-' }}, Kodepos {{ Auth::user()->kodepos ? Auth::user()->kodepos : '-' }}</p>

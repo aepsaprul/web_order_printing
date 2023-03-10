@@ -383,7 +383,7 @@
         const val = $(this).val();
         let updateVal;
 
-        if (!val || isNaN(val) || parseInt(val) < 1) {
+        if (!val || isNaN(val) || parseInt(val) < 2) {
           $('#input_counter').val(1);
 
           $('#btn_minus').prop('disabled', true);
@@ -393,6 +393,10 @@
           updateVal = 1;
         } else {
           updateVal = val;
+
+          $('#btn_minus').prop('disabled', false);
+          $('#btn_minus').removeClass('bg-rose-400');
+          $('#btn_minus').addClass('bg-rose-600');
         }
 
         const harga = parseInt($('.nominal_harga').text().replace(/\./g, ''));

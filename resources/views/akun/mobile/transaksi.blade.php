@@ -1,64 +1,68 @@
-@extends('akun.index')
+@extends('layouts.app')
 
-@section('content_akun')
+@section('content')
+
+@include('layouts.header')
+
 <div>
-  <h3 class="font-bold text-lg">Transaksi</h3>
-</div>
-<div id="transaksi_page" class="flex">
-  <div class="w-full">
+  {{-- data hidden --}}
+  <input type="hidden" name="transaksi_total" id="transaksi_total" value="{{ $transaksi->count() }}">
 
-    {{-- data hidden --}}
-    <input type="hidden" name="transaksi_total" id="transaksi_total" value="{{ $transaksi->count() }}">
-
-    @foreach ($transaksi as $key => $item)
-    <div class="border rounded my-2 p-2">
-      <div class="flex">
-        <div class="text-sm mr-3">
-          @php
-            $transaksi_tanggal = Carbon\Carbon::parse($item->created_at)->locale('id');
-            $transaksi_tanggal->settings(['formatFunction' => 'translatedFormat']);
-          @endphp
-          {{ $transaksi_tanggal->format('d F Y') }}
-        </div>
-        <div class="text-sm mr-3">{{ $item->kode }}</div>
-        <div class="{{ $item->status == 6 ? 'bg-green-600 rounded' : 'bg-rose-600 rounded' }} px-3 text-sm text-white font-semibold">{{ $item->dataStatus->nama }}</div>
-      </div>
-      <div class="flex justify-between mt-3">
+  @foreach ($transaksi as $key => $item)
+  <div class="m-3">
+    <div class="border rounded-md">
+      <div class="flex justify-between border-b p-2">
         <div>
-          @foreach ($item->dataKeranjang as $item_keranjang)
-            <div class="flex my-3">
-              <div>
-                <img src="{{ url('http://localhost/abata_web_order_admin/public/img_produk/' . $item_keranjang->produk->gambar) }}" alt="gambar produk" class="w-16">
-              </div>
-              <div class="ml-3">
-                <div class="font-bold">{{ $item_keranjang->produk->nama }}</div>
-                <div class="text-sm text-slate-500">{{ $item_keranjang->qty }} {{ $item_keranjang->produk->satuan }} x <span class="text-xs">Rp</span> @currency($item_keranjang->harga)</div>
-              </div>              
-            </div>
-          @endforeach
+          <div>
+            @php
+              $transaksi_tanggal = Carbon\Carbon::parse($item->created_at)->locale('id');
+              $transaksi_tanggal->settings(['formatFunction' => 'translatedFormat']);
+            @endphp
+            {{ $transaksi_tanggal->format('d F Y') }}          
+          </div>
+          <div class="text-sm font-semibold">{{ $item->kode }}</div>      
         </div>
-        <div class="border-l-2 h-12 px-12">
-          <div class="text-sm">Total Beli</div>
-          <div class="font-bold">Rp @currency($item->total)</div>
-        </div>
-      </div>
-      <div class="flex justify-end items-center">
         <div>
-          <button class="lihat-detail-{{ $key }} transaksi-detail font-bold text-sm mx-2 text-sky-400" 
-              data-id="{{ $item->id }}"
+          <div class="{{ $item->status == 6 ? 'bg-green-600 rounded' : 'bg-rose-600 rounded' }} px-3 text-sm text-white font-semibold">{{ $item->dataStatus->nama }}</div>
+          <div class="flex justify-end">
+            <button class="lihat-detail-{{ $key }} text-sky-400 font-semibold border my-1 px-2 rounded"
               data-te-toggle="modal"
               data-te-target="#modalTransaksiDetail"
               data-te-ripple-init
               data-te-ripple-color="light"
-            >Detail Transaksi
-          </button>
+              data-id="{{ $item->id }}"
+            >Lihat Detail</button>
+          </div>
         </div>
-        <div><button class="bg-sky-500 py-2 px-7 mx-2 text-white font-bold text-sm rounded">Ulas</button></div>
-        <div><button class="bg-sky-500 py-2 px-7 mx-2 text-white font-bold text-sm rounded">Beli Lagi</button></div>
+      </div>
+      <div>
+        @foreach ($item->dataKeranjang as $item_keranjang)
+          <div class="flex p-2">
+            <div>
+              <img src="{{ url('http://localhost/abata_web_order_admin/public/img_produk/' . $item_keranjang->produk->gambar) }}" alt="gambar produk" class="w-16">
+            </div>
+            <div class="ml-3">
+              <div class="font-bold">{{ $item_keranjang->produk->nama }}</div>
+              <div class="text-sm text-slate-500">{{ $item_keranjang->qty }} {{ $item_keranjang->produk->satuan }} x <span class="text-xs">Rp</span> @currency($item_keranjang->harga)</div>
+            </div>              
+          </div>
+        @endforeach
+      </div>
+      <div>
+        <div class="flex justify-between p-2">
+          <div>
+            <div class="text-xs">Total Beli</div>
+            <div class="text-sm font-semibold">Rp @currency($item->total)</div>
+          </div>
+          <div class="flex">
+            <button class="bg-sky-500 text-white text-sm font-semibold rounded px-3 ml-2 w-24">Ulas</button>
+            <button class="border border-sky-500 text-sm font-semibold rounded px-3 ml-2 w-24">Beli Lagi</button>
+          </div>
+        </div>
       </div>
     </div>
-    @endforeach
   </div>
+  @endforeach
 </div>
 
 <!--modal -->
@@ -106,6 +110,8 @@
     </div>
   </div>
 </div>
+@include('layouts.navBawah')
+
 @endsection
 
 @section('script')
@@ -130,7 +136,7 @@
         const id = $(this).attr('data-id');
         let url = "{{ route('mTransaksi.detail', ':id') }}";
         url = url.replace(':id', id);
-  
+
         $.ajax({
           url: url,
           type: "get",
@@ -141,7 +147,7 @@
             const event = new Date(tgl); // ambil variabel tanggal
             const options = { year: 'numeric', month: 'long', day: 'numeric' } // tentukan jenis tanggal
             const tgl_indo = event.toLocaleDateString('id-ID', options); // output ex. 9 maret 2023
-  
+
             let val = `
               <div class="flex justify-between border mb-2 rounded p-2">
                 <div>${response.transaksi.kode}</div>
@@ -149,7 +155,7 @@
               </div>
               <div class="border my-2 rounded p-2">
                 <div class="text-sm font-semibold border-b pb-2">Detail Produk</div>`;
-  
+
                 $.each(response.transaksi.data_keranjang, function (index, item) {
                   val += `
                     <div class="flex my-2">
@@ -163,7 +169,7 @@
                     </div>
                   `;
                 })
-  
+
                 val += `
                 <div class="flex justify-between mt-2">
                   <div>

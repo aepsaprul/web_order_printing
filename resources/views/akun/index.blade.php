@@ -2,9 +2,10 @@
 
 @section('content')
 
-@include('layouts.headerLg')
+@include('layouts.header')
+{{-- @include('layouts.headerLg') --}}
 
-<div class="lg:hidden">
+{{-- <div class="lg:hidden">
   <div class="m-5 flex justify-between items-center bg-white shadow-md rounded-md">
     <div class="w-1/4 py-2 pl-2">
       <img src="{{ asset('assets/1665988705.jpg') }}" alt="avatar" class="w-16 rounded-full">
@@ -59,10 +60,10 @@
       <p class="p-2">Lorem ipsum dolor, sit amet consectetur adipisicing elit. A, nisi.</p>
     </div>
   </div>
-</div>
+</div> --}}
 
-<div class="hidden lg:flex lg:justify-center">
-  <div class="lg:w-4/5 2xl:w-3/5 flex mt-5">
+<div class="flex justify-center">
+  <div class="w-4/5 2xl:w-3/5 flex mt-5">
     <div class="w-1/5 border rounded-md">
       <div class="flex items-center p-3 border-b">
         <div class="mr-3">
@@ -80,7 +81,12 @@
         <div class="px-3 py-2 text-sm font-light cursor-pointer {{ request()->is(['akun']) ? 'bg-sky-200' : '' }} rounded"><a href="{{ route('akun') }}">Data Diri</a></div>
         <div class="px-3 py-2 text-sm font-light cursor-pointer {{ request()->is(['akun/transaksi']) ? 'bg-sky-200' : '' }}"><a href="{{ route('akun.transaksi') }}">Transaksi</a></div>
         <div class="px-3 py-2 text-sm font-light cursor-pointer {{ request()->is(['akun/ulasan']) ? 'bg-sky-200' : '' }}"><a href="{{ route('akun.ulasan') }}">Ulasan</a></div>
-        <div class="px-3 py-2 text-sm font-semibold cursor-pointer underline"><a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></div>
+        <div class="px-3 py-2 text-sm font-semibold cursor-pointer underline">
+          <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+          <form id="logout-form" action="{{ route('logout') }}" method="POST">
+            @csrf
+          </form>
+        </div>
       </div>
     </div>
     <div class="w-4/5 px-5">

@@ -171,17 +171,6 @@
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
       }
     });
-    function afRupiah(nominal) {
-      var	number_string = nominal.toString(),
-        sisa 	= number_string.length % 3,
-        rupiah 	= number_string.substr(0, sisa),
-        ribuan 	= number_string.substr(sisa).match(/\d{3}/g);
-      if (ribuan) {
-        let separator = sisa ? '.' : '';
-        rupiah += separator + ribuan.join('.');
-      }
-      return rupiah;
-    }
     
     // counter
     const total_query = $('#total_query').val();
@@ -264,7 +253,7 @@
         const harga = $('#harga_produk_' + id).val();
         let updateVal;
 
-        if (!val || isNaN(val) || parseInt(val) < 1) {
+        if (!val || isNaN(val) || parseInt(val) < 2) {
           $('#input_counter_' + id).val(1);
 
           $('#btn_minus_' + id).prop('disabled', true);
@@ -274,6 +263,10 @@
           updateVal = 1;
         } else {
           updateVal = val;
+
+          $('#btn_minus_' + id).prop('disabled', false);
+          $('#btn_minus_' + id).removeClass('bg-rose-400');
+          $('#btn_minus_' + id).addClass('bg-rose-600');
         }
 
         let formData = {

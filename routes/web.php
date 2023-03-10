@@ -67,6 +67,12 @@ Route::middleware(['auth'])->group(function() {
   Route::get('akun/{id}/editAlamatKota', [AkunController::class, 'editAlamatKota'])->name('akun.editAlamatKota');
   Route::get('akun/{id}/editAlamatKecamatan', [AkunController::class, 'editAlamatKecamatan'])->name('akun.editAlamatKecamatan');
   Route::get('akun/transaksi', [AkunController::class, 'transaksi'])->name('akun.transaksi');
+  Route::get('akun/transaksi/{id}/detail', [AkunController::class, 'transaksiDetail'])->name('akun.transaksiDetail');
   Route::get('akun/ulasan', [AkunController::class, 'ulasan'])->name('akun.ulasan');
+
+  // akun mobile
+  Route::get('mAkun', [AkunController::class, 'mAkun'])->name('mAkun');
+  Route::get('mAkun/transaksi', [AkunController::class, 'mTransaksi'])->name('mTransaksi');
+  Route::get('mAkun/transaksi/{id}/detail', [AkunController::class, 'mTransaksiDetail'])->name('mTransaksi.detail');
 });
 

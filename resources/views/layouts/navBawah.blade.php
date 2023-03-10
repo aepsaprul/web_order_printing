@@ -3,7 +3,7 @@
     <i class="fa fa-home"></i>
     <span class="text-xs">Home</span>
   </a>
-  <a href="#" class="flex flex-col text-center w-full">
+  <a href="{{ route('mTransaksi') }}" class="flex flex-col text-center w-full">
     <i class="fa-solid fa-rectangle-list"></i>
     <span class="text-xs">Transaksi</span>
   </a>
@@ -12,7 +12,7 @@
       <i class="fa fa-comment-dots"></i>
       <span class="text-xs">Chat</span>
     </a>
-    <a href="{{ route('akun') }}" class="flex flex-col text-center w-full">
+    <a href="{{ route('mAkun') }}" class="flex flex-col text-center w-full">
       <i class="fa fa-user"></i>
       <span class="text-xs">Akun</span>
     </a>

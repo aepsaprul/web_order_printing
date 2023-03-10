@@ -36,8 +36,7 @@
 
   {{-- swiper --}}
   <script src="{{ asset('swiper/swiper.js') }}"></script>
-
-  <script type="module">
+  <script>
     function afRupiah(nominal) {
       var	number_string = nominal.toString(),
         sisa 	= number_string.length % 3,
@@ -49,6 +48,10 @@
       }
       return rupiah;
     }
+  </script>
+
+  <script type="module">
+    
     // menu
     if (document.getElementById('menu')) {
       document.getElementById('menu').onclick = function() {

@@ -22,6 +22,7 @@ class KeranjangController extends Controller
       ->get();
     $keranjang_total = Keranjang::select(DB::raw('SUM(total) as total_harga'))
       ->where('customer_id', Auth::user()->id)
+      ->where('transaksi_id', null)
       ->first();
 
     return view('keranjang', [
@@ -77,7 +78,10 @@ class KeranjangController extends Controller
     $keranjang->total = $keranjang->total + $request->harga;
     $keranjang->save();
 
-    $keranjang_total = Keranjang::select(DB::raw('SUM(total) as total_harga'))->first();
+    $keranjang_total = Keranjang::select(DB::raw('SUM(total) as total_harga'))
+      ->where('customer_id', Auth::user()->id)
+      ->where('transaksi_id', null)
+      ->first();
 
     return response()->json([
       'total_harga' => $keranjang_total->total_harga
@@ -90,7 +94,10 @@ class KeranjangController extends Controller
     $keranjang->total = $keranjang->total - $request->harga;
     $keranjang->save();
 
-    $keranjang_total = Keranjang::select(DB::raw('SUM(total) as total_harga'))->first();
+    $keranjang_total = Keranjang::select(DB::raw('SUM(total) as total_harga'))
+      ->where('customer_id', Auth::user()->id)
+      ->where('transaksi_id', null)
+      ->first();
 
     return response() ->json([
       'total_harga' => $keranjang_total->total_harga
@@ -119,7 +126,10 @@ class KeranjangController extends Controller
     $keranjang->qty = $request->qty;
     $keranjang->save();
 
-    $keranjang_total = Keranjang::select(DB::raw('SUM(total) as total_harga'))->first();
+    $keranjang_total = Keranjang::select(DB::raw('SUM(total) as total_harga'))
+      ->where('customer_id', Auth::user()->id)
+      ->where('transaksi_id', null)
+      ->first();
 
     return response() ->json([
       'total_harga' => $keranjang_total->total_harga
@@ -150,8 +160,13 @@ class KeranjangController extends Controller
   public function checkout(Request $request)
   {
     if ($request->session()->has('checkout')) {
-      $keranjang = Keranjang::where('customer_id', Auth::user()->id)->get();
-      $keranjang_total = Keranjang::select(DB::raw('SUM(total) as total_harga'))->first();
+      $keranjang = Keranjang::where('customer_id', Auth::user()->id)
+        ->where('transaksi_id', null)
+        ->get();
+      $keranjang_total = Keranjang::select(DB::raw('SUM(total) as total_harga'))
+        ->where('customer_id', Auth::user()->id)
+        ->where('transaksi_id', null)
+        ->first();
       $ekspedisi = Ekspedisi::get();
       $rekening = Rekening::get();
       $rekening_bank = Rekening::where('grup', 'bank')->get();
