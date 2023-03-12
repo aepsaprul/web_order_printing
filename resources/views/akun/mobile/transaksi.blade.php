@@ -4,7 +4,7 @@
 
 @include('layouts.header')
 
-<div>
+<div class="pb-20">
   {{-- data hidden --}}
   <input type="hidden" name="transaksi_total" id="transaksi_total" value="{{ $transaksi->count() }}">
 
@@ -13,7 +13,7 @@
     <div class="border rounded-md">
       <div class="flex justify-between border-b p-2">
         <div>
-          <div>
+          <div class="text-sm">
             @php
               $transaksi_tanggal = Carbon\Carbon::parse($item->created_at)->locale('id');
               $transaksi_tanggal->settings(['formatFunction' => 'translatedFormat']);
@@ -25,7 +25,7 @@
         <div>
           <div class="{{ $item->status == 6 ? 'bg-green-600 rounded' : 'bg-rose-600 rounded' }} px-3 text-sm text-white font-semibold">{{ $item->dataStatus->nama }}</div>
           <div class="flex justify-end">
-            <button class="lihat-detail-{{ $key }} text-sky-400 font-semibold border my-1 px-2 rounded"
+            <button class="lihat-detail-{{ $key }} text-sky-500 text-sm font-thin border my-1 px-2 rounded"
               data-te-toggle="modal"
               data-te-target="#modalTransaksiDetail"
               data-te-ripple-init
@@ -36,7 +36,11 @@
         </div>
       </div>
       <div>
-        @foreach ($item->dataKeranjang as $item_keranjang)
+        <input type="hidden" id="keranjang_total_{{ $key }}" value="{{ $item->dataKeranjang->count() }}">
+        @foreach ($item->dataKeranjang as $key_keranjang => $item_keranjang)
+          <!-- data hidden -->
+          <input type="hidden" id="keranjang_id_{{ $key }}_{{ $key_keranjang }}" value="{{ $item_keranjang->id }}">
+
           <div class="flex p-2">
             <div>
               <img src="{{ url('http://localhost/abata_web_order_admin/public/img_produk/' . $item_keranjang->produk->gambar) }}" alt="gambar produk" class="w-16">
@@ -56,7 +60,6 @@
           </div>
           <div class="flex">
             <button class="bg-sky-500 text-white text-sm font-semibold rounded px-3 ml-2 w-24">Ulas</button>
-            <button class="border border-sky-500 text-sm font-semibold rounded px-3 ml-2 w-24">Beli Lagi</button>
           </div>
         </div>
       </div>
@@ -141,7 +144,6 @@
           url: url,
           type: "get",
           success: function (response) {
-            console.log(response)
             const transaksi = response.transaksi;
             const tgl = response.transaksi.created_at; // tanggal dari DB
             const event = new Date(tgl); // ambil variabel tanggal
@@ -174,10 +176,7 @@
                 <div class="flex justify-between mt-2">
                   <div>
                     <div class="text-sm">Total Harga</div>
-                    <div class="font-semibold"><span class="text-xs">Rp</span> ${afRupiah(response.keranjang_total.total_harga)}</div>
-                  </div>
-                  <div class="flex items-center">
-                    <button class="rounded border border-sky-600 text-sm py-1 px-3 font-bold">Beli Lagi</button>
+                    <div class="text-sm font-semibold"><span class="text-xs">Rp</span> ${afRupiah(response.keranjang_total.total_harga)}</div>
                   </div>
                 </div>
               </div>
@@ -202,17 +201,17 @@
                 </div>
                 <div class="p-1 flex justify-between">
                   <div class="w-2/4 text-sm capitalize">Total Harga</div>
-                  <div class="w-2/4 text-sm">${afRupiah(response.keranjang_total.total_harga)}</div>
+                  <div class="w-2/4 text-sm"><span class="text-xs">Rp</span> ${afRupiah(response.keranjang_total.total_harga)}</div>
                 </div>
                 <div class="p-1 flex justify-between">
                   <div class="w-2/4 text-sm capitalize">Ongkir</div>
-                  <div class="w-2/4 text-sm">${afRupiah(transaksi.ongkir)}</div>
+                  <div class="w-2/4 text-sm"><span class="text-xs">Rp</span> ${afRupiah(transaksi.ongkir)}</div>
                 </div>
                 <div class="p-1 flex justify-between">
                   <div class="w-2/4 text-sm capitalize">Diskon</div>
                   <div class="w-2/4 text-sm">`;
                     if (transaksi.diskon) {
-                      val += `${afRupiah(transaksi.diskon)}`;
+                      val += `<span class="text-xs">Rp</span> ${afRupiah(transaksi.diskon)}`;
                     } else {
                       val += `0`;
                     }
@@ -220,7 +219,7 @@
                 </div>
                 <div class="p-1 flex justify-between">
                   <div class="w-2/4 text-sm capitalize">Total Beli</div>
-                  <div class="w-2/4 text-sm">${afRupiah(transaksi.total)}</div>
+                  <div class="w-2/4 text-lg font-bold"><span class="text-xs">Rp</span> ${afRupiah(transaksi.total)}</div>
                 </div>
               </div>
             `;
@@ -228,7 +227,7 @@
             $('.modal-content').html(val);
           }
         })
-      })      
+      })
     }
   })
 </script>

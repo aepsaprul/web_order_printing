@@ -54,7 +54,6 @@
           </button>
         </div>
         <div><button class="bg-sky-500 py-2 px-7 mx-2 text-white font-bold text-sm rounded">Ulas</button></div>
-        <div><button class="bg-sky-500 py-2 px-7 mx-2 text-white font-bold text-sm rounded">Beli Lagi</button></div>
       </div>
     </div>
     @endforeach
@@ -168,10 +167,7 @@
                 <div class="flex justify-between mt-2">
                   <div>
                     <div class="text-sm">Total Harga</div>
-                    <div class="font-semibold"><span class="text-xs">Rp</span> ${afRupiah(response.keranjang_total.total_harga)}</div>
-                  </div>
-                  <div class="flex items-center">
-                    <button class="rounded border border-sky-600 text-sm py-1 px-3 font-bold">Beli Lagi</button>
+                    <div class="text-sm font-semibold"><span class="text-xs">Rp</span> ${afRupiah(response.keranjang_total.total_harga)}</div>
                   </div>
                 </div>
               </div>
@@ -196,17 +192,17 @@
                 </div>
                 <div class="p-1 flex justify-between">
                   <div class="w-2/4 text-sm capitalize">Total Harga</div>
-                  <div class="w-2/4 text-sm">${afRupiah(response.keranjang_total.total_harga)}</div>
+                  <div class="w-2/4 text-sm"><span class="text-sm">Rp</span> ${afRupiah(response.keranjang_total.total_harga)}</div>
                 </div>
                 <div class="p-1 flex justify-between">
                   <div class="w-2/4 text-sm capitalize">Ongkir</div>
-                  <div class="w-2/4 text-sm">${afRupiah(transaksi.ongkir)}</div>
+                  <div class="w-2/4 text-sm"><span class="text-sm">Rp</span> ${afRupiah(transaksi.ongkir)}</div>
                 </div>
                 <div class="p-1 flex justify-between">
                   <div class="w-2/4 text-sm capitalize">Diskon</div>
                   <div class="w-2/4 text-sm">`;
                     if (transaksi.diskon) {
-                      val += `${afRupiah(transaksi.diskon)}`;
+                      val += `<span class="text-sm">Rp</span> ${afRupiah(transaksi.diskon)}`;
                     } else {
                       val += `0`;
                     }
@@ -214,7 +210,7 @@
                 </div>
                 <div class="p-1 flex justify-between">
                   <div class="w-2/4 text-sm capitalize">Total Beli</div>
-                  <div class="w-2/4 text-sm">${afRupiah(transaksi.total)}</div>
+                  <div class="w-2/4 text-lg font-bold"><span class="text-sm">Rp</span> ${afRupiah(transaksi.total)}</div>
                 </div>
               </div>
             `;

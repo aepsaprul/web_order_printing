@@ -188,14 +188,15 @@ class KeranjangController extends Controller
   {
     $customer = Customer::find($request->customer_id);
     $ekspedisi = Ekspedisi::find($request->ekspedisi);
+    $kode_unik = rand(000, 333);
 
     $transaksi = new Transaksi;
     $transaksi->kode = Str::random(8);
     $transaksi->customer_id = $request->customer_id;
     $transaksi->status = 1;
     $transaksi->penerima = $customer->nama_lengkap;
-    $transaksi->total = $request->total_harga;
-    $transaksi->kode_unik = rand(000, 333);
+    $transaksi->total = $request->total_harga + $kode_unik;
+    $transaksi->kode_unik = $kode_unik;
     $transaksi->rekening_id = $request->rekening;
     $transaksi->alamat = $customer->alamat;
     $transaksi->provinsi = $customer->provinsi;

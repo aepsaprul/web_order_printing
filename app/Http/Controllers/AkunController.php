@@ -82,20 +82,6 @@ class AkunController extends Controller
 
     return view('akun.transaksi', ['transaksi' => $transaksi]);
   }
-  // public function transaksiDetail($id)
-  // {
-  //   $transaksi = Transaksi::find($id);
-
-  //   $keranjang_total = Keranjang::select(DB::raw('SUM(total) as total_harga'))
-  //     ->where('customer_id', Auth::user()->id)
-  //     ->where('transaksi_id', $id)
-  //     ->first();
-
-  //   return view('akun.transaksiDetail', [
-  //     'transaksi' => $transaksi,
-  //     'keranjang_total' => $keranjang_total
-  //   ]);
-  // }
   public function ulasan()
   {
     return view('akun.ulasan');
