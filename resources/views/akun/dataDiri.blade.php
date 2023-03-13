@@ -541,9 +541,9 @@
         }
       })
     })
-    $('#tes_select').on('change', function() {
-      console.log('tes');
-    })
+    // $('#tes_select').on('change', function() {
+    //   console.log('tes');
+    // })
   })
 </script>
 @endsection

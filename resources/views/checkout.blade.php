@@ -19,10 +19,19 @@
         <p class="font-semibold text-sm border-b px-3 lg:px-0 py-3">Alamat Pengiriman</p>
         <div class="px-3 lg:px-0 py-3 rounded">
           <input type="hidden" id="customer_id" value="{{ Auth::user()->id }}">
-          <p class="font-bold capitalize">{{ Auth::user()->nama_lengkap }}</p>
-          <p class="text-sm uppercase">{{ Auth::user()->telepon }}</p>
-          <p class="text-sm uppercase">{{ Auth::user()->alamat }}</p>
-          <p class="text-sm uppercase">Kec. {{ Auth::user()->dataKecamatan->dis_name }}, Kab. {{ Auth::user()->dataKabupaten->city_name }}, {{ Auth::user()->dataProvinsi->prov_name }}, {{ Auth::user()->kodepos }}</p>
+          @if (Auth::user()->telepon || Auth::user()->kecamatan || Auth::user()->kabupaten || Auth::user()->provinsi || Auth::user()->kodepos)
+            <p class="font-bold capitalize">{{ Auth::user()->nama_lengkap }}</p>
+            <p class="text-sm uppercase">{{ Auth::user()->telepon }}</p>
+            <p class="text-sm uppercase">{{ Auth::user()->alamat ? Auth::user()->alamat : '-' }}</p>
+            <p class="text-sm uppercase">Kecamatan {{ Auth::user()->kecamatan ? Auth::user()->dataKecamatan->dis_name : '-' }}, Kabupaten/Kota {{ Auth::user()->kabupaten ? Auth::user()->dataKabupaten->city_name : '-' }}, Provinsi {{ Auth::user()->provinsi ? Auth::user()->dataProvinsi->prov_name : '-' }}, Kodepos {{ Auth::user()->kodepos ? Auth::user()->kodepos : '-' }}</p>              
+          @else
+            <button id="ubah_alamat" class="text-sky-500 font-bold"
+              data-te-toggle="modal"
+              data-te-target="#modalAlamat"
+              data-te-ripple-init
+              data-te-ripple-color="light"
+            >Ubah Alamat</button>
+          @endif
         </div>
       </div>
       {{-- produk --}}
@@ -158,7 +167,7 @@
             </div>
             <div class="flex justify-between">
               <div class="text-slate-600">Diskon</div>
-              <div class="text-slate-600"><span class="text-sm">- Rp</span> 0</div>
+              <div class="text-slate-600"><span class="text-sm">- Rp</span> <span class="nominal_diskon">0</div>
             </div>
           </div>
           <div class="border-t lg:border-0 flex lg:block justify-between mx-3 lg:mx-0 lg:px-3 lg:py-3">
@@ -184,6 +193,100 @@
     </div>
   </div>
 </div>
+
+<!-- modal -->
+<div
+  data-te-modal-init
+  class="fixed top-0 left-0 z-[1055] hidden h-full w-full overflow-y-auto overflow-x-hidden outline-none"
+  id="modalAlamat"
+  tabindex="-1"
+  aria-labelledby="modalAlamatTitle"
+  aria-modal="true"
+  role="dialog">
+  <div
+    data-te-modal-dialog-ref
+    class="pointer-events-none relative flex min-h-[calc(100%-1rem)] w-auto translate-y-[-50px] items-center opacity-0 transition-all duration-300 ease-in-out min-[576px]:mx-auto min-[576px]:mt-7 min-[576px]:min-h-[calc(100%-3.5rem)] min-[576px]:max-w-[500px]">
+    <div
+      class="pointer-events-auto relative flex w-full flex-col rounded-md border-none bg-white bg-clip-padding text-current shadow-lg outline-none dark:bg-neutral-600">
+      <div
+        class="flex flex-shrink-0 items-center justify-between rounded-t-md border-b-2 border-neutral-100 border-opacity-100 p-4 dark:border-opacity-50">
+        <h5
+          class="text-xl font-medium leading-normal text-neutral-800 dark:text-neutral-200"
+          id="exampleModalScrollableLabel">
+          Alamat Pengiriman
+        </h5>
+        <button
+          type="button"
+          class="box-content rounded-none border-none hover:no-underline hover:opacity-75 focus:opacity-100 focus:shadow-none focus:outline-none"
+          data-te-modal-dismiss
+          aria-label="Close">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="h-6 w-6">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <div class="relative flex-auto p-2" data-te-modal-body-ref>
+        <input type="text" name="telepon" id="telepon" class="w-full border border-slate-300 rounded px-2 py-1 outline-0" placeholder="Ketikkan Nomor HP">
+      </div>
+      <div class="relative flex-auto p-2" data-te-modal-body-ref>
+        <select
+          id="select_provinsi"
+          data-te-select-init
+          data-te-container="#modalAlamat"
+          data-te-select-filter="true">              
+        </select>
+      </div>
+      <div class="relative flex-auto p-2" data-te-modal-body-ref>
+        <select
+          id="select_kota"
+          data-te-select-init
+          data-te-container="#modalAlamat"
+          data-te-select-filter="true">              
+        </select>
+      </div>
+      <div class="relative flex-auto p-2" data-te-modal-body-ref>
+        <select
+          id="select_kecamatan"
+          data-te-select-init
+          data-te-container="#modalAlamat"
+          data-te-select-filter="true">              
+        </select>
+      </div>
+      <div class="relative flex-auto p-2" data-te-modal-body-ref>
+        <textarea name="alamat" id="alamat" rows="3" class="w-full border border-slate-300 rounded p-2 outline-0" placeholder="Ketikkan alamat lengkap"></textarea>
+      </div>
+      <div class="relative flex-auto p-2" data-te-modal-body-ref>
+        <input type="text" name="kodepos" id="kodepos" class="w-full border border-slate-300 rounded px-2 py-1 outline-0" placeholder="Ketikkan kodepos">
+      </div>
+      <div
+        class="flex flex-shrink-0 flex-wrap items-center justify-end rounded-b-md border-t-2 border-neutral-100 border-opacity-100 p-4 dark:border-opacity-50">
+        <div class="relative flex items-center justify-center">
+          <div id="modal_alamat_loading" class="hidden absolute">
+            <div class="flex items-center justify-center">
+              <div class="flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-tr from-sky-500 to-slate-100 animate-spin">
+                <div class="h-2 w-2 rounded-full bg-white"></div>
+              </div>
+            </div>
+          </div>
+          <button
+            type="button"
+            class="modal-alamat-btn-simpan ml-1 inline-block rounded border border-sky-600 bg-primary px-6 pt-2.5 pb-2 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out">
+            Simpan
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 @endsection
 
 @section('script')
@@ -195,13 +298,122 @@
       }
     });
 
-    const total_ekspedisi = $('#total_ekspedisi').val();
+    const total_harga_produk = Number($('#total_harga_produk').text().replace(/\./g, ''));
+    let diskon = total_harga_produk * 0.05;
+    let total_harga = Number($('#total_harga').text().replace(/\./g, ''));
+    let totalHargaCalc = total_harga - diskon;
     
+    $('.nominal_diskon').html(diskon);
+    $('#total_harga').html(afRupiah(totalHargaCalc));
+
+    // ubah alamat
+    const akun_id = $('#customer_id').val();
+    $('#ubah_alamat').on('click', function () {
+      $('.modal-alamat-title').html('Ubah Alamat');
+      $('.modal-alamat-btn-simpan').prop('id', 'btn_simpan_alamat');
+
+      let url = '{{ route("akun.editAlamat", ":id") }}';
+      url = url.replace(':id', akun_id);
+
+      $.ajax({
+        url: url,
+        type: "get",
+        success: function (response) {
+          let data_provinsi = `<option value="0">Pilih Provinsi</option>`;
+
+          $.each(response.provinsi, function (index, item) {
+            data_provinsi += `<option value="` + item.prov_id + `">` + item.prov_name + `</option>`;
+          })
+
+          $('#select_provinsi').html(data_provinsi);
+        }
+      })
+    })
+    $(document).on('change', '#select_provinsi', function () {
+      const val = $(this).val();
+      $('#select_kota').html('<option value="0">Pilih Kota</option>');
+      $('#select_kecamatan').html('<option value="0">Pilih Kecamatan</option>');
+      
+      let url = '{{ route("akun.editAlamatKota", ":id") }}';
+      url = url.replace(':id', val);
+
+      $.ajax({
+        url: url,
+        type: "get",
+        success: function (response) {
+          let data_kota = `<option value="0">Pilih Kota</option>`;
+
+          $.each(response.kota, function (index, item) {
+            data_kota += `<option value="` + item.city_id + `">` + item.city_name + `</option>`;
+          })
+
+          $('#select_kota').html(data_kota);
+        }
+      })
+    })
+    $(document).on('change', '#select_kota', function () {
+      const val = $(this).val();
+      $('#select_kecamatan').html('<option value="0">Pilih Kecamatan</option>');
+      
+      let url = '{{ route("akun.editAlamatKecamatan", ":id") }}';
+      url = url.replace(':id', val);
+
+      $.ajax({
+        url: url,
+        type: "get",
+        success: function (response) {
+          let data_kecamatan = `<option value="0">Pilih Kecamatan</option>`;
+
+          $.each(response.kecamatan, function (index, item) {
+            data_kecamatan += `<option value="` + item.dis_id + `">` + item.dis_name + `</option>`;
+          })
+
+          $('#select_kecamatan').html(data_kecamatan);
+        }
+      })
+    })
+    $(document).on('click', '#btn_simpan_alamat', function () {
+      const provinsi = $('#select_provinsi').val();
+      const kabupaten = $('#select_kota').val();
+      const kecamatan = $('#select_kecamatan').val();
+      const alamat = $('#alamat').val();
+      const kodepos = $('#kodepos').val();
+      const telepon = $('#telepon').val();
+
+      let formData = {
+        id: akun_id,
+        title: "alamat",
+        provinsi: provinsi,
+        kabupaten: kabupaten,
+        kecamatan: kecamatan,
+        alamat: alamat,
+        kodepos: kodepos,
+        telepon: telepon
+      }
+
+      $.ajax({
+        url: "{{ URL::route('akun.updateDataDiri') }}",
+        type: "post",
+        data: formData,
+        beforeSend: function (response) {
+          $('#modal_alamat_loading').removeClass('hidden');
+          $('.modal-alamat-btn-simpan').removeClass('bg-primary');
+        },
+        success: function (response) {
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
+        }
+      })
+    })
+
+    // ekspedisi
+    const total_ekspedisi = $('#total_ekspedisi').val();
     for (let index_ekspedisi = 0; index_ekspedisi < total_ekspedisi; index_ekspedisi++) {
       $('#radio_ekspedisi_' + index_ekspedisi).on('change', function () {
         const val = $(this).val();
         const total_harga_produk = $('#total_harga_produk').text().replace(/\./g, '');
-        const calcTotal = parseInt(total_harga_produk) + parseInt(val);
+        const calcTotal = (parseInt(total_harga_produk) + parseInt(val)) - diskon;
         
         $('#total_ongkos_kirim').html(afRupiah(val));
         $('#total_harga').html(afRupiah(calcTotal));
@@ -217,6 +429,7 @@
       })
     }
 
+    // bank
     const total_rekening_bank = $('#total_rekening_bank').val();
     for (let index_bank = 0; index_bank < total_rekening_bank; index_bank++) {
       $('#radio_rekening_bank_' + index_bank).on('change', function () {
@@ -231,6 +444,7 @@
       })
     }
 
+    // e-wallet
     const total_rekening_ewallet = $('#total_rekening_ewallet').val();
     for (let index_ewallet = 0; index_ewallet < total_rekening_ewallet; index_ewallet++) {
       $('#radio_rekening_ewallet_' + index_ewallet).on('change', function () {
@@ -245,10 +459,11 @@
       })
     }
     
+    // btn bayar
     $('#btn_bayar').on('click', function (e) {
       const customer_id = $('#customer_id').val();
       const keranjang_id_total = $('#total_query').val();
-      const total_harga = $('#total_harga').text().replace(/\./g, '');
+      const total_harga_fix = $('#total_harga').text().replace(/\./g, '');
       const eskpedisi_id = $('input[name="radio_ekspedisi"]:checked').attr('data-id');
       const rekening_val = $('input[name="radio_rekening"]:checked').val();
       const keranjang_id = [];
@@ -263,7 +478,8 @@
         keranjang_id: keranjang_id,
         ekspedisi: eskpedisi_id,
         rekening: rekening_val,
-        total_harga: total_harga
+        total_harga: total_harga_fix,
+        diskon: diskon
       }
 
       $.ajax({

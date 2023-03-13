@@ -205,6 +205,7 @@ class KeranjangController extends Controller
     $transaksi->kodepos = $customer->kodepos;
     $transaksi->ekspedisi = $ekspedisi->nama;
     $transaksi->ongkir = $ekspedisi->harga;
+    $transaksi->diskon = $request->diskon;
     $transaksi->save();
 
     $keranjang_id = $request->keranjang_id;

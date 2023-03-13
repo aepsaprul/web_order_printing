@@ -58,6 +58,9 @@ class AkunController extends Controller
     } else if ($request->title == "jenis_kelamin") {
       $customer->jenis_kelamin = $request->jenis_kelamin;
     } else if ($request->title == "alamat") {
+      if ($request->telepon) {
+        $customer->telepon = $request->telepon;
+      }
       $customer->provinsi = $request->provinsi;
       $customer->kabupaten = $request->kabupaten;
       $customer->kecamatan = $request->kecamatan;
