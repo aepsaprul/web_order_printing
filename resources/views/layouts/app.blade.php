@@ -85,7 +85,10 @@
     }
 
     // notif keranjang
-    notifKeranjang();
+    var loggedIn = {{ auth()->check() ? 'true' : 'false' }};
+    if (loggedIn) {
+      notifKeranjang();      
+    }
     function notifKeranjang() {
       $.ajax({
         url: "{{ URL::route('keranjang.ajaks') }}",

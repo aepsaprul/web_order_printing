@@ -17,7 +17,7 @@
       <div class="border-b mx-3">
         <div class="flex justify-between">
           <div class="py-3">Total Pembayaran</div>
-          <div class="py-3 font-bold text-xl"><span class="text-sm">Rp</span> <span id="nominal_bayar">@currency($transaksi->total + $transaksi->kode_unik)</span></div>
+          <div class="py-3 font-bold text-xl"><span class="text-sm">Rp</span> <span id="nominal_bayar">@currency($transaksi->total)</span></div>
         </div>
         <div class="py-3 text-right text-xs italic"><span class="text-rose-800">*</span> pastikan 3 digit terakhir sama</div>
       </div>

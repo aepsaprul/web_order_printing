@@ -167,6 +167,15 @@ class KeranjangController extends Controller
         ->where('customer_id', Auth::user()->id)
         ->where('transaksi_id', null)
         ->first();
+      
+      if (Auth::user()->segmen == "member") {
+        $diskon = intval($keranjang_total->total_harga) * 0.05;
+      } else {
+        $diskon = 0;
+      }
+
+      $transaksi_total = intval($keranjang_total->total_harga) - $diskon;
+      
       $ekspedisi = Ekspedisi::get();
       $rekening = Rekening::get();
       $rekening_bank = Rekening::where('grup', 'bank')->get();
@@ -175,6 +184,8 @@ class KeranjangController extends Controller
       return view('checkout', [
         'keranjang' => $keranjang,
         'keranjang_total' => $keranjang_total,
+        'transaksi_total' => $transaksi_total,
+        'diskon' => $diskon,
         'ekspedisi' => $ekspedisi,
         'rekening' => $rekening,
         'rekening_bank' => $rekening_bank,
@@ -188,7 +199,7 @@ class KeranjangController extends Controller
   {
     $customer = Customer::find($request->customer_id);
     $ekspedisi = Ekspedisi::find($request->ekspedisi);
-    $kode_unik = rand(000, 333);
+    $kode_unik = rand(000, 100);
 
     $transaksi = new Transaksi;
     $transaksi->kode = Str::random(8);

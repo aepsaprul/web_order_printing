@@ -167,13 +167,13 @@
             </div>
             <div class="flex justify-between">
               <div class="text-slate-600">Diskon</div>
-              <div class="text-slate-600"><span class="text-sm">- Rp</span> <span class="nominal_diskon">0</div>
+              <div class="text-slate-600"><span class="text-sm">- Rp</span> <span class="nominal_diskon">@currency($diskon)</div>
             </div>
           </div>
           <div class="border-t lg:border-0 flex lg:block justify-between mx-3 lg:mx-0 lg:px-3 lg:py-3">
             <div class="w-full mt-2 lg:flex lg:justify-between">
               <div class="text-sm lg:text-lg lg:font-semibold">Total Harga</div>
-              <div class="text-lg font-semibold"><span class="text-sm">Rp</span> <span id="total_harga">@currency($keranjang_total->total_harga)</span></div>
+              <div class="text-lg font-semibold"><span class="text-sm">Rp</span> <span id="total_harga">@currency($transaksi_total)</span></div>
             </div>
             <div class="w-full mt-3">
               <div class="relative flex items-center justify-center h-full">
@@ -298,13 +298,15 @@
       }
     });
 
-    const total_harga_produk = Number($('#total_harga_produk').text().replace(/\./g, ''));
-    let diskon = total_harga_produk * 0.05;
-    let total_harga = Number($('#total_harga').text().replace(/\./g, ''));
-    let totalHargaCalc = total_harga - diskon;
+    // diskon
+    const diskon = $('.nominal_diskon').text().replace(/\./g, '');
+    // const total_harga_produk = Number($('#total_harga_produk').text().replace(/\./g, ''));
+    // let diskon = total_harga_produk * 0.05;
+    // let total_harga = Number($('#total_harga').text().replace(/\./g, ''));
+    // let totalHargaCalc = total_harga - diskon;
     
-    $('.nominal_diskon').html(diskon);
-    $('#total_harga').html(afRupiah(totalHargaCalc));
+    // $('.nominal_diskon').html(afRupiah(diskon));
+    // $('#total_harga').html(afRupiah(totalHargaCalc));
 
     // ubah alamat
     const akun_id = $('#customer_id').val();
