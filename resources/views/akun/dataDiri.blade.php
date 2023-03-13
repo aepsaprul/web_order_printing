@@ -2,22 +2,29 @@
 
 @section('content_akun')
 
-{{-- data hidden --}}
-<input type="hidden" name="akun_id" id="akun_id" value="{{ Auth::user()->id }}">
-
 <div>
   <h3 class="font-bold text-lg">Data Diri</h3>
 </div>
 <div class="p-3 border rounded-lg flex">
   <div class="w-1/3">
     <div class="p-3 rounded-lg border shadow-md">
-      <img src="{{ asset('assets/1665988705.jpg') }}" alt="img">
+      <div class="w-60 h-60 bg-sky-400">
+        @if (Auth::user()->gambar)
+          <img src="{{ asset('img_customer/' . Auth::user()->gambar) }}" alt="img" class="object-cover h-full w-full">
+        @else
+          <img src="{{ asset('assets/1665988705.jpg') }}" id="preview_image" alt="img" class="object-cover h-full w-full">
+        @endif
+      </div>
       <div class="my-4">
         <p class="text-sm">Ganti Foto</p>
-        <input type="file" name="foto" id="foto" class="w-full border text-sm rounded">
+        <form id="form_gambar" method="post" enctype="multipart/form-data">
+          {{-- data hidden --}}
+          <input type="hidden" name="akun_id" id="akun_id" value="{{ Auth::user()->id }}">
+          <input type="file" name="gambar" id="gambar" class="w-full border text-sm rounded bg-cover">
+        </form>
       </div>
       <div>
-        <p class="text-sm text-center mt-3">Gambar maksimal 10Mb, Tipe gambar JPG, JPEG, PNG</p>
+        <p class="text-sm text-center mt-3">Gambar maksimal 3Mb, Tipe gambar JPG, JPEG, PNG</p>
       </div>
     </div>
   </div>
@@ -271,6 +278,22 @@
 
     // akun id
     const akun_id = $('#akun_id').val();
+
+    // upload image
+    $('#gambar').on('change', function () {
+      let formData = new FormData($('#form_gambar')[0]);
+
+      $.ajax({
+        url: "{{ URL::route('akun.updateGambar') }}",
+        type: "post",
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function (response) {
+          window.location.reload();
+        }
+      })
+    })
 
     // ubah nama
     $('#ubah_nama_lengkap').on('click', function () {

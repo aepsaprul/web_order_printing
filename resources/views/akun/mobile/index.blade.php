@@ -51,7 +51,7 @@
         <div class="font-semibold">Alamat</div>
       </div>
       <div class="my-2">
-        <div class="uppercase">{{ $customer->alamat }}, Kec {{ $customer->dataKecamatan->dis_name }}, Kab/Kota {{ $customer->dataKabupaten->city_name }}, {{ $customer->dataProvinsi->prov_name }}</div>
+        <div class="uppercase text-sm">{{ Auth::user()->alamat ? Auth::user()->alamat : '-' }}, Kecamatan {{ Auth::user()->kecamatan ? Auth::user()->dataKecamatan->dis_name : '-' }}, Kabupaten/Kota {{ Auth::user()->kabupaten ? Auth::user()->dataKabupaten->city_name : '-' }}, Provinsi {{ Auth::user()->provinsi ? Auth::user()->dataProvinsi->prov_name : '-' }}, Kodepos {{ Auth::user()->kodepos ? Auth::user()->kodepos : '-' }}</div>
       </div>
     </div>
   </div>

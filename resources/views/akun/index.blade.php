@@ -68,7 +68,7 @@
       <div class="flex items-center p-3 border-b">
         <div class="mr-3">
           @if (Auth::user()->gambar)
-            <img src="{{ asset('assets/pembayaran-mandiri.png') }}" alt="avatar" class="w-10 h-10 rounded-full object-contain border">            
+            <img src="{{ asset('img_customer/' . Auth::user()->gambar) }}" alt="avatar" class="w-10 h-10 rounded-full object-cover border">            
           @else
             <div class="w-10 h-10 rounded-full border flex justify-center items-center">
               <i class="fa fa-user"></i>

@@ -61,6 +61,7 @@ Route::middleware(['auth'])->group(function() {
   
   // akun
   Route::get('akun', [AkunController::class, 'index'])->name('akun');
+  Route::post('akun/gambar', [AkunController::class, 'updateGambar'])->name('akun.updateGambar');
   Route::get('akun/{id}/editDataDiri', [AkunController::class, 'editDataDiri'])->name('akun.editDataDiri');
   Route::post('akun/updateDataDiri', [AkunController::class, 'updateDataDiri'])->name('akun.updateDataDiri');
   Route::get('akun/{id}/editAlamat', [AkunController::class, 'editAlamat'])->name('akun.editAlamat');

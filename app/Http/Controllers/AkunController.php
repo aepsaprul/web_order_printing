@@ -11,12 +11,33 @@ use App\Models\WilayahProvince;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 
 class AkunController extends Controller
 {
   public function index()
   {
     return view('akun.dataDiri');
+  }
+  public function updateGambar(Request $request)
+  {
+    $customer = Customer::find($request->akun_id);
+
+    if($request->hasFile('gambar')) {
+      if (file_exists("img_customer/" . $customer->gambar)) {
+        File::delete("img_customer/" . $customer->gambar);
+      }
+      $file = $request->file('gambar');
+      $extension = $file->getClientOriginalExtension();
+      $filename = time() . "." . $extension;
+      $file->move('img_customer/', $filename);
+      $customer->gambar = $filename;
+    }
+    $customer->save();
+
+    return response()->json([
+      'status' => $request->all()
+    ]);
   }
   public function editDataDiri($id)
   {
