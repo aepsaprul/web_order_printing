@@ -21,7 +21,7 @@
           {{ $transaksi_tanggal->format('d F Y') }}
         </div>
         <div class="text-sm mr-3">{{ $item->kode }}</div>
-        <div class="{{ $item->status == 6 ? 'bg-green-600 rounded' : 'bg-rose-600 rounded' }} px-3 text-sm text-white font-semibold">{{ $item->dataStatus->nama }}</div>
+        <div class="{{ $item->status == 6 ? 'bg-green-600 rounded' : 'bg-rose-600 rounded' }} px-3 text-sm text-white font-semibold capitalize">{{ $item->dataStatus->nama }}</div>
       </div>
       <div class="flex justify-between mt-3">
         <div>

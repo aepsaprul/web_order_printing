@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\KonfirmasiBayar;
 use App\Models\Transaksi;
+use App\Models\TransaksiStatus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -35,8 +36,15 @@ class KonfirmasiBayarController extends Controller
 
     // transaksi
     $transaksi = Transaksi::find($request->transaksi_id);
-    $transaksi->bayar = 'y';
+    $transaksi->status = 2;
     $transaksi->save();
+
+    // transaksi status
+    $transaksi_status = new TransaksiStatus;
+    $transaksi_status->transaksi_id = $request->transaksi_id;
+    $transaksi_status->status_id = 2;
+    $transaksi_status->keterangan = "Pembayaran sedang di cek oleh Admin";
+    $transaksi_status->save();
 
     return response()->json([
       'status' => 200

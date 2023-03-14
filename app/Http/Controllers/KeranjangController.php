@@ -8,6 +8,7 @@ use App\Models\Keranjang;
 use App\Models\KeranjangTemplate;
 use App\Models\Rekening;
 use App\Models\Transaksi;
+use App\Models\TransaksiStatus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -218,6 +219,13 @@ class KeranjangController extends Controller
     $transaksi->ongkir = $ekspedisi->harga;
     $transaksi->diskon = $request->diskon;
     $transaksi->save();
+
+    // transaksi status
+    $transaksi_status = new TransaksiStatus;
+    $transaksi_status->transaksi_id = $transaksi->id;
+    $transaksi_status->status_id = 1;
+    $transaksi_status->keterangan = "Segera Lakukan Pembayaran";
+    $transaksi_status->save();
 
     $keranjang_id = $request->keranjang_id;
     foreach ($keranjang_id as $key => $value) {
