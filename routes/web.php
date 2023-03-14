@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\KeranjangController;
+use App\Http\Controllers\KonfirmasiBayarController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\RegisterController;
@@ -75,5 +76,9 @@ Route::middleware(['auth'])->group(function() {
   Route::get('mAkun', [AkunController::class, 'mAkun'])->name('mAkun');
   Route::get('mAkun/transaksi', [AkunController::class, 'mTransaksi'])->name('mTransaksi');
   Route::get('mAkun/transaksi/{id}/detail', [AkunController::class, 'mTransaksiDetail'])->name('mTransaksi.detail');
+
+  // konfirmasi bayar
+  Route::get('konfirmasi_bayar', [KonfirmasiBayarController::class, 'index'])->name('konfirmasi_bayar');
+  Route::post('konfirmasi_bayar/store', [KonfirmasiBayarController::class, 'store'])->name('konfirmasi_bayar.store');
 });
 

@@ -28,7 +28,7 @@
         <a href="#"><i class="fa fa-list w-8 text-center text-slate-500"></i> Transaksi</a>
       </div>
       <div class="border-b p-3">
-        <a href="#"><i class="fa fa-money-bill-wave w-8 text-center text-slate-500"></i> Konfirmasi Pembayaran</a>
+        <a href="{{ route('konfirmasi_bayar') }}"><i class="fa fa-money-bill-wave w-8 text-center text-slate-500"></i> Konfirmasi Pembayaran</a>
       </div>
     </div>
     @yield('content')

@@ -44,7 +44,7 @@
         <a href="{{ url('/') }}" class="font-semibold mx-2">Home</a>
         <a href="{{ route('produk') }}" class="font-semibold mx-2">Produk</a>
         <a href="#" class="font-semibold mx-2">Cara Pesan</a>
-        <a href="#" class="font-semibold mx-2">Konfirmasi Bayar</a>
+        <a href="{{ route('konfirmasi_bayar') }}" class="font-semibold mx-2">Konfirmasi Bayar</a>
       </div>
     </div>
     <div class="relative mx-1">
