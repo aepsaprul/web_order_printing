@@ -458,10 +458,6 @@
     // btn keranjang
     $('.btn-keranjang').on('click', function (e) {
       e.preventDefault();
-      $('#notif').removeClass('hidden');
-      setTimeout(() => {
-        $('#notif').addClass('hidden');        
-      }, 2000);
 
       const produk_id = $('#produk_id').val();
       const keterangan = $('#keterangan').val();
