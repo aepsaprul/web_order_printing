@@ -7,7 +7,9 @@ use App\Models\Keranjang;
 use App\Models\Transaksi;
 use App\Models\WilayahCity;
 use App\Models\WilayahDistrict;
+use App\Models\WilayahKabupaten;
 use App\Models\WilayahProvince;
+use App\Models\WilayahProvinsi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -77,7 +79,7 @@ class AkunController extends Controller
   public function editAlamat($id)
   {
     $customer = Customer::find($id);
-    $provinsi = WilayahProvince::get();
+    $provinsi = WilayahProvinsi::get();
 
     return response()->json([
       'customer' => $customer,
@@ -86,7 +88,7 @@ class AkunController extends Controller
   }
   public function editAlamatKota($id)
   {
-    $kota = WilayahCity::where('prov_id', $id)->get();
+    $kota = WilayahKabupaten::where('prov_id', $id)->get();
 
     return response()->json([
       'kota' => $kota

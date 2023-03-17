@@ -24,6 +24,12 @@
             <p class="text-sm uppercase">{{ Auth::user()->telepon }}</p>
             <p class="text-sm uppercase">{{ Auth::user()->alamat ? Auth::user()->alamat : '-' }}</p>
             <p class="text-sm uppercase">Kecamatan {{ Auth::user()->kecamatan ? Auth::user()->dataKecamatan->dis_name : '-' }}, Kabupaten/Kota {{ Auth::user()->kabupaten ? Auth::user()->dataKabupaten->city_name : '-' }}, Provinsi {{ Auth::user()->provinsi ? Auth::user()->dataProvinsi->prov_name : '-' }}, Kodepos {{ Auth::user()->kodepos ? Auth::user()->kodepos : '-' }}</p>              
+            <button id="ubah_alamat" class="text-sky-500 font-bold mt-3"
+              data-te-toggle="modal"
+              data-te-target="#modalAlamat"
+              data-te-ripple-init
+              data-te-ripple-color="light"
+            >Ubah Alamat</button>
           @else
             <button id="ubah_alamat" class="text-sky-500 font-bold"
               data-te-toggle="modal"
@@ -66,32 +72,55 @@
           <div class="ml-3 lg:ml-0 mr-3 my-2">
             <p class="font-semibold text-sm border-b py-3">Pilih Pengiriman</p>
             <div class="mt-3">
-              @foreach ($ekspedisi as $key => $item)
-                <div class="flex w-full">
-                  <div class="w-3/4 flex">
-                    <div class="w-32">
-                      <div class="mb-[0.125rem] block min-h-[1.5rem] pl-[1.5rem]">
-                        <input
-                          class="radio_ekspedisi_{{ $key }} relative float-left mt-0.5 mr-1 -ml-[1.5rem] h-5 w-5 appearance-none rounded-full border-2 border-solid border-[rgba(0,0,0,0.25)] bg-white before:pointer-events-none before:absolute before:h-4 before:w-4 before:scale-0 before:rounded-full before:bg-transparent before:opacity-0 before:shadow-[0px_0px_0px_13px_transparent] before:content-[''] after:absolute after:block after:h-4 after:w-4 after:rounded-full after:bg-white after:content-[''] checked:border-primary checked:bg-white checked:before:opacity-[0.16] checked:after:absolute checked:after:left-1/2 checked:after:top-1/2 checked:after:h-[0.625rem] checked:after:w-[0.625rem] checked:after:rounded-full checked:after:border-primary checked:after:bg-primary checked:after:content-[''] checked:after:[transform:translate(-50%,-50%)] hover:cursor-pointer hover:before:opacity-[0.04] hover:before:shadow-[0px_0px_0px_13px_rgba(0,0,0,0.6)] focus:shadow-none focus:transition-[border-color_0.2s] focus:before:scale-100 focus:before:opacity-[0.12] focus:before:shadow-[0px_0px_0px_13px_rgba(0,0,0,0.6)] focus:before:transition-[box-shadow_0.2s,transform_0.2s] checked:focus:border-primary checked:focus:bg-white checked:focus:before:scale-100 checked:focus:before:shadow-[0px_0px_0px_13px_#3b71ca] checked:focus:before:transition-[box-shadow_0.2s,transform_0.2s]"
-                          type="radio"
-                          name="radio_ekspedisi"
-                          id="radio_ekspedisi_{{ $key }}"
-                          value="{{ $item->harga }}"
-                          data-id="{{ $item->id }}" />
-                        <label
-                          class="mt-px inline-block pl-[0.15rem] hover:cursor-pointer bg-white"
-                          for="radio_ekspedisi_{{ $key }}">
-                            <img src="{{ url('http://localhost/abata_web_order_admin/public/img_ekspedisi/' . $item->gambar) }}" alt="gambar" class="w-12 h-5">
-                        </label>
-                      </div>
-                    </div>
-                    <div class="w-full text-sm">{{ $item->nama }}</div>
-                  </div>
-                  <div class="w-1/4 text-right">
-                    <span class="text-xs">Rp</span> <span class="text-sm">@currency($item->harga)</span>
+              <div class="my-2">
+                <select name="origin" id="origin" class="border rounded py-2 px-2 w-full">
+                  <option value="">Pilih Cabang Abata</option>
+                  <option value="41">Situmpur (Banyumas)</option>
+                  <option value="41">HR Boenyamin (Banyumas)</option>
+                  <option value="41">Dukuh Waluh (Banyumas)</option>
+                  <option value="105">Cilacap</option>
+                  <option value="375">Purbalingga</option>
+                  <option value="92">Bumiayu (Brebes)</option>
+                </select>
+              </div>
+              <div class="my-2">
+                <div class="flex justify-center">
+                  <div class="w-full xl:w-96">
+                    <select name="destination" id="destination" class="border rounded w-full" data-te-select-init data-te-select-filter="true">
+                      <option value="0">Pilih Kota Tujuan</option>
+                      @foreach ($kabupaten as $item)
+                        <option value="{{ $item->id }}">{{ $item->kabupaten }}</option>
+                      @endforeach
+                    </select>
                   </div>
                 </div>
-              @endforeach
+              </div>
+              <div class="my-2">
+                <input type="text" name="weight" id="weight" value="1" class="border rounded py-2 px-2 w-full" readonly>
+              </div>
+              <div class="my-2">
+                <select name="courier" id="courier" class="border rounded py-2 px-2 w-full">
+                  <option value="">Pilih Ekspedisi</option>
+                  <option value="jne">JNE</option>
+                  <option value="tiki">Tiki</option>
+                  <option value="pos">POS Indonesia</option>
+                </select>
+              </div>
+              <div class="my-2">
+                <div class="relative flex items-center justify-center h-full">
+                  <div id="loading_cek_ongkir" class="hidden absolute">
+                    <div class="flex items-center justify-center">
+                      <div class="flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-tr from-sky-500 to-slate-100 animate-spin">
+                        <div class="h-2 w-2 rounded-full bg-white"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <button id="btn_cek_ongkir" class="bg-sky-500 border rounded py-2 px-4 text-white texk-sm font-bold">Cek Ongkir</button>
+                </div>
+              </div>
+            </div>
+            <div class="mt-3">
+              <div class="results-pengiriman"></div>
             </div>
           </div>
         </div>
@@ -107,6 +136,7 @@
             <p class="font-semibold text-sm border-b py-3">Pilih Pembayaran</p>
           </div>
           <div>
+            <!-- bank -->
             <div>
               <p class="text-sm py-2">Bank</p>
               <div class="float-left">
@@ -126,7 +156,8 @@
                   </div>
                 @endforeach
               </div>
-            </div>  
+            </div>
+            <!-- e-wallet -->
             <div>
               <p class="text-sm py-2">Wallet</p>
               <div class="float-left">
@@ -409,33 +440,113 @@
       })
     })
 
-    // ekspedisi
-    const total_ekspedisi = $('#total_ekspedisi').val();
-    for (let index_ekspedisi = 0; index_ekspedisi < total_ekspedisi; index_ekspedisi++) {
-      $('#radio_ekspedisi_' + index_ekspedisi).on('change', function () {
-        const val = $(this).val();
-        const total_harga_produk = $('#total_harga_produk').text().replace(/\./g, '');
-        const calcTotal = (parseInt(total_harga_produk) + parseInt(val)) - diskon;
-        
-        $('#total_ongkos_kirim').html(afRupiah(val));
-        $('#total_harga').html(afRupiah(calcTotal));
+    // ongkir
+    $('#btn_cek_ongkir').on('click', function (e) {
+      e.preventDefault();
+      const origin = $('#origin').val();
+      const destination = $('#destination').val();
+      const weight = $('#weight').val();
+      const courier = $('#courier').val();
+      // console.log(origin, destination, weight, courier)
+      let formData = {
+        origin: origin,
+        destination: destination,
+        weight: weight,
+        courier: courier
+      }
 
-        const rekening_check = $('input[name="radio_rekening"]:checked').val();
-        if (rekening_check) {
-          $('#btn_bayar').prop('disabled', false);
-          $('#btn_bayar').removeClass('bg-sky-300').addClass('bg-sky-500');
-        } else {
-          $('#btn_bayar').prop('disabled', true);
-          $('#btn_bayar').removeClass('bg-sky-500').addClass('bg-sky-300');
+      $.ajax({
+        url: "{{ URL::route('keranjang.ongkir') }}",
+        type: "post",
+        data: formData,
+        beforeSend: function () {
+          $('#loading_cek_ongkir').removeClass('hidden');
+          $('#btn_cek_ongkir').removeClass('bg-sky-500');
+        },
+        success: function (response) {
+          setTimeout(() => {
+            $('#loading_cek_ongkir').addClass('hidden');
+            $('#btn_cek_ongkir').addClass('bg-sky-500');
+          }, 500);
+
+          const val_json = JSON.parse(response);
+          const rajaongkir_ = val_json.rajaongkir.results[0];
+          let total_layanan = 0;
+          
+          let val_results = `
+            <div class="border-b py-2">
+              <div>${rajaongkir_.name}</div>
+            </div>
+            <div class="my-2">`;    
+              $.each(rajaongkir_.costs, function (index, item) {
+                val_results += `
+                  <div>
+                    <label for="layanan_pengiriman_${index}" class="flex justify-between">
+                      <div><input type="radio" name="layanan_pengiriman" id="layanan_pengiriman_${index}" class="mr-3" `;
+                        $.each(item.cost, function(index_cost, item_cost) {
+                          val_results += `value="${item_cost.value}"`;
+                        })
+                        val_results += `>${item.service} (${item.description})</div>
+                      <div><span class="text-xs">Rp</span> `;                        
+                        $.each(item.cost, function(index_cost, item_cost) {
+                          val_results += `${afRupiah(item_cost.value)}`;
+                        })
+                        val_results += `</div>
+                    </label>
+                  </div>                
+                `;
+              })
+            val_results += `</div>
+          `;
+          $('.results-pengiriman').html(val_results)
         }
       })
-    }
+    })
+    $(document).on('click', 'input[name="layanan_pengiriman"]', function () {
+      const val = $(this).val();
+      const total_harga_produk = $('#total_harga_produk').text().replace(/\./g, '');
+      const calcTotal = (parseInt(total_harga_produk) + parseInt(val)) - diskon;
+      
+      $('#total_ongkos_kirim').html(afRupiah(val));
+      $('#total_harga').html(afRupiah(calcTotal));
+
+      const rekening_check = $('input[name="radio_rekening"]:checked').val();
+      if (rekening_check) {
+        $('#btn_bayar').prop('disabled', false);
+        $('#btn_bayar').removeClass('bg-sky-300').addClass('bg-sky-500');
+      } else {
+        $('#btn_bayar').prop('disabled', true);
+        $('#btn_bayar').removeClass('bg-sky-500').addClass('bg-sky-300');
+      }
+    })
+
+    // ekspedisi
+    // const total_ekspedisi = $('#total_ekspedisi').val();
+    // for (let index_ekspedisi = 0; index_ekspedisi < total_ekspedisi; index_ekspedisi++) {
+    //   $('#radio_ekspedisi_' + index_ekspedisi).on('change', function () {
+    //     const val = $(this).val();
+    //     const total_harga_produk = $('#total_harga_produk').text().replace(/\./g, '');
+    //     const calcTotal = (parseInt(total_harga_produk) + parseInt(val)) - diskon;
+        
+    //     $('#total_ongkos_kirim').html(afRupiah(val));
+    //     $('#total_harga').html(afRupiah(calcTotal));
+
+    //     const rekening_check = $('input[name="radio_rekening"]:checked').val();
+    //     if (rekening_check) {
+    //       $('#btn_bayar').prop('disabled', false);
+    //       $('#btn_bayar').removeClass('bg-sky-300').addClass('bg-sky-500');
+    //     } else {
+    //       $('#btn_bayar').prop('disabled', true);
+    //       $('#btn_bayar').removeClass('bg-sky-500').addClass('bg-sky-300');
+    //     }
+    //   })
+    // }
 
     // bank
     const total_rekening_bank = $('#total_rekening_bank').val();
     for (let index_bank = 0; index_bank < total_rekening_bank; index_bank++) {
       $('#radio_rekening_bank_' + index_bank).on('change', function () {
-        const ekspedisi_check = $('input[name="radio_ekspedisi"]:checked').val();
+        const ekspedisi_check = $('input[name="layanan_pengiriman"]:checked').val();
         if (ekspedisi_check) {
           $('#btn_bayar').prop('disabled', false);
           $('#btn_bayar').removeClass('bg-sky-300').addClass('bg-sky-500');
@@ -450,7 +561,7 @@
     const total_rekening_ewallet = $('#total_rekening_ewallet').val();
     for (let index_ewallet = 0; index_ewallet < total_rekening_ewallet; index_ewallet++) {
       $('#radio_rekening_ewallet_' + index_ewallet).on('change', function () {
-        const ekspedisi_check = $('input[name="radio_ekspedisi"]:checked').val();
+        const ekspedisi_check = $('input[name="layanan_pengiriman"]:checked').val();
         if (ekspedisi_check) {
           $('#btn_bayar').prop('disabled', false);
           $('#btn_bayar').removeClass('bg-sky-300').addClass('bg-sky-500');

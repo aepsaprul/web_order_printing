@@ -9,6 +9,7 @@ use App\Models\KeranjangTemplate;
 use App\Models\Rekening;
 use App\Models\Transaksi;
 use App\Models\TransaksiStatus;
+use App\Models\WilayahKabupaten;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -177,6 +178,9 @@ class KeranjangController extends Controller
 
       $transaksi_total = intval($keranjang_total->total_harga) - $diskon;
       
+      // kabupaten
+      $kabupaten = WilayahKabupaten::get();
+
       $ekspedisi = Ekspedisi::get();
       $rekening = Rekening::get();
       $rekening_bank = Rekening::where('grup', 'bank')->get();
@@ -187,6 +191,7 @@ class KeranjangController extends Controller
         'keranjang_total' => $keranjang_total,
         'transaksi_total' => $transaksi_total,
         'diskon' => $diskon,
+        'kabupaten' => $kabupaten,
         'ekspedisi' => $ekspedisi,
         'rekening' => $rekening,
         'rekening_bank' => $rekening_bank,
@@ -194,6 +199,71 @@ class KeranjangController extends Controller
       ]);
     } else {
       return redirect()->route('home');
+    }
+  }
+  public function ongkir(Request $request)
+  {
+    // $url_cost = "https://api.rajaongkir.com/starter/cost";
+    // $key="b26ad9c38f1ea6354da405ce736b0371";
+
+    $postdata = http_build_query([
+      "origin" => $request->origin, 
+      "destination" => $request->destination, 
+      "weight" => $request->weight, 
+      "courier" => $request->courier
+    ]);
+    
+    // $curl = curl_init();
+    // curl_setopt_array($curl, [
+    //   CURLOPT_URL => $url_cost,
+    //   CURLOPT_RETURNTRANSFER => true,
+    //   CURLOPT_ENCODING => "",
+    //   CURLOPT_MAXREDIRS => 10,
+    //   CURLOPT_TIMEOUT => 30,
+    //   CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+    //   CURLOPT_CUSTOMREQUEST => "POST",
+    //   CURLOPT_POSTFIELDS => $postdata, 
+    //   CURLOPT_HTTPHEADER => [
+    //     "content-type: application/x-www-form-urlencoded",
+    //     "key: ".$key
+    //   ],
+    // ]);
+
+    // $response = curl_exec($curl);
+    // $error = curl_error($curl);
+    // curl_close($curl);
+
+    // return response()->json([
+    //   'error' => $error,
+    //   'response' => $response
+    // ]);
+    $curl = curl_init();
+
+    curl_setopt_array($curl, array(
+      CURLOPT_URL => "https://api.rajaongkir.com/starter/cost",
+      CURLOPT_RETURNTRANSFER => true,
+      CURLOPT_ENCODING => "",
+      CURLOPT_MAXREDIRS => 10,
+      CURLOPT_TIMEOUT => 30,
+      CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+      CURLOPT_CUSTOMREQUEST => "POST",
+      CURLOPT_POSTFIELDS => $postdata,
+      // CURLOPT_POSTFIELDS => "origin=501&destination=114&weight=1700&courier=jne",
+      CURLOPT_HTTPHEADER => array(
+        "content-type: application/x-www-form-urlencoded",
+        "key: b26ad9c38f1ea6354da405ce736b0371"
+      ),
+    ));
+
+    $response = curl_exec($curl);
+    $err = curl_error($curl);
+
+    curl_close($curl);
+
+    if ($err) {
+      echo "cURL Error #:" . $err;
+    } else {
+      echo $response;
     }
   }
   public function bayar(Request $request)

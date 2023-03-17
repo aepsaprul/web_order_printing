@@ -54,6 +54,7 @@ Route::middleware(['auth'])->group(function() {
   Route::get('keranjang/ajaks', [KeranjangController::class, 'ajaks'])->name('keranjang.ajaks');
 
   Route::middleware(['back-page'])->group(function () {
+    Route::post('keranjang/ongkir', [KeranjangController::class, 'ongkir'])->name('keranjang.ongkir');
     Route::get('keranjang/checkout', [KeranjangController::class, 'checkout'])->name('keranjang.checkout');
     Route::post('keranjang/bayar', [KeranjangController::class, 'bayar'])->name('keranjang.bayar');
   

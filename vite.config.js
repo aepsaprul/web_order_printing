@@ -12,5 +12,8 @@ export default defineConfig({
     alias: {
       '$': 'jQuery'
     },
+  },  
+  build: {
+    chunkSizeWarningLimit: 1600,
   },
 });
