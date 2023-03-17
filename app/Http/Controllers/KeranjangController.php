@@ -269,7 +269,7 @@ class KeranjangController extends Controller
   public function bayar(Request $request)
   {
     $customer = Customer::find($request->customer_id);
-    $ekspedisi = Ekspedisi::find($request->ekspedisi);
+    // $ekspedisi = Ekspedisi::find($request->ekspedisi);
     $kode_unik = rand(000, 100);
 
     $transaksi = new Transaksi;
@@ -285,8 +285,8 @@ class KeranjangController extends Controller
     $transaksi->kabupaten = $customer->kabupaten;
     $transaksi->kecamatan = $customer->kecamatan;
     $transaksi->kodepos = $customer->kodepos;
-    $transaksi->ekspedisi = $ekspedisi->nama;
-    $transaksi->ongkir = $ekspedisi->harga;
+    $transaksi->ekspedisi = $request->ekspedisi;
+    $transaksi->ongkir = $request->ekspedisi_harga;
     $transaksi->diskon = $request->diskon;
     $transaksi->save();
 

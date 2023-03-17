@@ -50,13 +50,26 @@
   
           <div class="border-2 mx-3 lg:mx-0 my-3 rounded">
             <div class="flex">
-              <div class="m-3">
-                <img src="{{ url('http://localhost/abata_web_order_admin/public/img_produk/' . $item->produk->gambar) }}" alt="gambar produk" class="w-20 h-20">
+              <div class="flex w-4/5">
+                <div class="m-3 w-1/5">
+                  <img src="{{ url('http://localhost/abata_web_order_admin/public/img_produk/' . $item->produk->gambar) }}" alt="gambar produk" class="w-full">
+                </div>
+                <div class="m-3 w-4/5">
+                  <div class="text-slate-800 font-semibold">{{ $item->produk->nama }}</div>
+                  <div class="text-slate-800">x {{ $item->qty }} </div>
+                  <div class="text-xs">
+                    @php
+                      $total_template = count($item->dataKeranjangTemplate) - 1;
+                    @endphp
+                    @foreach ($item->dataKeranjangTemplate as $key_keranjang_template => $item_keranjang_template)
+                      {{ $item_keranjang_template->dataTemplate->nama }} ({{ $item_keranjang_template->dataTemplateDetail->nama }}) 
+                      {{ $key_keranjang_template != $total_template ? ',' : '' }}
+                    @endforeach
+                  </div>
+                </div>
               </div>
-              <div class="m-3 w-full">
-                <div class="text-slate-800 font-semibold">{{ $item->produk->nama }}</div>
-                <div class="text-slate-800">x {{ $item->qty }} </div>
-                <div class="text-slate-800 text-right font-semibold"><span class="text-sm">Rp</span> @currency($item->total)</div>
+              <div class="flex items-end justify-end w-1/5">
+                <div class="text-slate-800 text-right font-semibold p-2"><span class="text-sm">Rp</span> @currency($item->total)</div>
               </div>
             </div>
           </div>          
@@ -577,7 +590,8 @@
       const customer_id = $('#customer_id').val();
       const keranjang_id_total = $('#total_query').val();
       const total_harga_fix = $('#total_harga').text().replace(/\./g, '');
-      const eskpedisi_id = $('input[name="radio_ekspedisi"]:checked').attr('data-id');
+      const ekspedisi = $('#courier').val();
+      const ekspedisi_harga = $('input[name="layanan_pengiriman"]:checked').val();
       const rekening_val = $('input[name="radio_rekening"]:checked').val();
       const keranjang_id = [];
 
@@ -589,7 +603,8 @@
       let formData = {
         customer_id: customer_id,
         keranjang_id: keranjang_id,
-        ekspedisi: eskpedisi_id,
+        ekspedisi: ekspedisi,
+        ekspedisi_harga: ekspedisi_harga,
         rekening: rekening_val,
         total_harga: total_harga_fix,
         diskon: diskon

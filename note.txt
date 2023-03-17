@@ -32,6 +32,9 @@ detail transaksi
 - tambah rincian template
 - tambah riwayat status
 
+halaman checkout
+- ambil ditempat
+
 
 
 ----------------------- pertanyaan -----------------

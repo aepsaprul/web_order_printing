@@ -19,18 +19,27 @@
 
           <div class="shadow-md m-3 lg:m-0 lg:mr-5 rounded">
             <div class="flex">
-              <div class="m-3">
+              <div class="m-3 w-1/5">
                 @if ($item->produk)
-                  <img src="{{ url('http://localhost/abata_web_order_admin/public/img_produk/' . $item->produk->gambar) }}" alt="gambar produk" class="w-20 h-20">                    
+                  <img src="{{ url('http://localhost/abata_web_order_admin/public/img_produk/' . $item->produk->gambar) }}" alt="gambar produk" class="w-full">                    
                 @endif
               </div>
-              <div class="m-3">
+              <div class="m-3 w-4/5">
                 <div class="text-slate-800 font-semibold">
                   @if ($item->produk)
                     {{ $item->produk->nama }}                      
                   @endif
                 </div>
-                <div class="text-slate-800">Rp <span class="nominal_harga">@currency($item->harga)</span></div>
+                <div class="text-slate-800"><span class="text-xs">Rp</span> <span class="nominal_harga text-sm">@currency($item->harga)</span></div>
+                <div class="text-xs">
+                  @php
+                    $total_template = count($item->dataKeranjangTemplate) - 1;
+                  @endphp
+                  @foreach ($item->dataKeranjangTemplate as $key_keranjang_template => $item_keranjang_template)
+                    {{ $item_keranjang_template->dataTemplate->nama }} ({{ $item_keranjang_template->dataTemplateDetail->nama }}) 
+                    {{ $key_keranjang_template != $total_template ? ',' : '' }}
+                  @endforeach
+                </div>
               </div>
             </div>
             <div class="flex justify-between">
@@ -83,7 +92,7 @@
           <div class="border-t lg:border-0 flex lg:block justify-between m-3 lg:m-0 lg:px-5 lg:py-3">
             <div class="w-full mt-3 lg:flex lg:justify-between">
               <div class="text-sm lg:text-lg">Total Harga</div>
-              <div class="text-lg font-semibold">Rp <span id="total_harga">@currency($keranjang_total->total_harga)</span></div>
+              <div class="text-lg font-semibold"><span class="text-sm">Rp</span> <span id="total_harga">@currency($keranjang_total->total_harga)</span></div>
             </div>
             <div class="w-full mt-3">
               <div class="relative flex items-center justify-center h-full">
@@ -173,11 +182,11 @@
     });
     
     // counter
-    const total_query = $('#total_query').val();
+    const total_query = parseInt($('#total_query').val());
 
     for (let id = 0; id < total_query; id++) {
       const input_counter = $('#input_counter_' + id).val();
-      if (input_counter <= "1") {
+      if (input_counter < 2) {
         $('#btn_minus_' + id).prop('disabled', true);
         $('#btn_minus_' + id).removeClass('bg-rose-600');
         $('#btn_minus_' + id).addClass('bg-rose-400');

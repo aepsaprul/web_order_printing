@@ -104,7 +104,7 @@ class AkunController extends Controller
   }
   public function transaksi()
   {
-    $transaksi = Transaksi::where('customer_id', Auth::user()->id)->limit(10)->get();
+    $transaksi = Transaksi::where('customer_id', Auth::user()->id)->limit(7)->orderBy('id', 'desc')->get();
 
     return view('akun.transaksi', ['transaksi' => $transaksi]);
   }
@@ -134,7 +134,9 @@ class AkunController extends Controller
         'dataKecamatan',
         'dataKabupaten',
         'dataProvinsi',
-        'dataRekening'
+        'dataRekening',
+        'dataTransaksiStatus',
+        'dataTransaksiStatus.dataStatus'
       ])
       ->find($id);
     
