@@ -14,7 +14,7 @@
           <li>
             <a href="{{ route('produk.show', [$item->id]) }}">
               <div>
-                <img src="{{ url('http://localhost/abata_web_order_admin/public/img_produk/' . $item->gambar) }}" alt="gambar" class="w-48 lg:w-full 2xl:w-full">
+                <img src="{{ url(env('APP_URL_ADMIN') . '/img_produk/' . $item->gambar) }}" alt="gambar" class="w-48 lg:w-full 2xl:w-full">
               </div>
               <div class="text-sm text-center">{{ $item->nama }}</div>
               <div class="text-sm text-center">{{ $item->harga }}</div>

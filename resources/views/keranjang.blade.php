@@ -3,8 +3,6 @@
 @section('content')
 
 @include('layouts.header')
-{{-- @include('layouts.headerArrow') --}}
-{{-- @include('layouts.headerLg') --}}
 
 <div class="flex justify-center pb-24">
   <div class="w-full lg:w-4/5 2xl:w-3/5 lg:flex lg:justify-between mt-5">
@@ -21,7 +19,7 @@
             <div class="flex">
               <div class="m-3 w-1/5">
                 @if ($item->produk)
-                  <img src="{{ url('http://localhost/abata_web_order_admin/public/img_produk/' . $item->produk->gambar) }}" alt="gambar produk" class="w-full">                    
+                  <img src="{{ url(env('APP_URL_ADMIN') . '/img_produk/' . $item->produk->gambar) }}" alt="gambar produk" class="w-full">                    
                 @endif
               </div>
               <div class="m-3 w-4/5">

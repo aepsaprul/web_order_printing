@@ -3,7 +3,6 @@
 @section('content')
 
 @include('layouts.header')
-{{-- @include('layouts.headerLg') --}}
 
 <div class="lg:flex lg:justify-center">  
   <div class="lg:w-10/12 2xl:w-3/5">
@@ -12,7 +11,7 @@
         <div class="swiper-wrapper">
           @foreach ($slide as $item)
             <div class="swiper-slide">
-              <img src="{{ url('http://localhost/abata_web_order_admin/public/img_slide/' . $item->gambar) }}" alt="slide">
+              <img src="{{ url(env('APP_URL_ADMIN') . '/img_slide/' . $item->gambar) }}" alt="slide">
             </div>            
           @endforeach
         </div>
@@ -25,7 +24,7 @@
           @foreach ($produk as $item)
             <a href="{{ route('produk.show', [$item->id]) }}" class="p-1">
               <div>
-                <img src="{{ url('http://localhost/abata_web_order_admin/public/img_produk/' . $item->gambar) }}" alt="gambar" class="w-full">
+                <img src="{{ url(env('APP_URL_ADMIN') . '/img_produk/' . $item->gambar) }}" alt="gambar" class="w-full">
               </div>
               <div class="text-sm text-center">{{ $item->nama }}</div>
               <div class="text-sm font-semibold"><span>Rp</span> <span class="text-lg">@currency($item->harga)</span></div>
@@ -46,7 +45,7 @@
             <div class="h-full">
               <div class="flex justify-center pt-2">
                 <div class="w-10 h-10 lg:w-32 lg:h-32 bg-white rounded-full flex items-center border-2 p-1">
-                  <img src="{{ url('http://localhost/abata_web_order_admin/public/img_kategori/' . $item->gambar) }}" alt="kategori" class="w-full rounded-full">
+                  <img src="{{ url(env('APP_URL_ADMIN') . '/img_kategori/' . $item->gambar) }}" alt="kategori" class="w-full rounded-full">
                 </div>
               </div>
               <div class="text-center capitalize text-xs my-2 lg:text-xl">{{ $item->nama }}</div>
@@ -63,7 +62,7 @@
             <li class="bg-white">
               <a href="{{ route('produk.show', [$item->id]) }}">
                 <div>
-                  <img src="{{ url('http://localhost/abata_web_order_admin/public/img_produk/' . $item->gambar) }}" alt="gambar" class="w-full">
+                  <img src="{{ url(env('APP_URL_ADMIN') . '/img_produk/' . $item->gambar) }}" alt="gambar" class="w-full">
                 </div>
                 <div class="text-sm text-center">{{ $item->nama }}</div>
                 <div class="text-sm text-center font-semibold"><span>Rp</span> <span class="text-lg">@currency($item->harga)</span></div>
@@ -80,7 +79,7 @@
       <h1 class="text-center font-bold mt-5 py-3 text-base text-slate-500 bg-white border-b">CARA PESAN</h1>
       <div class="lg:flex lg:justify-between bg-white">
         <div class="lg:w-2/4 lg:flex lg:justify-center lg:items-center">
-          <img src="{{ url('http://localhost/abata_web_order_admin/public/img_cara_pesan_gambar/' . $cara_pesan_gambar->gambar) }}" alt="gambar cara pesan" class="hidden lg:block lg:w-60 h-80">
+          <img src="{{ url(env('APP_URL_ADMIN') . '/img_cara_pesan_gambar/' . $cara_pesan_gambar->gambar) }}" alt="gambar cara pesan" class="hidden lg:block lg:w-60 h-80">
         </div>
         <div class="lg:w-2/4 lg:flex lg:items-center lg:justify-center">
           <div class="lg:w-4/5">

@@ -28,7 +28,7 @@
           @foreach ($item->dataKeranjang as $item_keranjang)
             <div class="flex my-3">
               <div class="w-1/5">
-                <img src="{{ url('http://localhost/abata_web_order_admin/public/img_produk/' . $item_keranjang->produk->gambar) }}" alt="gambar produk" class="w-full">
+                <img src="{{ url(env('APP_URL_ADMIN') . '/img_produk/' . $item_keranjang->produk->gambar) }}" alt="gambar produk" class="w-full">
               </div>
               <div class="mx-2 w-4/5">
                 <div class="font-bold">{{ $item_keranjang->produk->nama }}</div>
@@ -186,7 +186,7 @@
                   val += `
                     <div class="flex my-2">
                       <div>
-                        <img src="{{ url('http://localhost/abata_web_order_admin/public/img_produk/${item.produk.gambar}') }}" alt="gambar" class="w-20">
+                        <img src="{{ url(env('APP_URL_ADMIN') . '/img_produk/${item.produk.gambar}') }}" alt="gambar" class="w-20">
                       </div>
                       <div class="ml-3">
                         <div class="font-semibold">${item.produk.nama}</div>

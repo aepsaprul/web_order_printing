@@ -36,7 +36,7 @@
       <div>
         <div class="mx-3 border-b">
           <div class="py-3">
-            <img src="{{ url('http://localhost/abata_web_order_admin/public/img_rekening/' . $transaksi->dataRekening->gambar) }}" alt="logo" class="w-20">
+            <img src="{{ url(env('APP_URL_ADMIN') . '/img_rekening/' . $transaksi->dataRekening->gambar) }}" alt="logo" class="w-20">
           </div>
           <div class="py-3">
             <div class="text-sm">No Rekening</div>

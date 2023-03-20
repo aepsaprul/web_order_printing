@@ -43,7 +43,7 @@
 
           <div class="flex p-2">
             <div>
-              <img src="{{ url('http://localhost/abata_web_order_admin/public/img_produk/' . $item_keranjang->produk->gambar) }}" alt="gambar produk" class="w-16">
+              <img src="{{ url(env('APP_URL_ADMIN') . '/img_produk/' . $item_keranjang->produk->gambar) }}" alt="gambar produk" class="w-16">
             </div>
             <div class="ml-3">
               <div class="font-bold">{{ $item_keranjang->produk->nama }}</div>
@@ -162,7 +162,7 @@
                   val += `
                     <div class="flex my-2">
                       <div>
-                        <img src="{{ url('http://localhost/abata_web_order_admin/public/img_produk/${item.produk.gambar}') }}" alt="gambar" class="w-20">
+                        <img src="{{ url(env('APP_URL_ADMIN') . '/img_produk/${item.produk.gambar}') }}" alt="gambar" class="w-20">
                       </div>
                       <div class="ml-3">
                         <div class="font-semibold">${item.produk.nama}</div>

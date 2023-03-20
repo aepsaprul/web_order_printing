@@ -52,7 +52,7 @@
             <div class="flex">
               <div class="flex w-4/5">
                 <div class="m-3 w-1/5">
-                  <img src="{{ url('http://localhost/abata_web_order_admin/public/img_produk/' . $item->produk->gambar) }}" alt="gambar produk" class="w-full">
+                  <img src="{{ url(env('APP_URL_ADMIN') . '/public/img_produk/' . $item->produk->gambar) }}" alt="gambar produk" class="w-full">
                 </div>
                 <div class="m-3 w-4/5">
                   <div class="text-slate-800 font-semibold">{{ $item->produk->nama }}</div>
@@ -164,7 +164,7 @@
                     <label
                       class="mt-px inline-block pl-[0.15rem] hover:cursor-pointer"
                       for="radio_rekening_bank_{{ $key }}">
-                        <img src="{{ url('http://localhost/abata_web_order_admin/public/img_rekening/' . $item->gambar) }}" alt="gambar" class="w-full h-8 border bg-white p-1">
+                        <img src="{{ url(env('APP_URL_ADMIN') . '/public/img_rekening/' . $item->gambar) }}" alt="gambar" class="w-full h-8 border bg-white p-1">
                     </label>
                   </div>
                 @endforeach
@@ -185,7 +185,7 @@
                   <label
                     class="mt-px inline-block pl-[0.15rem] hover:cursor-pointer"
                     for="radio_rekening_ewallet_{{ $key }}">
-                      <img src="{{ url('http://localhost/abata_web_order_admin/public/img_rekening/' . $item->gambar) }}" alt="gambar" class="w-full h-8 border bg-white p-1">
+                      <img src="{{ url(env('APP_URL_ADMIN') . '/public/img_rekening/' . $item->gambar) }}" alt="gambar" class="w-full h-8 border bg-white p-1">
                   </label>
                 </div>
                 @endforeach

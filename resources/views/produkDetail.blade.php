@@ -17,7 +17,7 @@
   <div class="lg:flex lg:justify-center">
     <div class="lg:w-4/5 lg:flex 2xl:w-3/5">
       <div class="lg:w-2/4">
-        <img src="{{ url('http://localhost/abata_web_order_admin/public/img_produk/' . $produk->gambar) }}" alt="gambar produk" class="my-2">
+        <img src="{{ url(env('APP_URL_ADMIN') . '/img_produk/' . $produk->gambar) }}" alt="gambar produk" class="my-2">
       </div>
       <div class="mx-3 my-2 lg:w-2/4">
         <div class="my-3 lg:my-0 text-xl font-bold">{{ $produk->nama }}</div>
