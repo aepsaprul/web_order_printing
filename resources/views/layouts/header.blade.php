@@ -35,7 +35,7 @@
 
 {{-- header lg --}}
 <div id="header-wrapper" class="w-full h-14 border-b bg-white sticky top-0 z-20 lg:flex justify-center hidden">
-  <div class="w-4/5 flex justify-between items-center">
+  <div class="w-10/12 2xl:w-3/5 flex justify-between items-center">
     <div class="flex">
       <div>
         <img src="{{ asset('assets/logo.png') }}" alt="logo" class="w-16">

@@ -14,7 +14,7 @@
 
   @yield('style')
 </head>
-<body class="font-sans">
+<body class="font-sans bg-slate-100">
   <div class="">
     <div id="menu_id" class="w-0 min-h-screen fixed z-30 top-0 overflow-x-hidden bg-white transition-all delay-150 duration-700">
     {{-- <div id="menu_id" class="w-full fixed min-h-screen z-10 top-0 bg-slate-50 transition-all delay-150 duration-700"> --}}

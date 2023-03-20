@@ -14,6 +14,7 @@ class KonfirmasiBayarController extends Controller
   {
     $transaksi = Transaksi::whereNull('bayar')
       ->where('customer_id', Auth::user()->id)
+      ->where('status', '!=', '6')
       ->get();
 
     return view('konfirmasiBayar', ['transaksi' => $transaksi]);
