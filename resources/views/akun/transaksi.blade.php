@@ -1,7 +1,7 @@
 @extends('akun.index')
 
 @section('content_akun')
-<div>
+<div class="bg-white p-3 rounded border">
   <h3 class="font-bold text-lg">Transaksi</h3>
 </div>
 <div id="transaksi_page" class="flex">
@@ -11,7 +11,7 @@
     <input type="hidden" name="transaksi_total" id="transaksi_total" value="{{ $transaksi->count() }}">
 
     @foreach ($transaksi as $key => $item)
-    <div class="border rounded my-2 p-2">
+    <div class="border rounded my-2 p-2 bg-white">
       <div class="flex">
         <div class="text-sm mr-3">
           @php

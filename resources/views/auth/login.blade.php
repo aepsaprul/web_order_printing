@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="lg:flex lg:justify-center lg:items-center lg:min-h-screen">
-  <div class="lg:w-1/4 lg:border lg:border-slate-200 lg:rounded">
+  <div class="bg-white lg:w-1/4 lg:border lg:border-slate-200 lg:rounded">
     <div class="w-full h-12 bg-white border-b flex justify-between items-center">
       <div class="mx-3"><a href="{{ url('/') }}"><i class="fas fa-arrow-left text-lg text-sky-600 mr-3"></i></a> <span class="font-bold">Masuk</span></div>
       <div class="mx-3"><a href="{{ route('register') }}" class="text-sky-600 font-bold">Daftar</a></div>

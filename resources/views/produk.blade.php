@@ -11,13 +11,13 @@
     <div>
       <ul id="paginated-list" class="grid grid-cols-2 lg:grid-cols-5 2xl:grid-cols-6 gap-2 m-2 lg:m-0">
         @foreach ($produk as $item)
-          <li>
+          <li class="bg-white">
             <a href="{{ route('produk.show', [$item->id]) }}">
               <div>
                 <img src="{{ url(env('APP_URL_ADMIN') . '/img_produk/' . $item->gambar) }}" alt="gambar" class="w-48 lg:w-full 2xl:w-full">
               </div>
               <div class="text-sm text-center">{{ $item->nama }}</div>
-              <div class="text-sm text-center">{{ $item->harga }}</div>
+              <div class="text-sm text-center font-semibold"><span>Rp</span> <span class="text-lg">@currency($item->harga)</span></div>
             </a>
           </li>
         @endforeach

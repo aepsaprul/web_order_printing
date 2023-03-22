@@ -2,10 +2,10 @@
 
 @section('content_akun')
 
-<div>
+<div class="bg-white p-3 rounded border">
   <h3 class="font-bold text-lg">Data Diri</h3>
 </div>
-<div class="p-3 border rounded-lg flex">
+<div class="p-3 mt-1 border rounded bg-white flex">
   <div class="w-1/3">
     <div class="p-3 rounded-lg border shadow-md">
       <div class="w-60 h-60 bg-sky-400">
@@ -41,6 +41,7 @@
             data-te-ripple-color="light">ubah</a>
         </div>
       </div>
+      
     </div>
     <div class="mb-5">
       <div class="flex">

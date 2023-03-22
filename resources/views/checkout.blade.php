@@ -15,9 +15,9 @@
   <div class="w-full lg:w-4/5 2xl:w-3/5 lg:flex lg:justify-between lg:mt-5">
     <div class="lg:w-4/6 relative">
       {{-- alamat pengiriman --}}
-      <div class="mb-5 lg:mr-5">
-        <p class="font-semibold text-sm border-b px-3 lg:px-0 py-3">Alamat Pengiriman</p>
-        <div class="px-3 lg:px-0 py-3 rounded">
+      <div class="mb-5 p-4 lg:mr-5 bg-white rounded border">
+        <p class="font-semibold text-sm border-b px-3 lg:px-0 pb-3">Alamat Pengiriman</p>
+        <div class="px-3 lg:px-0 py-3">
           <input type="hidden" id="customer_id" value="{{ Auth::user()->id }}">
           @if (Auth::user()->telepon || Auth::user()->kecamatan || Auth::user()->kabupaten || Auth::user()->provinsi || Auth::user()->kodepos)
             <p class="font-bold capitalize">{{ Auth::user()->nama_lengkap }}</p>
@@ -48,11 +48,11 @@
           <input type="hidden" name="harga_produk" id="harga_produk_{{ $key }}" value="{{ $item->produk->harga }}">
           <input type="hidden" name="keranjang_id[]" id="keranjang_id_{{ $key }}" value="{{ $item->id }}">
   
-          <div class="border-2 mx-3 lg:mx-0 my-3 rounded">
+          <div class="border mx-3 lg:mx-0 my-3 rounded bg-white">
             <div class="flex">
               <div class="flex w-4/5">
                 <div class="m-3 w-1/5">
-                  <img src="{{ url(env('APP_URL_ADMIN') . '/public/img_produk/' . $item->produk->gambar) }}" alt="gambar produk" class="w-full">
+                  <img src="{{ url(env('APP_URL_ADMIN') . '/img_produk/' . $item->produk->gambar) }}" alt="gambar produk" class="w-full">
                 </div>
                 <div class="m-3 w-4/5">
                   <div class="text-slate-800 font-semibold">{{ $item->produk->nama }}</div>
@@ -82,8 +82,8 @@
           {{-- data hidden --}}
           <input type="hidden" id="total_ekspedisi" value="{{ count($ekspedisi) }}">
     
-          <div class="ml-3 lg:ml-0 mr-3 my-2">
-            <p class="font-semibold text-sm border-b py-3">Pilih Pengiriman</p>
+          <div class="ml-3 lg:ml-0 mr-3 my-2 bg-white rounded border p-3">
+            <p class="font-semibold text-sm border-b pb-3">Pilih Pengiriman</p>
             <div class="mt-3">
               <div class="my-2">
                 <select name="origin" id="origin" class="border rounded py-2 px-2 w-full">
@@ -139,14 +139,14 @@
         </div>
         
         {{-- rekening --}}
-        <div class="ml-3 mr-3 lg:mr-0 my-2 lg:w-2/4">
+        <div class="ml-3 mr-3 lg:mr-0 my-2 lg:w-2/4 bg-white rounded border p-3">
           {{-- data hidden --}}
           <input type="hidden" id="total_rekening" value="{{ count($rekening) }}">
           <input type="hidden" id="total_rekening_bank" value="{{ count($rekening_bank) }}">
           <input type="hidden" id="total_rekening_ewallet" value="{{ count($rekening_ewallet) }}">
 
           <div>
-            <p class="font-semibold text-sm border-b py-3">Pilih Pembayaran</p>
+            <p class="font-semibold text-sm border-b pb-3">Pilih Pembayaran</p>
           </div>
           <div>
             <!-- bank -->
@@ -164,7 +164,7 @@
                     <label
                       class="mt-px inline-block pl-[0.15rem] hover:cursor-pointer"
                       for="radio_rekening_bank_{{ $key }}">
-                        <img src="{{ url(env('APP_URL_ADMIN') . '/public/img_rekening/' . $item->gambar) }}" alt="gambar" class="w-full h-8 border bg-white p-1">
+                        <img src="{{ url(env('APP_URL_ADMIN') . '/img_rekening/' . $item->gambar) }}" alt="gambar" class="w-full h-8 border bg-white p-1">
                     </label>
                   </div>
                 @endforeach
@@ -185,7 +185,7 @@
                   <label
                     class="mt-px inline-block pl-[0.15rem] hover:cursor-pointer"
                     for="radio_rekening_ewallet_{{ $key }}">
-                      <img src="{{ url(env('APP_URL_ADMIN') . '/public/img_rekening/' . $item->gambar) }}" alt="gambar" class="w-full h-8 border bg-white p-1">
+                      <img src="{{ url(env('APP_URL_ADMIN') . '/img_rekening/' . $item->gambar) }}" alt="gambar" class="w-full h-8 border bg-white p-1">
                   </label>
                 </div>
                 @endforeach
@@ -488,12 +488,12 @@
           
           let val_results = `
             <div class="border-b py-2">
-              <div>${rajaongkir_.name}</div>
+              <div class="text-sm">${rajaongkir_.name}</div>
             </div>
             <div class="my-2">`;    
               $.each(rajaongkir_.costs, function (index, item) {
                 val_results += `
-                  <div>
+                  <div class="text-sm">
                     <label for="layanan_pengiriman_${index}" class="flex justify-between">
                       <div><input type="radio" name="layanan_pengiriman" id="layanan_pengiriman_${index}" class="mr-3" `;
                         $.each(item.cost, function(index_cost, item_cost) {

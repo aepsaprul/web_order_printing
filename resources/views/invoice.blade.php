@@ -13,7 +13,7 @@
 </div>
 <div class="flex justify-center pb-24">
   <div class="w-full lg:w-4/5 lg:mt-5 lg:flex lg:justify-center">
-    <div class="lg:w-2/4 border p-3 rounded">
+    <div class="lg:w-2/4 border p-3 rounded bg-white">
       <div class="border-b mx-3">
         <div class="flex justify-between">
           <div class="py-3">Total Pembayaran</div>

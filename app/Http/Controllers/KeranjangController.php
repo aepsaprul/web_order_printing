@@ -150,6 +150,33 @@ class KeranjangController extends Controller
       'status' => 200
     ]);
   }
+  public function updateGambar(Request $request)
+  {
+    if ($request->keranjang_id_upload) {
+      $keranjang_id = $request->keranjang_id_upload;
+
+      $keranjang = Keranjang::find($keranjang_id);
+  
+      if($request->hasFile('gambar')) {
+        $file = $request->file('gambar');
+        $extension = $file->getClientOriginalExtension();
+        $filename = time() . "." . $extension;
+        $file->move('img_desain/', $filename);
+        $keranjang->gambar = $filename;
+      }
+      $keranjang->save();
+    } else if ($request->keranjang_id_link) {
+      $keranjang_id = $request->keranjang_id_link;
+
+      $keranjang = Keranjang::find($keranjang_id);
+      $keranjang->gambar_link = $request->link;
+      $keranjang->save();
+    }
+
+    return response()->json([
+      'status' => $request->all()
+    ]);
+  }
   public function beli()
   {
     $session_checkout = session('checkout');

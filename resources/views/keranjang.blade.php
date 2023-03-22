@@ -15,7 +15,7 @@
           <input type="hidden" name="harga_produk" id="harga_produk_{{ $key }}" value="{{ $item->harga }}">
           <input type="hidden" name="keranjang_id[]" id="keranjang_id_{{ $key }}" value="{{ $item->id }}">
 
-          <div class="shadow-md m-3 lg:m-0 lg:mr-5 rounded">
+          <div class="shadow-md m-3 lg:m-0 lg:mr-5 rounded bg-white">
             <div class="flex">
               <div class="m-3 w-1/5">
                 @if ($item->produk)
@@ -37,6 +37,24 @@
                     {{ $item_keranjang_template->dataTemplate->nama }} ({{ $item_keranjang_template->dataTemplateDetail->nama }}) 
                     {{ $key_keranjang_template != $total_template ? ',' : '' }}
                   @endforeach
+                </div>
+                <div class="mt-9">
+                  <div>
+                    @if ($item->gambar || $item->gambar_link)
+                      <input type="hidden" class="upload_status" value="sudah">
+                      <span class="text-emerald-500 italic text-sm">Desain berhasil di Upload</span>                        
+                    @else
+                      <input type="hidden" class="upload_status" value="belum">
+                      <button 
+                        class="upload-desain text-sm text-sky-500 font-bold"
+                        data-te-toggle="modal"
+                        data-te-target="#modalUpload"
+                        data-te-ripple-init
+                        data-te-ripple-color="light"
+                        data-id="{{ $item->id }}"
+                        >Upload Desain</button>                        
+                    @endif
+                  </div>
                 </div>
               </div>
             </div>
@@ -101,8 +119,9 @@
                     </div>
                   </div>
                 </div>
-                <button id="btn_beli" class="bg-sky-500 border text-center text-white font-bold w-full h-full lg:h-10 rounded-md">Beli</button>
+                <button id="btn_beli" class="bg-sky-300 border text-center text-white font-bold w-full h-full lg:h-10 rounded-md" disabled>Beli</button>
               </div>
+              <div class="mt-5 text-xs italic text-rose-700">*Upload Desain Terlebih Dahulu</div>
             </div>
           </div>
         </div>
@@ -111,7 +130,128 @@
   </div>
 </div>
 
-{{-- modal --}}
+<!-- modal upload -->
+<div
+  data-te-modal-init
+  class="fixed top-0 left-0 z-[1055] hidden h-full w-full overflow-y-auto overflow-x-hidden outline-none"
+  id="modalUpload"
+  tabindex="-1"
+  aria-labelledby="modalUploadTitle"
+  aria-modal="true"
+  role="dialog">
+  <div
+    data-te-modal-dialog-ref
+    class="pointer-events-none relative flex min-h-[calc(100%-1rem)] w-auto translate-y-[-50px] items-center opacity-0 transition-all duration-300 ease-in-out min-[576px]:mx-auto min-[576px]:mt-7 min-[576px]:min-h-[calc(100%-3.5rem)] min-[576px]:max-w-[500px]">
+    <div
+      class="pointer-events-auto relative flex w-full flex-col rounded-md border-none bg-white bg-clip-padding text-current shadow-lg outline-none dark:bg-neutral-600">
+      <div
+        class="flex flex-shrink-0 items-center justify-between rounded-t-md border-b-2 border-neutral-100 border-opacity-100 p-4 dark:border-opacity-50">
+        <h5
+          class="text-xl font-medium leading-normal text-neutral-800 dark:text-neutral-200"
+          id="modalUploadScrollableLabel">
+          Upload Desain
+        </h5>
+        <button
+          type="button"
+          class="box-content rounded-none border-none hover:no-underline hover:opacity-75 focus:opacity-100 focus:shadow-none focus:outline-none"
+          data-te-modal-dismiss
+          aria-label="Close">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="h-6 w-6">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <div class="relative p-4">
+        {{-- upload --}}
+        <div class="mt-2">
+          <div class="flex justify-between lg:block">
+            <button id="btn_upload" class="border-b-2 border-sky-300 w-full lg:w-32 py-1 rounded">Upload</button>
+            <button id="btn_link" class="border-b-2 border-sky-100 w-full lg:w-32 py-1 rounded">Link</button>
+          </div>
+          <div id="tab_upload" class="w-full mt-1">
+            <form id="form_upload" method="post" enctype="multipart/form-data">
+              <input type="hidden" name="keranjang_id_upload" id="keranjang_id_upload">
+              <div class="flex justify-center items-center">
+                <div>
+                  <div class="text-center mt-2">
+                    <label for="gambar">(PDF, JPG, ZIP, RAR max 50Mb)</label>
+                  </div>
+                  <div class="text-center border border-slate-400">
+                    <input type="file" name="gambar" id="gambar">
+                  </div>
+                </div>
+              </div>
+              <div>
+                <p class="text-sm px-2 mt-4 text-slate-600">*Jika ukuran file lebih dari 10Mb, silahkan upload file di dropbox / google drive dan masukkkan link file anda <a href="#" id="btn_disini" class="text-sky-600">disini</a>.</p>
+              </div>
+              <div class="flex justify-center mt-3">
+                <div class="w-full relative flex items-center justify-center">
+                  <div id="loading_kirim" class="hidden absolute">
+                    <div class="flex items-center">
+                      <div class="flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-tr from-indigo-500 to-slate-100 animate-spin mr-3">
+                        <div class="h-2 w-2 rounded-full bg-white"></div>
+                      </div>
+                      <span class="text-white">Loading. . .</span>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    class="btn-kirim-upload bg-primary rounded my-2 px-5 py-2 text-white "
+                    data-te-ripple-init
+                    data-te-ripple-color="light">
+                    <i class="fa fa-paper-plane"></i> Kirim
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div id="tab_link" class="w-full h-36 mt-1 hidden">
+            <form id="form_link" method="post" enctype="multipart/form-data">
+              <input type="hidden" name="keranjang_id_link" id="keranjang_id_link">
+              <div class="h-full flex justify-center items-center">
+                <div>
+                  <div>
+                    <input type="text" name="link" id="link" class="w-60 border p-2" placeholder="Masukkan Link">
+                  </div>
+                  <div class="flex justify-center mt-3">
+                    <div class="w-full relative flex items-center justify-center">
+                      <div id="loading_kirim" class="hidden absolute">
+                        <div class="flex items-center">
+                          <div class="flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-tr from-indigo-500 to-slate-100 animate-spin mr-3">
+                            <div class="h-2 w-2 rounded-full bg-white"></div>
+                          </div>
+                          <span class="text-white">Loading. . .</span>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        class="btn-kirim-link bg-primary rounded my-2 px-5 py-2 text-white "
+                        data-te-ripple-init
+                        data-te-ripple-color="light">
+                        <i class="fa fa-paper-plane"></i> Kirim
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- modal delete -->
 <div
   data-te-modal-init
   class="fixed top-0 left-0 z-[1055] hidden h-full w-full overflow-y-auto overflow-x-hidden outline-none"
@@ -326,6 +466,145 @@
         })
       })
     } // end for
+
+    // upload
+    const upload_status = [];
+    const upload_status_jml = document.querySelectorAll('.upload_status');
+    for (let i = 0; i < upload_status_jml.length; i++) {
+      const val = upload_status_jml[i].value;
+      upload_status.push(val);
+    }
+    const upload_cek = upload_status.includes('belum');
+    if (upload_status_jml.length > 0) {
+      if (!upload_cek) {
+        $('#btn_beli').prop('disabled', false).removeClass('bg-sky-300').addClass('bg-sky-500');
+      }      
+    }
+    
+    // btn upload desain
+    $('.upload-desain').on('click', function (e) {
+      e.preventDefault();
+      const id = $(this).attr('data-id');
+      $('#keranjang_id_upload').val(id);
+      $('#keranjang_id_link').val(id);
+    })
+
+    // tab upload
+    const btn = [];
+    $('#btn_upload').on('click', function (e) {
+      e.preventDefault();
+      btn.pop();
+    
+      if (btn[0] != 'btn_upload') {
+        $('#btn_link').addClass('border-sky-100');
+        $('#btn_link').removeClass('border-sky-300');
+        $('#btn_upload').removeClass('border-sky-100');
+        $('#btn_upload').addClass('border-sky-300');
+
+        $('#tab_upload').removeClass('hidden');
+        $('#tab_link').addClass('hidden');
+      }
+    })
+    $('#btn_link').on('click', function (e) {
+      e.preventDefault();
+      btn.pop();
+      btn.push('btn_link');
+    
+      if (btn[0] == 'btn_link') {
+        $('#btn_link').removeClass('border-sky-100');
+        $('#btn_link').addClass('border-sky-300');
+        $('#btn_upload').removeClass('border-sky-300');
+        $('#btn_upload').addClass('border-sky-100');
+
+        $('#tab_upload').addClass('hidden');
+        $('#tab_link').removeClass('hidden');
+      }
+    })
+    $('#btn_disini').on('click', function (e) {
+      e.preventDefault();
+      btn.pop();
+      btn.push('btn_link');
+    
+      if (btn[0] == 'btn_link') {
+        $('#btn_link').removeClass('border-sky-100');
+        $('#btn_link').addClass('border-sky-300');
+        $('#btn_upload').removeClass('border-sky-300');
+        $('#btn_upload').addClass('border-sky-100');
+
+        $('#tab_upload').addClass('hidden');
+        $('#tab_link').removeClass('hidden');
+      }
+    })
+
+    // btn kirim upload
+    $(document).on('click', '.btn-kirim-upload', function (e) {
+      e.preventDefault();
+      console.log('tes')
+      let formData = new FormData($('#form_upload')[0]);
+
+      $.ajax({
+        url: "{{ URL::route('keranjang.updateGambar') }}",
+        type: "post",
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function (response) {
+          window.location.reload();
+        }
+      })
+    })
+
+    // btn kirim link
+    $('.btn-kirim-link').on('click', function (e) {
+      e.preventDefault();
+      let formData = new FormData($('#form_link')[0]);
+
+      $.ajax({
+        url: "{{ URL::route('keranjang.updateGambar') }}",
+        type: "post",
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function (response) {
+          window.location.reload();
+        }
+      })
+    })
+
+    // tab detail
+    const tab = [];
+
+    $('#btn-ulasan').on('click', function (e) {
+      e.preventDefault();
+      tab.pop();
+      tab.push('ulasan');
+    
+      if (tab[0] == 'ulasan') {
+        $('#btn-ulasan').removeClass('bg-slate-100');
+        $('#btn-ulasan').addClass('bg-sky-500 text-white');
+        $('#btn-rincian').removeClass('bg-sky-500 text-white');
+        $('#btn-rincian').addClass('bg-slate-100');
+
+        $('#rincian').addClass('hidden');
+        $('#ulasan').removeClass('hidden');
+      }
+    })
+    $('#btn-rincian').on('click', function (e) {
+      e.preventDefault();
+      tab.pop();
+    
+      if (tab[0] != 'ulasan') {
+        $('#btn-ulasan').addClass('bg-slate-100');
+        $('#btn-ulasan').removeClass('bg-sky-500 text-white');
+        $('#btn-rincian').removeClass('bg-slate-100');
+        $('#btn-rincian').addClass('bg-sky-500 text-white');
+
+        $('#rincian').removeClass('hidden');
+        $('#ulasan').addClass('hidden');
+      }
+    })
+    $('#btn-rincian').addClass('bg-sky-500 text-white');
+    $('#btn-ulasan').addClass('bg-slate-100');
 
     // btn beli
     $('#btn_beli').on('click', function (e) {

@@ -15,11 +15,11 @@
   <input type="hidden" name="produk_id" id="produk_id" value="{{ $produk->id }}">
 
   <div class="lg:flex lg:justify-center">
-    <div class="lg:w-4/5 lg:flex 2xl:w-3/5">
-      <div class="lg:w-2/4">
+    <div class="lg:w-4/5 lg:flex 2xl:w-3/5 bg-white mt-2">
+      <div class="p-3 lg:w-2/4">
         <img src="{{ url(env('APP_URL_ADMIN') . '/img_produk/' . $produk->gambar) }}" alt="gambar produk" class="my-2">
       </div>
-      <div class="mx-3 my-2 lg:w-2/4">
+      <div class="p-3 lg:w-2/4">
         <div class="my-3 lg:my-0 text-xl font-bold">{{ $produk->nama }}</div>
         <div>
           <p class="text-slate-500 text-sm my-2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis sequi ea iusto ipsum? Sequi, voluptates corporis nihil aperiam laborum quibusdam!</p>
@@ -29,12 +29,12 @@
         <input type="hidden" name="template_total" id="template_total" value="{{ count($produk_template) }}"> <!-- jumlah total query template -->
         @foreach ($template as $key => $item) <!-- loop tabel template -->
           <div class="my-3">
-            @foreach ($produk_template as $key => $item_produk_template) <!-- loop tabel produk_template -->
+            @foreach ($produk_template as $key_produk_template => $item_produk_template) <!-- loop tabel produk_template -->
               @if ($item_produk_template->template_id == $item->id) <!-- jika template_id yg ada di tabel produk_template sama dengan template_id yg ada di tabel template -->
                 <input type="hidden" name="template[]" value="{{ $item->id }}">
                 <div class="font-semibold my-1">{{ $item->nama }}</div>
-                <select name="template_detail[]" id="template_{{ $key }}" class="border text-slate-700 w-full p-2 rounded border-sky-600 outline-0 cursor-pointer">
-                  <option value="0" data-id="0" class="text-slate-700">Pilih {{ $item->nama }}</option>
+                <select name="template_detail[]" id="template_{{ $key_produk_template }}" class="border text-slate-700 w-full p-2 rounded border-sky-600 outline-0 cursor-pointer">
+                  {{-- <option value="0" data-id="0" class="text-slate-700">Pilih {{ $item->nama }}</option> --}}
                   @foreach ($template_detail as $item_detail) <!-- loop tabel template_detail -->
                     @if ($item_detail->template_id == $item->id) <!-- jika template_id yg ada di tabel template_detail sama dengan id yg ada di tabel template -->
                       @foreach ($produk_template_detail as $item_produk_template_detail) <!-- loop tabel produk_template_detail -->
@@ -54,38 +54,6 @@
           <label for="keterangan" class="font-semibold">Keterangan</label>
           <textarea name="keterangan" id="keterangan" rows="4" class="w-full border border-sky-600 rounded p-3 mt-2 outline-0" placeholder="Maksimal 200 karakter"></textarea>
         </div>
-
-        {{-- upload --}}
-        {{-- <div class="mt-2">
-          <div class="flex justify-between lg:block">
-            <button id="btn_upload" class="border border-sky-300 w-full lg:w-32 py-1 rounded bg-sky-500 text-white">Upload</button>
-            <button id="btn_link" class="border border-sky-300 w-full lg:w-32 py-1 rounded">Link</button>
-          </div>
-          <div id="tab_upload" class="w-full h-36 mt-1 bg-slate-100">
-            <div class="flex justify-center items-center">
-              <div>
-                <div class="text-center mt-2">
-                  <label for="upload">(PDF, JPG, ZIP, RAR max 50Mb)</label>
-                </div>
-                <div class="text-center border border-slate-400">
-                  <input type="file" name="upload" id="upload">
-                </div>
-              </div>
-            </div>
-            <div>
-              <p class="text-sm px-2 mt-4 text-slate-600">*Jika ukuran file lebih dari 10Mb, silahkan upload file di dropbox / google drive dan masukkkan link file anda <a href="#" id="btn_disini" class="text-sky-600">disini</a>.</p>
-            </div>
-          </div>
-          <div id="tab_link" class="w-full h-36 mt-1 bg-slate-100 hidden">
-            <div class="h-full flex justify-center items-center">
-              <div>
-                <div>
-                  <input type="text" name="link" id="link" class="w-60 border p-2" placeholder="Masukkan Link">
-                </div>
-              </div>
-            </div>
-          </div>
-        </div> --}}
         <div class="mt-5">
           <div class="ml-5 text-xs italic mb-1">Minimal Pembelian: {{ $produk->min_beli }} <span class="capitalize">{{ $produk->satuan }}</span></div>
           <div class="flex justify-between">
@@ -143,9 +111,9 @@
       </div>
     </div>
   </div>
-  <div class="lg:flex lg:justify-center pb-20 lg:pb-5">
-    <div class="lg:w-4/5 2xl:w-3/5 mx-3">
-      <div class="mt-5">
+  <div class="lg:flex lg:justify-center my-5 lg:pb-5">
+    <div class="lg:w-4/5 2xl:w-3/5 p-5 bg-white">
+      <div>
         <div class="tab flex justify-between lg:block">
           <button id="btn-rincian" class="linktab w-full lg:w-44 rounded py-1" id="default">Rincian</button>
           <button id="btn-ulasan" class="linktab w-full lg:w-44 rounded py-1">Ulasan</button>
@@ -226,7 +194,29 @@
       template_detail_val[i_template] = 0;
     }
 
-    for (let index = 0; index < template_total; index++) { // loop produk template      
+    for (let index = 0; index < template_total; index++) { // loop produk template
+        const val_onload = $('#template_' + index).val();
+        const id_this = $('#template_' + index).find('option:selected', '#template_' + index);
+
+        let result = 0;
+        id_this.each(function (index_, item) {
+          result = $(this).data('id');
+        })
+
+        template_detail_val[index] = result; // override array data-id dari select
+        template_awal[index] = val_onload; // override array dasar dengan value template
+
+        let template_hasil = 0;
+        for (let i_template_hasil = 0; i_template_hasil < template_awal.length; i_template_hasil++) { // perhitungan tambah untuk array dasar yg sudah di override
+          template_hasil += parseInt(template_awal[i_template_hasil]);
+        }
+
+        const templateCalc = parseInt($('#produk_harga').val()) + template_hasil;
+        const input_counter = $('#input_counter').val();
+        const templateTotalCalc = templateCalc * input_counter;
+        $('.nominal_harga').html(afRupiah(templateCalc));
+        $('.nominal_total').html(afRupiah(templateTotalCalc));
+
       $('#template_' + index).on('change', function () { // onchange template
         const val_this = $('#template_' + index).val(); // value template ketika onchange
         const id_this = $(this).find('option:selected', this);
@@ -251,90 +241,6 @@
         $('.nominal_total').html(afRupiah(templateTotalCalc));
       })
     }
-
-    // tab upload
-    const btn = [];
-    $('#btn_upload').on('click', function (e) {
-      e.preventDefault();
-      btn.pop();
-    
-      if (btn[0] != 'btn_upload') {
-        $('#btn_link').addClass('bg-white');
-        $('#btn_link').removeClass('bg-sky-500 text-white');
-        $('#btn_upload').removeClass('bg-white');
-        $('#btn_upload').addClass('bg-sky-500 text-white');
-
-        $('#tab_upload').removeClass('hidden');
-        $('#tab_link').addClass('hidden');
-      }
-    })
-    $('#btn_link').on('click', function (e) {
-      e.preventDefault();
-      btn.pop();
-      btn.push('btn_link');
-    
-      if (btn[0] == 'btn_link') {
-        $('#btn_link').removeClass('bg-white');
-        $('#btn_link').addClass('bg-sky-500 text-white');
-        $('#btn_upload').removeClass('bg-sky-500 text-white');
-        $('#btn_upload').addClass('bg-white');
-
-        $('#tab_upload').addClass('hidden');
-        $('#tab_link').removeClass('hidden');
-      }
-    })
-    $('#btn_disini').on('click', function (e) {
-      e.preventDefault();
-      btn.pop();
-      btn.push('btn_link');
-    
-      if (btn[0] == 'btn_link') {
-        $('#btn_link').removeClass('bg-white');
-        $('#btn_link').addClass('bg-sky-500 text-white');
-        $('#btn_upload').removeClass('bg-sky-500 text-white');
-        $('#btn_upload').addClass('bg-white');
-
-        $('#tab_upload').addClass('hidden');
-        $('#tab_link').removeClass('hidden');
-      }
-    })
-    $('#btn_upload').addClass('bg-sky-500 text-white');
-    $('#btn_link').addClass('bg-white');
-
-    // tab detail
-    const tab = [];
-
-    $('#btn-ulasan').on('click', function (e) {
-      e.preventDefault();
-      tab.pop();
-      tab.push('ulasan');
-    
-      if (tab[0] == 'ulasan') {
-        $('#btn-ulasan').removeClass('bg-slate-100');
-        $('#btn-ulasan').addClass('bg-sky-500 text-white');
-        $('#btn-rincian').removeClass('bg-sky-500 text-white');
-        $('#btn-rincian').addClass('bg-slate-100');
-
-        $('#rincian').addClass('hidden');
-        $('#ulasan').removeClass('hidden');
-      }
-    })
-    $('#btn-rincian').on('click', function (e) {
-      e.preventDefault();
-      tab.pop();
-    
-      if (tab[0] != 'ulasan') {
-        $('#btn-ulasan').addClass('bg-slate-100');
-        $('#btn-ulasan').removeClass('bg-sky-500 text-white');
-        $('#btn-rincian').removeClass('bg-slate-100');
-        $('#btn-rincian').addClass('bg-sky-500 text-white');
-
-        $('#rincian').removeClass('hidden');
-        $('#ulasan').addClass('hidden');
-      }
-    })
-    $('#btn-rincian').addClass('bg-sky-500 text-white');
-    $('#btn-ulasan').addClass('bg-slate-100');
 
     // counter
     let input_counter = $('#input_counter').val();
