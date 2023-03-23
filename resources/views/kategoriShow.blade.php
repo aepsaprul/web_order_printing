@@ -9,12 +9,12 @@
     <h1 class="text-center font-bold my-5 text-xl lg:text-2xl text-slate-500">Kategori {{ $kategori->nama }}</h1>
     <ul id="paginated-list" class="grid grid-cols-2 lg:grid-cols-5 2xl:grid-cols-6 gap-2 m-2">
       @foreach ($produk as $item)
-        <li>
+        <li class="bg-white">
           <div>
-            <img src="{{ url(env('APP_URL_ADMIN') . '/img_produk/' . $item->gambar) }}" alt="gambar" class="w-48">
+            <img src="{{ url(env('APP_URL_ADMIN') . '/img_produk/' . $item->gambar) }}" alt="gambar" class="w-full">
           </div>
           <div class="text-sm text-center">{{ $item->nama }}</div>
-          <div class="text-sm text-center">{{ $item->harga }}</div>
+                <div class="text-sm text-center font-semibold"><span>Rp</span> <span class="text-lg">@currency($item->harga)</span></div>
         </li>
       @endforeach
     </ul>  

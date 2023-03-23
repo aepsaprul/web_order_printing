@@ -19,21 +19,22 @@ prevent back history
   'prevent-back-history' => \App\Http\Middleware\PreventBackHistory::class,
 
 request update
-- header jadi satu file
+- spesifikasi promo
+- pencarian produk
+- notifikasi
 
 halaman akun yg perlu di update
 - ubah kata sandi
 - validasi
 - halaman transaksi
 - halaman ulasan
-- gambar profil
 
 detail transaksi
 - tambah rincian template
-- tambah riwayat status
 
 halaman checkout
 - ambil ditempat
+- checklist pengiriman
 
 
 

@@ -35,6 +35,7 @@ class RegisterController extends Controller
     
     $customer = new Customer;
     $customer->nama_lengkap = $request->nama_lengkap;
+    $customer->nik = $request->nik;
     $customer->telepon = $request->telepon;
     $customer->username = $request->username;
     $customer->email = $request->email;

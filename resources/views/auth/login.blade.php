@@ -7,7 +7,7 @@
       <div class="mx-3"><a href="{{ url('/') }}"><i class="fas fa-arrow-left text-lg text-sky-600 mr-3"></i></a> <span class="font-bold">Masuk</span></div>
       <div class="mx-3"><a href="{{ route('register') }}" class="text-sky-600 font-bold">Daftar</a></div>
     </div>
-    <div class="mt-10">
+    <div class="mt-5">
       <form action="{{ route('login.auth') }}" method="post">
         @csrf
         <div class="m-4">

@@ -7,7 +7,7 @@
 <div class="lg:flex lg:justify-center mt-4">
   <div class="lg:w-4/5 2xl:w-3/5">
     <div class="md:flex md:justify-center">
-      <div class="m-3 md:w-2/4">
+      <div class="m-3 md:w-2/4 bg-white p-3 rounded border">
         <div class="text-center text-lg font-bold">Konfirmasi Pembayaran</div>
         <form id="form_bayar" method="POST" enctype="multipart/form-data">
           <input type="hidden" name="akun_id" id="akun_id" value="{{ Auth::user()->id }}">
