@@ -9,7 +9,8 @@ use App\Models\KeranjangTemplate;
 use App\Models\Rekening;
 use App\Models\Transaksi;
 use App\Models\TransaksiStatus;
-use App\Models\WilayahKabupaten;
+use App\Models\WilKabupaten;
+use App\Models\WilKecamatan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -206,7 +207,7 @@ class KeranjangController extends Controller
       $transaksi_total = intval($keranjang_total->total_harga) - $diskon;
       
       // kabupaten
-      $kabupaten = WilayahKabupaten::get();
+      $kabupaten = WilKabupaten::get();
 
       $ekspedisi = Ekspedisi::get();
       $rekening = Rekening::get();
@@ -228,69 +229,101 @@ class KeranjangController extends Controller
       return redirect()->route('home');
     }
   }
+  public function kecamatan($id)
+  {
+    $kecamatan = WilKecamatan::where('kabupaten_id', $id)->get();
+
+    return response()->json([
+      'kecamatan' => $kecamatan
+    ]);
+  }
   public function ongkir(Request $request)
   {
-    // $url_cost = "https://api.rajaongkir.com/starter/cost";
-    // $key="b26ad9c38f1ea6354da405ce736b0371";
+    $origin = $request->origin;
+    $destination = $request->destination;
 
-    $postdata = http_build_query([
-      "origin" => $request->origin, 
-      "destination" => $request->destination, 
-      "weight" => $request->weight, 
-      "courier" => $request->courier
-    ]);
-    
-    // $curl = curl_init();
-    // curl_setopt_array($curl, [
-    //   CURLOPT_URL => $url_cost,
-    //   CURLOPT_RETURNTRANSFER => true,
-    //   CURLOPT_ENCODING => "",
-    //   CURLOPT_MAXREDIRS => 10,
-    //   CURLOPT_TIMEOUT => 30,
-    //   CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-    //   CURLOPT_CUSTOMREQUEST => "POST",
-    //   CURLOPT_POSTFIELDS => $postdata, 
-    //   CURLOPT_HTTPHEADER => [
-    //     "content-type: application/x-www-form-urlencoded",
-    //     "key: ".$key
-    //   ],
-    // ]);
-
-    // $response = curl_exec($curl);
-    // $error = curl_error($curl);
-    // curl_close($curl);
-
-    // return response()->json([
-    //   'error' => $error,
-    //   'response' => $response
-    // ]);
-    $curl = curl_init();
-
-    curl_setopt_array($curl, array(
-      CURLOPT_URL => "https://api.rajaongkir.com/starter/cost",
-      CURLOPT_RETURNTRANSFER => true,
-      CURLOPT_ENCODING => "",
-      CURLOPT_MAXREDIRS => 10,
-      CURLOPT_TIMEOUT => 30,
-      CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-      CURLOPT_CUSTOMREQUEST => "POST",
-      CURLOPT_POSTFIELDS => $postdata,
-      // CURLOPT_POSTFIELDS => "origin=501&destination=114&weight=1700&courier=jne",
+    // jne
+    $curl_jne = curl_init();
+    curl_setopt_array($curl_jne, array(
+      CURLOPT_URL => "https://pro.rajaongkir.com/api/cost", CURLOPT_RETURNTRANSFER => true, CURLOPT_ENCODING => "", CURLOPT_MAXREDIRS => 10, CURLOPT_TIMEOUT => 30, CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1, CURLOPT_CUSTOMREQUEST => "POST", CURLOPT_POSTFIELDS => "origin=".$origin."&originType=city&destination=".$destination."&destinationType=subdistrict&weight=1&courier=jne",
       CURLOPT_HTTPHEADER => array(
         "content-type: application/x-www-form-urlencoded",
-        "key: b26ad9c38f1ea6354da405ce736b0371"
+        "key: 06f5c93c31ef48c91c6260c011014d37"
       ),
     ));
 
-    $response = curl_exec($curl);
-    $err = curl_error($curl);
+    $response_jne = curl_exec($curl_jne);
+    $err_jne = curl_error($curl_jne);
+    curl_close($curl_jne);
 
-    curl_close($curl);
+    // tiki
+    $curl_tiki = curl_init();
+    curl_setopt_array($curl_tiki, array(
+      CURLOPT_URL => "https://pro.rajaongkir.com/api/cost", CURLOPT_RETURNTRANSFER => true, CURLOPT_ENCODING => "", CURLOPT_MAXREDIRS => 10, CURLOPT_TIMEOUT => 30, CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1, CURLOPT_CUSTOMREQUEST => "POST", CURLOPT_POSTFIELDS => "origin=".$origin."&originType=city&destination=".$destination."&destinationType=subdistrict&weight=1&courier=tiki",
+      CURLOPT_HTTPHEADER => array(
+        "content-type: application/x-www-form-urlencoded",
+        "key: 06f5c93c31ef48c91c6260c011014d37"
+      ),
+    ));
 
-    if ($err) {
-      echo "cURL Error #:" . $err;
+    $response_tiki = curl_exec($curl_tiki);
+    $err_tiki = curl_error($curl_tiki);
+    curl_close($curl_tiki);
+
+    // pos
+    $curl_pos = curl_init();
+    curl_setopt_array($curl_pos, array(
+      CURLOPT_URL => "https://pro.rajaongkir.com/api/cost", CURLOPT_RETURNTRANSFER => true, CURLOPT_ENCODING => "", CURLOPT_MAXREDIRS => 10, CURLOPT_TIMEOUT => 30, CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1, CURLOPT_CUSTOMREQUEST => "POST", CURLOPT_POSTFIELDS => "origin=".$origin."&originType=city&destination=".$destination."&destinationType=subdistrict&weight=1&courier=pos",
+      CURLOPT_HTTPHEADER => array(
+        "content-type: application/x-www-form-urlencoded",
+        "key: 06f5c93c31ef48c91c6260c011014d37"
+      ),
+    ));
+
+    $response_pos = curl_exec($curl_pos);
+    $err_pos = curl_error($curl_pos);
+    curl_close($curl_pos);
+
+    // jnt
+    $curl_jnt = curl_init();
+    curl_setopt_array($curl_jnt, array(
+      CURLOPT_URL => "https://pro.rajaongkir.com/api/cost", CURLOPT_RETURNTRANSFER => true, CURLOPT_ENCODING => "", CURLOPT_MAXREDIRS => 10, CURLOPT_TIMEOUT => 30, CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1, CURLOPT_CUSTOMREQUEST => "POST", CURLOPT_POSTFIELDS => "origin=".$origin."&originType=city&destination=".$destination."&destinationType=subdistrict&weight=1&courier=jnt",
+      CURLOPT_HTTPHEADER => array(
+        "content-type: application/x-www-form-urlencoded",
+        "key: 06f5c93c31ef48c91c6260c011014d37"
+      ),
+    ));
+
+    $response_jnt = curl_exec($curl_jnt);
+    $err_jnt = curl_error($curl_jnt);
+    curl_close($curl_jnt);
+
+    // sicepat
+    $curl_sicepat = curl_init();
+    curl_setopt_array($curl_sicepat, array(
+      CURLOPT_URL => "https://pro.rajaongkir.com/api/cost", CURLOPT_RETURNTRANSFER => true, CURLOPT_ENCODING => "", CURLOPT_MAXREDIRS => 10, CURLOPT_TIMEOUT => 30, CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1, CURLOPT_CUSTOMREQUEST => "POST", CURLOPT_POSTFIELDS => "origin=".$origin."&originType=city&destination=".$destination."&destinationType=subdistrict&weight=1&courier=sicepat",
+      CURLOPT_HTTPHEADER => array(
+        "content-type: application/x-www-form-urlencoded",
+        "key: 06f5c93c31ef48c91c6260c011014d37"
+      ),
+    ));
+
+    $response_sicepat = curl_exec($curl_sicepat);
+    $err_sicepat = curl_error($curl_sicepat);
+    curl_close($curl_sicepat);
+
+    if ($err_jne) {
+      return response()->json([
+        'error' => "cURL Error #:" . $err_jne
+      ]);
     } else {
-      echo $response;
+      return response()->json([
+        'jne' => json_decode($response_jne),
+        'tiki' => json_decode($response_tiki),
+        'pos' => json_decode($response_pos),
+        'jnt' => json_decode($response_jnt),
+        'sicepat' => json_decode($response_sicepat)
+      ]);
     }
   }
   public function bayar(Request $request)

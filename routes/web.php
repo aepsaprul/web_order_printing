@@ -55,6 +55,7 @@ Route::middleware(['auth'])->group(function() {
   Route::post('keranjang/updateGambar', [KeranjangController::class, 'updateGambar'])->name('keranjang.updateGambar');
 
   Route::middleware(['back-page'])->group(function () {
+    Route::get('keranjang/{id}/kecamatan', [KeranjangController::class, 'kecamatan'])->name('keranjang.kecamatan');
     Route::post('keranjang/ongkir', [KeranjangController::class, 'ongkir'])->name('keranjang.ongkir');
     Route::get('keranjang/checkout', [KeranjangController::class, 'checkout'])->name('keranjang.checkout');
     Route::post('keranjang/bayar', [KeranjangController::class, 'bayar'])->name('keranjang.bayar');

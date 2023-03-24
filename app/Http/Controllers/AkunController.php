@@ -5,11 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use App\Models\Keranjang;
 use App\Models\Transaksi;
-use App\Models\WilayahCity;
-use App\Models\WilayahDistrict;
-use App\Models\WilayahKabupaten;
-use App\Models\WilayahProvince;
-use App\Models\WilayahProvinsi;
+use App\Models\WilKabupaten;
+use App\Models\WilKecamatan;
+use App\Models\WilProvinsi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -79,7 +77,7 @@ class AkunController extends Controller
   public function editAlamat($id)
   {
     $customer = Customer::find($id);
-    $provinsi = WilayahProvinsi::get();
+    $provinsi = WilProvinsi::get();
 
     return response()->json([
       'customer' => $customer,
@@ -88,7 +86,7 @@ class AkunController extends Controller
   }
   public function editAlamatKota($id)
   {
-    $kota = WilayahKabupaten::where('prov_id', $id)->get();
+    $kota = WilKabupaten::where('provinsi_id', $id)->get();
 
     return response()->json([
       'kota' => $kota
@@ -96,7 +94,7 @@ class AkunController extends Controller
   }
   public function editAlamatKecamatan($id)
   {
-    $kecamatan = WilayahDistrict::where('city_id', $id)->get();
+    $kecamatan = WilKecamatan::where('kabupaten_id', $id)->get();
 
     return response()->json([
       'kecamatan' => $kecamatan

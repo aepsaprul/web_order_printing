@@ -22,6 +22,7 @@ request update
 - spesifikasi promo
 - pencarian produk
 - notifikasi
+- hapus dark mode
 
 halaman akun yg perlu di update
 - ubah kata sandi

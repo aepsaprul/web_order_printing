@@ -97,7 +97,7 @@
     <div class="mt-5">
       <h5 class="font-semibold">Alamat</h5>
       <div>
-        <p class="text-sm uppercase">{{ Auth::user()->alamat ? Auth::user()->alamat : '-' }}, Kecamatan {{ Auth::user()->kecamatan ? Auth::user()->dataKecamatan->dis_name : '-' }}, Kabupaten/Kota {{ Auth::user()->kabupaten ? Auth::user()->dataKabupaten->city_name : '-' }}, Provinsi {{ Auth::user()->provinsi ? Auth::user()->dataProvinsi->prov_name : '-' }}, Kodepos {{ Auth::user()->kodepos ? Auth::user()->kodepos : '-' }}</p>
+        <p class="text-sm uppercase">{{ Auth::user()->alamat ? Auth::user()->alamat : '-' }}, Kecamatan {{ Auth::user()->kecamatan ? Auth::user()->dataKecamatan->kecamatan : '-' }}, Kabupaten/Kota {{ Auth::user()->kabupaten ? Auth::user()->dataKabupaten->kabupaten : '-' }}, Provinsi {{ Auth::user()->provinsi ? Auth::user()->dataProvinsi->provinsi : '-' }}, Kodepos {{ Auth::user()->kodepos ? Auth::user()->kodepos : '-' }}</p>
         <div>
           <a href="#" id="ubah_alamat" class="text-sm text-sky-500"
             data-te-toggle="modal"
@@ -460,7 +460,7 @@
           let data_provinsi = `<option value="0">Pilih Provinsi</option>`;
 
           $.each(response.provinsi, function (index, item) {
-            data_provinsi += `<option value="` + item.prov_id + `">` + item.prov_name + `</option>`;
+            data_provinsi += `<option value="` + item.id + `">` + item.provinsi + `</option>`;
           })
 
           $('#select_provinsi').html(data_provinsi);
@@ -479,10 +479,11 @@
         url: url,
         type: "get",
         success: function (response) {
+          console.log(response)
           let data_kota = `<option value="0">Pilih Kota</option>`;
 
           $.each(response.kota, function (index, item) {
-            data_kota += `<option value="` + item.city_id + `">` + item.city_name + `</option>`;
+            data_kota += `<option value="` + item.id + `">` + item.type + ` ` + item.kabupaten + `</option>`;
           })
 
           $('#select_kota').html(data_kota);
@@ -503,7 +504,7 @@
           let data_kecamatan = `<option value="0">Pilih Kecamatan</option>`;
 
           $.each(response.kecamatan, function (index, item) {
-            data_kecamatan += `<option value="` + item.dis_id + `">` + item.dis_name + `</option>`;
+            data_kecamatan += `<option value="` + item.id + `">` + item.kecamatan + `</option>`;
           })
 
           $('#select_kecamatan').html(data_kecamatan);
