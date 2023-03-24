@@ -213,7 +213,7 @@
                   </div>
                   <div class="flex justify-between">
                     <div class="w-1/4 text-sm">Alamat</div>
-                    <div class="w-3/4 text-sm uppercase">${transaksi.alamat}, kec ${transaksi.data_kecamatan.dis_name}, kab ${transaksi.data_kabupaten.city_name}, ${transaksi.data_provinsi.prov_name}</div>
+                    <div class="w-3/4 text-sm uppercase">${transaksi.alamat}, kec ${transaksi.data_kecamatan.kecamatan}, kab ${transaksi.data_kabupaten.kabupaten}, ${transaksi.data_provinsi.provinsi}</div>
                   </div>
                 </div>
               </div>

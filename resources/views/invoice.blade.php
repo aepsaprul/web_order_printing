@@ -17,7 +17,7 @@
       <div class="border-b mx-3">
         <div class="flex justify-between">
           <div class="py-3">Total Pembayaran</div>
-          <div class="py-3 font-bold text-xl"><span class="text-sm">Rp</span> <span id="nominal_bayar">@currency($transaksi->total)</span></div>
+          <div class="py-3"><button onclick="copyTotal('nominal_bayar')" class="border rounded-full px-3 text-sky-500 mr-5">salin</button> <span class="font-bold text-sm">Rp</span> <span id="nominal_bayar" class="font-bold text-xl">@currency($transaksi->total)</span></div>
         </div>
         <div class="py-3 text-right text-xs italic"><span class="text-rose-800">*</span> pastikan 3 digit terakhir sama</div>
       </div>
@@ -66,6 +66,12 @@
     $temp.val($(element).text()).select();
     document.execCommand("copy");
     $temp.remove();
+  }
+  function copyTotal(id)
+  {
+    var str = document.getElementById(id);
+    window.getSelection().selectAllChildren(str);
+    document.execCommand("Copy")
   }
 </script>
 @endsection

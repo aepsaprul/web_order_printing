@@ -22,12 +22,12 @@ class Transaksi extends Model
     return $this->hasMany(Keranjang::class, 'transaksi_id', 'id');
   }
   public function dataKecamatan() {
-    return $this->belongsTo(WilayahDistrict::class, 'kecamatan', 'dis_id');
+    return $this->belongsTo(WilKecamatan::class, 'kecamatan', 'id');
   }
   public function dataKabupaten() {
-    return $this->belongsTo(WilayahCity::class, 'kabupaten', 'city_id');
+    return $this->belongsTo(WilKabupaten::class, 'kabupaten', 'id');
   }
   public function dataProvinsi() {
-    return $this->belongsTo(WilayahProvince::class, 'provinsi', 'prov_id');
+    return $this->belongsTo(WilProvinsi::class, 'provinsi', 'id');
   }
 }

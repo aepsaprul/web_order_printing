@@ -30,12 +30,10 @@ halaman akun yg perlu di update
 - halaman transaksi
 - halaman ulasan
 
-detail transaksi
-- tambah rincian template
-
 halaman checkout
 - ambil ditempat
 - checklist pengiriman
+- weight pengiriman
 
 
 
