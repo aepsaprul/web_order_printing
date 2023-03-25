@@ -269,11 +269,11 @@
     data-te-modal-dialog-ref
     class="pointer-events-none relative flex min-h-[calc(100%-1rem)] w-auto translate-y-[-50px] items-center opacity-0 transition-all duration-300 ease-in-out min-[576px]:mx-auto min-[576px]:mt-7 min-[576px]:min-h-[calc(100%-3.5rem)] min-[576px]:max-w-[500px]">
     <div
-      class="pointer-events-auto relative flex w-full flex-col rounded-md border-none bg-white bg-clip-padding text-current shadow-lg outline-none dark:bg-neutral-600">
+      class="pointer-events-auto relative flex w-full flex-col rounded-md border-none bg-white bg-clip-padding text-current shadow-lg outline-none">
       <div
-        class="flex flex-shrink-0 items-center justify-between rounded-t-md border-b-2 border-neutral-100 border-opacity-100 p-4 dark:border-opacity-50">
+        class="flex flex-shrink-0 items-center justify-between rounded-t-md border-b-2 border-neutral-100 border-opacity-100 p-4">
         <h5
-          class="text-xl font-medium leading-normal text-neutral-800 dark:text-neutral-200"
+          class="text-xl font-medium leading-normal text-neutral-800"
           id="exampleModalScrollableLabel">
           Alamat Pengiriman
         </h5>
@@ -330,7 +330,7 @@
         <input type="text" name="kodepos" id="kodepos" class="w-full border border-slate-300 rounded px-2 py-1 outline-0" placeholder="Ketikkan kodepos">
       </div>
       <div
-        class="flex flex-shrink-0 flex-wrap items-center justify-end rounded-b-md border-t-2 border-neutral-100 border-opacity-100 p-4 dark:border-opacity-50">
+        class="flex flex-shrink-0 flex-wrap items-center justify-end rounded-b-md border-t-2 border-neutral-100 border-opacity-100 p-4">
         <div class="relative flex items-center justify-center">
           <div id="modal_alamat_loading" class="hidden absolute">
             <div class="flex items-center justify-center">

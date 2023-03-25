@@ -11,62 +11,64 @@
     <input type="hidden" name="transaksi_total" id="transaksi_total" value="{{ $transaksi->count() }}">
 
     @foreach ($transaksi as $key => $item)
-    <div class="border rounded my-2 p-2 bg-white">
-      <div class="flex">
-        <div class="text-sm mr-3">
-          @php
-            $transaksi_tanggal = Carbon\Carbon::parse($item->created_at)->locale('id');
-            $transaksi_tanggal->settings(['formatFunction' => 'translatedFormat']);
-          @endphp
-          {{ $transaksi_tanggal->format('d F Y') }}
+      <div class="border rounded my-2 p-4 bg-white">
+        <div class="flex">
+          <div class="text-sm mr-3">
+            @php
+              $transaksi_tanggal = Carbon\Carbon::parse($item->created_at)->locale('id');
+              $transaksi_tanggal->settings(['formatFunction' => 'translatedFormat']);
+            @endphp
+            {{ $transaksi_tanggal->format('d F Y') }}
+          </div>
+          <div class="text-sm mr-3">{{ $item->kode }}</div>
+          <div class="{{ $item->status == 6 ? 'bg-green-600 rounded' : 'bg-rose-600 rounded' }} px-3 text-sm text-white font-semibold capitalize">{{ $item->dataStatus->nama }}</div>
         </div>
-        <div class="text-sm mr-3">{{ $item->kode }}</div>
-        <div class="{{ $item->status == 6 ? 'bg-green-600 rounded' : 'bg-rose-600 rounded' }} px-3 text-sm text-white font-semibold capitalize">{{ $item->dataStatus->nama }}</div>
-      </div>
-      <div class="flex justify-between mt-3">
-        <div class="w-4/5">
-          @foreach ($item->dataKeranjang as $item_keranjang)
-            <div class="flex my-3">
-              <div class="w-1/5">
-                <img src="{{ url(env('APP_URL_ADMIN') . '/img_produk/' . $item_keranjang->produk->gambar) }}" alt="gambar produk" class="w-full">
+        <div class="flex justify-between mt-3">
+          <div class="w-4/5">
+            @foreach ($item->dataKeranjang as $item_keranjang)
+              <div class="flex my-3">
+                <div class="w-1/5">
+                  <img src="{{ url(env('APP_URL_ADMIN') . '/img_produk/' . $item_keranjang->produk->gambar) }}" alt="gambar produk" class="w-full">
+                </div>
+                <div class="mx-2 w-4/5">
+                  <div class="font-bold">{{ $item_keranjang->produk->nama }}</div>
+                  <div class="text-sm text-slate-700">{{ $item_keranjang->qty }} {{ $item_keranjang->produk->satuan }} x <span class="text-xs">Rp</span> @currency($item_keranjang->harga)</div>
+                  <div class="text-xs text-slate-700">
+                    @php
+                      $total_template = count($item_keranjang->dataKeranjangTemplate) - 1;
+                    @endphp
+                    @foreach ($item_keranjang->dataKeranjangTemplate as $key_keranjang_template => $item_keranjang_template)
+                      {{ $item_keranjang_template->dataTemplate->nama }} ({{ $item_keranjang_template->dataTemplateDetail->nama }}) 
+                      {{ $key_keranjang_template != $total_template ? ',' : '' }}
+                    @endforeach
+                  </div>           
+                </div>
               </div>
-              <div class="mx-2 w-4/5">
-                <div class="font-bold">{{ $item_keranjang->produk->nama }}</div>
-                <div class="text-sm text-slate-700">{{ $item_keranjang->qty }} {{ $item_keranjang->produk->satuan }} x <span class="text-xs">Rp</span> @currency($item_keranjang->harga)</div>
-                <div class="text-xs text-slate-700">
-                  @php
-                    $total_template = count($item_keranjang->dataKeranjangTemplate) - 1;
-                  @endphp
-                  @foreach ($item_keranjang->dataKeranjangTemplate as $key_keranjang_template => $item_keranjang_template)
-                    {{ $item_keranjang_template->dataTemplate->nama }} ({{ $item_keranjang_template->dataTemplateDetail->nama }}) 
-                    {{ $key_keranjang_template != $total_template ? ',' : '' }}
-                  @endforeach
-                </div>           
-              </div>
+            @endforeach
+          </div>
+          <div class="border-l-2 h-16 w-1/5">
+            <div class="mx-4">
+              <div class="text-sm">Total Beli</div>
+              <div class="font-bold">Rp @currency($item->total)</div>
             </div>
-          @endforeach
-        </div>
-        <div class="border-l-2 h-16 w-1/5">
-          <div class="mx-4">
-            <div class="text-sm">Total Beli</div>
-            <div class="font-bold">Rp @currency($item->total)</div>
           </div>
         </div>
-      </div>
-      <div class="flex justify-end items-center">
-        <div>
-          <button class="lihat-detail-{{ $key }} transaksi-detail font-bold text-sm mx-2 text-sky-400" 
-              data-id="{{ $item->id }}"
-              data-te-toggle="modal"
-              data-te-target="#modalTransaksiDetail"
-              data-te-ripple-init
-              data-te-ripple-color="light"
-            >Detail Transaksi
-          </button>
+        <div class="flex justify-end items-center">
+          <div>
+            <button class="lihat-detail-{{ $key }} transaksi-detail font-bold text-sm mx-2 text-sky-400" 
+                data-id="{{ $item->id }}"
+                data-te-toggle="modal"
+                data-te-target="#modalTransaksiDetail"
+                data-te-ripple-init
+                data-te-ripple-color="light"
+              >Detail Transaksi
+            </button>
+          </div>
+          @if ($item->status == 6)
+            <div><button class="bg-sky-500 py-2 px-7 text-white font-bold text-sm rounded">Ulas</button></div>              
+          @endif
         </div>
-        <div><button class="bg-sky-500 py-2 px-7 mx-2 text-white font-bold text-sm rounded">Ulas</button></div>
       </div>
-    </div>
     @endforeach
   </div>
 </div>
@@ -83,11 +85,11 @@
     data-te-modal-dialog-ref
     class="pointer-events-none relative h-[calc(100%-1rem)] w-auto translate-y-[-50px] opacity-0 transition-all duration-300 ease-in-out min-[576px]:mx-auto min-[576px]:mt-7 min-[576px]:h-[calc(100%-3.5rem)] min-[576px]:max-w-[500px]">
     <div
-      class="pointer-events-auto relative flex max-h-[100%] w-full flex-col overflow-hidden rounded-md border-none bg-white bg-clip-padding text-current shadow-lg outline-none dark:bg-neutral-600">
+      class="pointer-events-auto relative flex max-h-[100%] w-full flex-col overflow-hidden rounded-md border-none bg-white bg-clip-padding text-current shadow-lg outline-none">
       <div
-        class="flex flex-shrink-0 items-center justify-between rounded-t-md border-b-2 border-neutral-100 border-opacity-100 p-4 dark:border-opacity-50">
+        class="flex flex-shrink-0 items-center justify-between rounded-t-md border-b-2 border-neutral-100 border-opacity-100 p-4">
         <h5
-          class="modal-title text-xl font-medium leading-normal text-neutral-800 dark:text-neutral-200"
+          class="modal-title text-xl font-medium leading-normal text-neutral-800"
           id="modalTransaksiDetailLabel">
           <!-- title -->
         </h5>
@@ -158,19 +160,19 @@
                 <div>${tgl_indo}</div>
               </div>
               <div>
-                <ol class="border-l border-neutral-300 dark:border-neutral-500">`;
+                <ol class="border-l border-neutral-300">`;
                   $.each(transaksi.data_transaksi_status, function (index_status, item_status) {
                     val += `
                       <li>
                         <div class="flex-start flex items-center pt-3">
                           <div
-                            class="-ml-[5px] mr-3 h-[9px] w-[9px] rounded-full bg-neutral-300 dark:bg-neutral-500"></div>
-                          <p class="text-sm text-neutral-500 dark:text-neutral-300 capitalize">
+                            class="-ml-[5px] mr-3 h-[9px] w-[9px] rounded-full bg-neutral-300"></div>
+                          <p class="text-sm text-neutral-500 capitalize">
                             ${item_status.data_status.nama}
                           </p>
                         </div>
                         <div class="mt-2 ml-4 mb-6">
-                          <p class="mb-3 text-neutral-500 text-sm dark:text-neutral-300 italic">
+                          <p class="mb-3 text-neutral-500 text-sm italic">
                             ${item_status.keterangan}
                           </p>
                         </div>
