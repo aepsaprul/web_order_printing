@@ -34,6 +34,7 @@ halaman checkout
 - ambil ditempat
 - checklist pengiriman
 - weight pengiriman
+- pengiriman otomatis jika data alamat sudah terisi
 
 
 

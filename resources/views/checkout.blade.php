@@ -19,7 +19,7 @@
         <p class="font-semibold text-sm border-b px-3 lg:px-0 pb-3">Alamat Pengiriman</p>
         <div class="px-3 lg:px-0 py-3">
           <input type="hidden" id="customer_id" value="{{ Auth::user()->id }}">
-          @if (Auth::user()->telepon || Auth::user()->kecamatan || Auth::user()->kabupaten || Auth::user()->provinsi || Auth::user()->kodepos)
+          @if (Auth::user()->kecamatan || Auth::user()->kabupaten || Auth::user()->provinsi || Auth::user()->kodepos)
             <p class="font-bold capitalize">{{ Auth::user()->nama_lengkap }}</p>
             <p class="text-sm uppercase">{{ Auth::user()->telepon }}</p>
             <p class="text-sm uppercase">{{ Auth::user()->alamat ? Auth::user()->alamat : '-' }}</p>
@@ -30,6 +30,7 @@
               data-te-ripple-init
               data-te-ripple-color="light"
             >Ubah Alamat</button>
+            <input type="hidden" id="cek_alamat" value="1">
           @else
             <button id="ubah_alamat" class="text-sky-500 font-bold"
               data-te-toggle="modal"
@@ -37,6 +38,7 @@
               data-te-ripple-init
               data-te-ripple-color="light"
             >Ubah Alamat</button>
+            <input type="hidden" id="cek_alamat" value="0">
           @endif
         </div>
       </div>
@@ -247,6 +249,7 @@
               </div>
             </div>
           </div>
+          <div id="error_cek_alamat"></div>
         </div>
       </div>
     </div>
@@ -359,13 +362,6 @@
 
     // diskon
     const diskon = $('.nominal_diskon').text().replace(/\./g, '');
-    // const total_harga_produk = Number($('#total_harga_produk').text().replace(/\./g, ''));
-    // let diskon = total_harga_produk * 0.05;
-    // let total_harga = Number($('#total_harga').text().replace(/\./g, ''));
-    // let totalHargaCalc = total_harga - diskon;
-    
-    // $('.nominal_diskon').html(afRupiah(diskon));
-    // $('#total_harga').html(afRupiah(totalHargaCalc));
 
     // ubah alamat
     const akun_id = $('#customer_id').val();
@@ -383,7 +379,7 @@
           let data_provinsi = `<option value="0">Pilih Provinsi</option>`;
 
           $.each(response.provinsi, function (index, item) {
-            data_provinsi += `<option value="` + item.prov_id + `">` + item.prov_name + `</option>`;
+            data_provinsi += `<option value="` + item.id + `">` + item.provinsi + `</option>`;
           })
 
           $('#select_provinsi').html(data_provinsi);
@@ -405,7 +401,7 @@
           let data_kota = `<option value="0">Pilih Kota</option>`;
 
           $.each(response.kota, function (index, item) {
-            data_kota += `<option value="` + item.city_id + `">` + item.city_name + `</option>`;
+            data_kota += `<option value="` + item.id + `">` + item.kabupaten + `</option>`;
           })
 
           $('#select_kota').html(data_kota);
@@ -426,7 +422,7 @@
           let data_kecamatan = `<option value="0">Pilih Kecamatan</option>`;
 
           $.each(response.kecamatan, function (index, item) {
-            data_kecamatan += `<option value="` + item.dis_id + `">` + item.dis_name + `</option>`;
+            data_kecamatan += `<option value="` + item.id + `">` + item.kecamatan + `</option>`;
           })
 
           $('#select_kecamatan').html(data_kecamatan);
@@ -686,28 +682,6 @@
       }
     })
 
-    // ekspedisi
-    // const total_ekspedisi = $('#total_ekspedisi').val();
-    // for (let index_ekspedisi = 0; index_ekspedisi < total_ekspedisi; index_ekspedisi++) {
-    //   $('#radio_ekspedisi_' + index_ekspedisi).on('change', function () {
-    //     const val = $(this).val();
-    //     const total_harga_produk = $('#total_harga_produk').text().replace(/\./g, '');
-    //     const calcTotal = (parseInt(total_harga_produk) + parseInt(val)) - diskon;
-        
-    //     $('#total_ongkos_kirim').html(afRupiah(val));
-    //     $('#total_harga').html(afRupiah(calcTotal));
-
-    //     const rekening_check = $('input[name="radio_rekening"]:checked').val();
-    //     if (rekening_check) {
-    //       $('#btn_bayar').prop('disabled', false);
-    //       $('#btn_bayar').removeClass('bg-sky-300').addClass('bg-sky-500');
-    //     } else {
-    //       $('#btn_bayar').prop('disabled', true);
-    //       $('#btn_bayar').removeClass('bg-sky-500').addClass('bg-sky-300');
-    //     }
-    //   })
-    // }
-
     // bank
     const total_rekening_bank = $('#total_rekening_bank').val();
     for (let index_bank = 0; index_bank < total_rekening_bank; index_bank++) {
@@ -747,41 +721,47 @@
       const ekspedisi_harga = $('input[name="layanan_pengiriman"]:checked').val();
       const rekening_val = $('input[name="radio_rekening"]:checked').val();
       const keranjang_id = [];
+      const cek_alamat = Number($('#cek_alamat').val());
 
-      for (let index = 0; index < parseInt(keranjang_id_total); index++) {
-        const val_keranjang_id = $('#keranjang_id_' + index).val();
-        keranjang_id.push(val_keranjang_id);
-      }
-
-      let formData = {
-        customer_id: customer_id,
-        keranjang_id: keranjang_id,
-        ekspedisi: ekspedisi,
-        ekspedisi_harga: ekspedisi_harga,
-        rekening: rekening_val,
-        total_harga: total_harga_fix,
-        diskon: diskon
-      }
-
-      $.ajax({
-        url: "{{ URL::route('keranjang.bayar') }}",
-        type: "post",
-        data: formData,
-        beforeSend: function () {
-          $('#loading').removeClass('hidden');
-          $('#btn_bayar').removeClass('bg-sky-500');
-        },
-        success: function (response) {
-          var kode = response.status;
-          var url = '{{ route("invoice", ":kode") }}';
-          url = url.replace(':kode', kode);
-          window.location.href = url;
-          setTimeout(() => {
-            $('#loading').addClass('hidden');
-            $('#btn_bayar').addClass('bg-sky-500');
-          }, 3000);
+      if (cek_alamat == 0) {
+        let val = `<div class="px-3 py-2 italic text-rose-500 text-sm">*Data alamat harus diisi</div>`;
+        $('#error_cek_alamat').html(val);
+      } else {
+        for (let index = 0; index < parseInt(keranjang_id_total); index++) {
+          const val_keranjang_id = $('#keranjang_id_' + index).val();
+          keranjang_id.push(val_keranjang_id);
         }
-      })
+  
+        let formData = {
+          customer_id: customer_id,
+          keranjang_id: keranjang_id,
+          ekspedisi: ekspedisi,
+          ekspedisi_harga: ekspedisi_harga,
+          rekening: rekening_val,
+          total_harga: total_harga_fix,
+          diskon: diskon
+        }
+  
+        $.ajax({
+          url: "{{ URL::route('keranjang.bayar') }}",
+          type: "post",
+          data: formData,
+          beforeSend: function () {
+            $('#loading').removeClass('hidden');
+            $('#btn_bayar').removeClass('bg-sky-500');
+          },
+          success: function (response) {
+            var kode = response.status;
+            var url = '{{ route("invoice", ":kode") }}';
+            url = url.replace(':kode', kode);
+            window.location.href = url;
+            setTimeout(() => {
+              $('#loading').addClass('hidden');
+              $('#btn_bayar').addClass('bg-sky-500');
+            }, 3000);
+          }
+        })        
+      }
     })
   })
 </script>
