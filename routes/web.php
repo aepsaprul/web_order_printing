@@ -74,6 +74,7 @@ Route::middleware(['auth'])->group(function() {
   Route::get('akun/transaksi', [AkunController::class, 'transaksi'])->name('akun.transaksi');
   Route::get('akun/transaksi/{id}/detail', [AkunController::class, 'transaksiDetail'])->name('akun.transaksiDetail');
   Route::get('akun/ulasan', [AkunController::class, 'ulasan'])->name('akun.ulasan');
+  Route::post('akun/ulasan/store', [AkunController::class, 'ulasanStore'])->name('akun.ulasan.store');
 
   // akun mobile
   Route::get('mAkun', [AkunController::class, 'mAkun'])->name('mAkun');

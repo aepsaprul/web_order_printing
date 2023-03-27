@@ -15,4 +15,7 @@ class Keranjang extends Model
   public function produk() {
     return $this->belongsTo(Produk::class, 'produk_id', 'id');
   }
+  public function dataUlasan() {
+    return $this->hasMany(Ulasan::class, 'keranjang_id', 'id');
+  }
 }

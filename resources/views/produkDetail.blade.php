@@ -3,8 +3,6 @@
 @section('content')
 
 @include('layouts.header')
-{{-- @include('layouts.headerArrow')
-@include('layouts.headerLg') --}}
 
 <div id="notif" class="hidden fixed right-10 mt-10">
   <div class="bg-emerald-500 w-72 py-2 px-5 rounded text-center text-white ease-in-out duration-300">Berhasil masuk keranjang <i class="fa fa-check font-bold text-xl text-lime-300 ml-3"></i></div>
@@ -22,7 +20,19 @@
       <div class="p-3 lg:w-2/4">
         <div class="my-3 lg:my-0 text-xl font-bold">{{ $produk->nama }}</div>
         <div>
-          <p class="text-slate-500 text-sm my-2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis sequi ea iusto ipsum? Sequi, voluptates corporis nihil aperiam laborum quibusdam!</p>
+          @php
+            $ulasan_total_ = $ulasan_total->total_rating / count($ulasan); 
+          @endphp
+          <div class="text-slate-300 text-2xl">
+            <i class="fas fa-star @if (1 <= $ulasan_total_) {{ "text-yellow-500" }} @endif cursor-pointer"></i>
+            <i class="fas @if ($ulasan_total_ > 1 && $ulasan_total_ < 2) {{ "fa-star-half-alt text-yellow-500" }} @else {{ "fa-star" }} @endif @if (2 <= $ulasan_total_) {{ "text-yellow-500" }} @endif cursor-pointer"></i>
+            <i class="fas @if ($ulasan_total_ > 2 && $ulasan_total_ < 3) {{ "fa-star-half-alt text-yellow-500" }} @else {{ "fa-star" }} @endif @if (3 <= $ulasan_total_) {{ "text-yellow-500" }} @endif cursor-pointer"></i>
+            <i class="fas @if ($ulasan_total_ > 3 && $ulasan_total_ < 4) {{ "fa-star-half-alt text-yellow-500" }} @else {{ "fa-star" }} @endif @if (4 <= $ulasan_total_) {{ "text-yellow-500" }} @endif cursor-pointer"></i>
+            <i class="fas @if ($ulasan_total_ > 4 && $ulasan_total_ < 5) {{ "fa-star-half-alt text-yellow-500" }} @else {{ "fa-star" }} @endif @if (5 <= $ulasan_total_) {{ "text-yellow-500" }} @endif cursor-pointer"></i>
+          </div>
+        </div>
+        <div>
+          <p class="text-slate-500 text-sm my-2">{{ $produk->deskripsi_singkat }}</p>
         </div>
 
         {{-- template --}}
@@ -113,16 +123,71 @@
   </div>
   <div class="lg:flex lg:justify-center my-5 lg:pb-5">
     <div class="lg:w-4/5 2xl:w-3/5 p-5 bg-white">
-      <div>
-        <div class="tab flex justify-between lg:block">
-          <button id="btn-rincian" class="linktab w-full lg:w-44 rounded py-1" id="default">Rincian</button>
-          <button id="btn-ulasan" class="linktab w-full lg:w-44 rounded py-1">Ulasan</button>
-        </div>      
-        <div id="rincian" class="mt-3">
-          <p>{!! $produk->deskripsi !!}</p>
-        </div>      
-        <div id="ulasan" class="hidden mt-3">
-          
+      <ul
+        class="mb-5 flex list-none flex-col flex-wrap border-b-0 pl-0 md:flex-row"
+        role="tablist"
+        data-te-nav-ref>
+        <li role="presentation">
+          <a
+            href="#tabs-home"
+            class="my-2 block border-x-0 border-t-0 border-b-2 border-transparent px-7 pt-4 pb-3.5 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-neutral-100 focus:isolate focus:border-transparent data-[te-nav-active]:border-primary data-[te-nav-active]:text-primary dark:text-neutral-400 dark:hover:bg-transparent dark:data-[te-nav-active]:border-primary-400 dark:data-[te-nav-active]:text-primary-400"
+            data-te-toggle="pill"
+            data-te-target="#tabs-home"
+            data-te-nav-active
+            role="tab"
+            aria-controls="tabs-home"
+            aria-selected="true"
+            >Rincian</a
+          >
+        </li>
+        <li role="presentation">
+          <a
+            href="#tabs-profile"
+            class="focus:border-transparen my-2 block border-x-0 border-t-0 border-b-2 border-transparent px-7 pt-4 pb-3.5 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-neutral-100 focus:isolate data-[te-nav-active]:border-primary data-[te-nav-active]:text-primary dark:text-neutral-400 dark:hover:bg-transparent dark:data-[te-nav-active]:border-primary-400 dark:data-[te-nav-active]:text-primary-400"
+            data-te-toggle="pill"
+            data-te-target="#tabs-profile"
+            role="tab"
+            aria-controls="tabs-profile"
+            aria-selected="false"
+            >Ulasan</a
+          >
+        </li>
+      </ul>
+      <div class="mb-6">
+        <div
+          class="hidden transition-opacity duration-150 ease-linear data-[te-tab-active]:block"
+          id="tabs-home"
+          role="tabpanel"
+          aria-labelledby="tabs-home-tab"
+          data-te-tab-active>
+            <div>{!! $produk->deskripsi !!}</div>
+        </div>
+        <div
+          class="hidden opacity-0 transition-opacity duration-150 ease-linear data-[te-tab-active]:block"
+          id="tabs-profile"
+          role="tabpanel"
+          aria-labelledby="tabs-profile-tab">
+            @foreach ($ulasan as $item_ulasan)
+              <div class="flex p-2">
+                <div>
+                  <img src="{{ asset('assets/1665988705.jpg') }}" alt="avatar" class="w-10 rounded-full shadow">
+                </div>
+                <div>
+                  <div class="m-3">{{ $item_ulasan->dataCustomer->nama_lengkap }}</div>
+                  <div class="m-3">
+                    <div class="text-slate-300 text-2xl">
+                      <i class="fas fa-star cursor-pointer {{ 1 <= $item_ulasan->rating ? 'text-yellow-500' : '' }}"></i>
+                      <i class="fas fa-star cursor-pointer {{ 2 <= $item_ulasan->rating ? 'text-yellow-500' : '' }}"></i>
+                      <i class="fas fa-star cursor-pointer {{ 3 <= $item_ulasan->rating ? 'text-yellow-500' : '' }}"></i>
+                      <i class="fas fa-star cursor-pointer {{ 4 <= $item_ulasan->rating ? 'text-yellow-500' : '' }}"></i>
+                      <i class="fas fa-star cursor-pointer {{ 5 <= $item_ulasan->rating ? 'text-yellow-500' : '' }}"></i>
+                    </div>
+                  </div>
+                  <div class="m-3">{{ $item_ulasan->keterangan }}</div>
+                </div>
+              </div>              
+              <div><hr></div>
+            @endforeach
         </div>
       </div>
     </div>

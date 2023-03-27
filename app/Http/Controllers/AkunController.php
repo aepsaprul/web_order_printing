@@ -8,6 +8,7 @@ use App\Models\Transaksi;
 use App\Models\WilKabupaten;
 use App\Models\WilKecamatan;
 use App\Models\WilProvinsi;
+use App\Models\Ulasan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -108,7 +109,27 @@ class AkunController extends Controller
   }
   public function ulasan()
   {
-    return view('akun.ulasan');
+    $ulasan = Ulasan::where('customer_id', Auth::user()->id)->get();
+    $transaksi = Transaksi::where('customer_id', Auth::user()->id)->where('status', '6')->get();
+
+    return view('akun.ulasan', [
+      'ulasan' => $ulasan,
+      'transaksi' => $transaksi
+    ]);
+  }
+  public function ulasanStore(Request $request)
+  {
+    $ulasan = new Ulasan;
+    $ulasan->customer_id = Auth::user()->id;
+    $ulasan->keranjang_id = $request->keranjang_id;
+    $ulasan->produk_id = $request->produk_id;
+    $ulasan->rating = $request->rating;
+    $ulasan->keterangan = $request->keterangan;
+    $ulasan->save();
+
+    return response()->json([
+      'status' => 200
+    ]);
   }
 
   // mobile
