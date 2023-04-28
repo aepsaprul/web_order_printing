@@ -20,16 +20,18 @@
       <div class="p-3 lg:w-2/4">
         <div class="my-3 lg:my-0 text-xl font-bold">{{ $produk->nama }}</div>
         <div>
-          @php
-            $ulasan_total_ = $ulasan_total->total_rating / count($ulasan); 
-          @endphp
-          <div class="text-slate-300 text-2xl">
-            <i class="fas fa-star @if (1 <= $ulasan_total_) {{ "text-yellow-500" }} @endif cursor-pointer"></i>
-            <i class="fas @if ($ulasan_total_ > 1 && $ulasan_total_ < 2) {{ "fa-star-half-alt text-yellow-500" }} @else {{ "fa-star" }} @endif @if (2 <= $ulasan_total_) {{ "text-yellow-500" }} @endif cursor-pointer"></i>
-            <i class="fas @if ($ulasan_total_ > 2 && $ulasan_total_ < 3) {{ "fa-star-half-alt text-yellow-500" }} @else {{ "fa-star" }} @endif @if (3 <= $ulasan_total_) {{ "text-yellow-500" }} @endif cursor-pointer"></i>
-            <i class="fas @if ($ulasan_total_ > 3 && $ulasan_total_ < 4) {{ "fa-star-half-alt text-yellow-500" }} @else {{ "fa-star" }} @endif @if (4 <= $ulasan_total_) {{ "text-yellow-500" }} @endif cursor-pointer"></i>
-            <i class="fas @if ($ulasan_total_ > 4 && $ulasan_total_ < 5) {{ "fa-star-half-alt text-yellow-500" }} @else {{ "fa-star" }} @endif @if (5 <= $ulasan_total_) {{ "text-yellow-500" }} @endif cursor-pointer"></i>
-          </div>
+          @if ($ulasan_total->total_rating)
+            @php
+              $ulasan_total_ = $ulasan_total->total_rating / count($ulasan); 
+            @endphp
+            <div class="text-slate-300 text-2xl">
+              <i class="fas fa-star @if (1 <= $ulasan_total_) {{ "text-yellow-500" }} @endif cursor-pointer"></i>
+              <i class="fas @if ($ulasan_total_ > 1 && $ulasan_total_ < 2) {{ "fa-star-half-alt text-yellow-500" }} @else {{ "fa-star" }} @endif @if (2 <= $ulasan_total_) {{ "text-yellow-500" }} @endif cursor-pointer"></i>
+              <i class="fas @if ($ulasan_total_ > 2 && $ulasan_total_ < 3) {{ "fa-star-half-alt text-yellow-500" }} @else {{ "fa-star" }} @endif @if (3 <= $ulasan_total_) {{ "text-yellow-500" }} @endif cursor-pointer"></i>
+              <i class="fas @if ($ulasan_total_ > 3 && $ulasan_total_ < 4) {{ "fa-star-half-alt text-yellow-500" }} @else {{ "fa-star" }} @endif @if (4 <= $ulasan_total_) {{ "text-yellow-500" }} @endif cursor-pointer"></i>
+              <i class="fas @if ($ulasan_total_ > 4 && $ulasan_total_ < 5) {{ "fa-star-half-alt text-yellow-500" }} @else {{ "fa-star" }} @endif @if (5 <= $ulasan_total_) {{ "text-yellow-500" }} @endif cursor-pointer"></i>
+            </div>              
+          @endif
         </div>
         <div>
           <p class="text-slate-500 text-sm my-2">{{ $produk->deskripsi_singkat }}</p>

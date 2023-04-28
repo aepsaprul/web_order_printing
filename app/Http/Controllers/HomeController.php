@@ -27,4 +27,21 @@ class HomeController extends Controller
       'cara_pesan_gambar' => $cara_pesan_gambar
     ]);
   }
+  public function cari(Request $request)
+  {
+    $cari = $request->cari;
+    
+    if ($cari == "focus") {
+      $kategori = Kategori::get();
+      $produk = 0;
+    } else {
+      $kategori = Kategori::where('nama', 'like', '%'.$request->kategori.'%')->get();
+      $produk = Produk::where('nama', 'like', '%'.$request->kategori.'%')->get();
+    }
+
+    return response()->json([
+      'kategori' => $kategori,
+      'produk' => $produk
+    ]);
+  }
 }

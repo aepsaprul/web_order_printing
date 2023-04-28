@@ -4,7 +4,7 @@
       <a href="{{ url('/') }}"><i class="fa fa-arrow-left pl-3 text-xl text-slate-500"></i></a>
     </div>
     <div class="relative mx-1">
-      <input type="text" name="cari" id="cari" placeholder="Cari produk" class="h-8 w-64 pl-3 border rounded-3xl text-sm">
+      <input type="text" name="cari" id="cari" placeholder="Cari produk" class="cari h-8 w-64 pl-3 border rounded-3xl text-sm">
       <i class="fa fa-search absolute right-3 top-1.5 text-slate-400 text-sm"></i>
     </div>
     <div class="relative w-10 h-10">
@@ -47,9 +47,12 @@
         <a href="{{ route('konfirmasi_bayar') }}" class="font-semibold mx-2">Konfirmasi Bayar</a>
       </div>
     </div>
-    <div class="relative mx-1">
-      <input type="text" name="cari" id="cari" placeholder="Cari produk" class="h-8 w-72 pl-3 border border-slate-500 rounded-3xl text-sm">
-      <i class="fa fa-search absolute right-3 top-1.5 text-slate-400 text-sm"></i>
+    <div>
+      <div class="relative mx-1">
+        <input type="text" name="cari" id="cari" placeholder="Cari produk" class="cari h-8 w-72 pl-3 border border-slate-500 rounded-3xl text-sm focus:outline-none" autocomplete="off">
+        <i class="fa fa-search absolute right-3 top-1.5 text-slate-400 text-sm"></i>
+      </div>
+      <div class="hidden cari-autocomplete absolute bg-white w-72 mx-1 rounded p-1 mt-1 shadow border-t"></div>
     </div>
     <div class="flex">
       <div class="relative w-10 h-10">
@@ -79,3 +82,68 @@
     </div>
   </div>
 </div>
+
+@section('script')
+<script type="module">
+  $(document).ready(function () {
+    $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
+    
+    $('.cari').on('focus', function () {
+      let formData = {
+        cari: "focus"
+      }
+      $.ajax({
+        url: "{{ URL::route('home.cari') }}",
+        type: "post",
+        data: formData,
+        success: function(response) {
+          let val = ``;
+          $.each(response.kategori, function (index, item) {
+            val += `<a href="{{ url('kategori/${item.id}/show') }}"><div class="capitalize p-1 hover:bg-slate-100">${item.nama}</div></a>`;
+          })
+          $('.cari-autocomplete').html(val);
+          $('.cari-autocomplete').removeClass('hidden');
+        }
+      })
+    })
+    $('.cari').on('blur', function () {
+      setTimeout(() => {
+        $('.cari-autocomplete').addClass('hidden');              
+      }, 200);
+    })
+    $('.cari').on('keyup', function () {
+      const inputCari = $(this).val();
+      
+      let formData = {
+        cari: "keyup",
+        kategori: inputCari
+      }
+      $.ajax({
+        url: "{{ URL::route('home.cari') }}",
+        type: "post",
+        data: formData,
+        success: function(response) {
+          console.log(response)
+          if (response.kategori.length > 0 || response.produk.length > 0) {
+            let val = ``;
+            $.each(response.produk, function (index, item) {
+              val += `<a href="{{ url('produk/${item.id}/show') }}"><div class="capitalize p-1 hover:bg-slate-100">${item.nama}</div></a>`;
+            })
+            $.each(response.kategori, function (index, item) {
+              val += `<a href="{{ url('kategori/${item.id}/show') }}"><div class="capitalize p-1 hover:bg-slate-100">${item.nama}</div></a>`;
+            })
+            $('.cari-autocomplete').html(val);
+            $('.cari-autocomplete').removeClass('hidden');            
+          } else {
+            $('.cari-autocomplete').addClass('hidden');
+          }
+        }
+      })
+    })
+  })
+</script>
+@endsection

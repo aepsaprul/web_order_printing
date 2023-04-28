@@ -25,6 +25,7 @@ use Whoops\Run;
 */
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::post('cari', [HomeController::class, 'cari'])->name('home.cari');
 
 Route::get('login', [LoginController::class, 'index'])->name('login');
 Route::post('login/auth', [LoginController::class, 'auth'])->name('login.auth');
@@ -42,7 +43,6 @@ Route::get('produk', [ProdukController::class, 'index'])->name('produk');
 Route::get('produk/{id}/show', [ProdukController::class, 'show'])->name('produk.show');
 
 Route::middleware(['auth'])->group(function() {
-  
   // keranjang
   Route::get('keranjang', [KeranjangController::class, 'index'])->name('keranjang');
   Route::post('keranjang/store', [KeranjangController::class, 'store'])->name('keranjang.store');
