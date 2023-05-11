@@ -45,18 +45,20 @@
                   </div>
                   <div class="mt-4">
                     @if ($item->status == 6)
-                      @if (count($item_keranjang->dataUlasan) > 0)
-                        <div class="text-emerald-500 italic text-sm">Sudah di ulas</div>
-                      @else
-                        {{-- <button class="btn-ulasan bg-sky-500 py-2 px-7 text-white font-bold text-sm rounded-full"
-                          data-te-toggle="modal"
-                          data-te-target="#modalUlasan"
-                          data-te-ripple-init
-                          data-te-ripple-color="light"
-                          data-keranjang-id="{{ $item_keranjang->id }}"
-                          data-produk-id="{{ $item_keranjang->produk_id }}"
-                        >Beri Ulasan</button>                           --}}
-                        <a href="{{ route('akun.ulasan.form', [$item_keranjang->id]) }}" class="btn-ulasan bg-sky-500 py-2 px-7 text-white font-bold text-sm rounded-full">Beri Ulasan</a>
+                      @if ($item_keranjang->dataUlasan)
+                        @if (count($item_keranjang->dataUlasan) > 0)
+                          <div class="text-emerald-500 italic text-sm">Sudah di ulas</div>
+                        @else
+                          {{-- <button class="btn-ulasan bg-sky-500 py-2 px-7 text-white font-bold text-sm rounded-full"
+                            data-te-toggle="modal"
+                            data-te-target="#modalUlasan"
+                            data-te-ripple-init
+                            data-te-ripple-color="light"
+                            data-keranjang-id="{{ $item_keranjang->id }}"
+                            data-produk-id="{{ $item_keranjang->produk_id }}"
+                          >Beri Ulasan</button>                           --}}
+                          <a href="{{ route('akun.ulasan.form', [$item_keranjang->id]) }}" class="btn-ulasan bg-sky-500 py-2 px-7 text-white font-bold text-sm rounded-full">Beri Ulasan</a>
+                        @endif
                       @endif
                     @endif  
                   </div>         

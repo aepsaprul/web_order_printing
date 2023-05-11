@@ -48,28 +48,30 @@
           @foreach ($transaksi as $item)
             @foreach ($item->dataKeranjang as $item_keranjang)
               @if ($item->status == 6)
-                @if (count($item_keranjang->dataUlasan) <= 0)
-                  <div class="flex m-2 p-2 border rounded-md">
-                    <div class="w-1/3">
-                      <img src="{{ url(env('APP_URL_ADMIN') . '/img_produk/' . $item_keranjang->produk->gambar) }}" alt="gambar produk" class="w-full">
-                    </div>
-                    <div class="w-2/3">
-                      <div class="w-full h-1/2">
-                        <div class="ml-3">{{ $item_keranjang->produk->nama }}</div>
+                @if ($item_keranjang->dataUlasan)
+                  @if (count($item_keranjang->dataUlasan) <= 0)
+                    <div class="flex m-2 p-2 border rounded-md">
+                      <div class="w-1/3">
+                        <img src="{{ url(env('APP_URL_ADMIN') . '/img_produk/' . $item_keranjang->produk->gambar) }}" alt="gambar produk" class="w-full">
                       </div>
-                      <div class="w-full h-1/2 flex items-center justify-center">
-                        {{-- <button class="btn-ulasan bg-sky-500 py-2 px-7 text-white font-bold text-sm rounded-full"
-                          data-te-toggle="modal"
-                          data-te-target="#modalUlasan"
-                          data-te-ripple-init
-                          data-te-ripple-color="light"
-                          data-keranjang-id="{{ $item_keranjang->id }}"
-                          data-produk-id="{{ $item_keranjang->produk_id }}"
-                        >Beri Ulasan</button> --}}
-                        <a href="{{ route('akun.ulasan.form', [$item_keranjang->id]) }}" class="btn-ulasan bg-sky-500 py-2 px-7 text-white font-bold text-sm rounded-full">Beri Ulasan</a>
+                      <div class="w-2/3">
+                        <div class="w-full h-1/2">
+                          <div class="ml-3">{{ $item_keranjang->produk->nama }}</div>
+                        </div>
+                        <div class="w-full h-1/2 flex items-center justify-center">
+                          {{-- <button class="btn-ulasan bg-sky-500 py-2 px-7 text-white font-bold text-sm rounded-full"
+                            data-te-toggle="modal"
+                            data-te-target="#modalUlasan"
+                            data-te-ripple-init
+                            data-te-ripple-color="light"
+                            data-keranjang-id="{{ $item_keranjang->id }}"
+                            data-produk-id="{{ $item_keranjang->produk_id }}"
+                          >Beri Ulasan</button> --}}
+                          <a href="{{ route('akun.ulasan.form', [$item_keranjang->id]) }}" class="btn-ulasan bg-sky-500 py-2 px-7 text-white font-bold text-sm rounded-full">Beri Ulasan</a>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  @endif
                 @endif
               @endif
             @endforeach
