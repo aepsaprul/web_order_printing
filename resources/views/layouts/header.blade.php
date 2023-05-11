@@ -90,7 +90,7 @@
       @endauth
       <div class="flex ml-10 items-center">
         @auth
-          <a href="#" class="font-bold text-sm text-slate-700"><i class="fa fa-comment-dots"></i> Chat</a>
+          <a href="https://api.whatsapp.com/send/?phone=6285726269500&text=Assalamu%27alaikum+&app_absent=0" target="_blank" class="font-bold text-sm text-slate-700"><i class="fa fa-comment-dots"></i> Chat</a>
           <div class="border-l h-full mx-4 border-slate-300"></div>
           <a href="{{ route('akun') }}" class="font-bold text-sm text-slate-700"><i class="fa fa-user"></i> Akun</a>
         @else
