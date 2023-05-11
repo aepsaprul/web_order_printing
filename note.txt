@@ -20,21 +20,9 @@ prevent back history
 
 request update
 - spesifikasi promo
-- pencarian produk
-- notifikasi
 - hapus dark mode
+- mobile version
 
-halaman akun yg perlu di update
-- ubah kata sandi
-- validasi
-- halaman transaksi
-- halaman ulasan
-
-halaman checkout
-- ambil ditempat
-- checklist pengiriman
-- weight pengiriman
-- pengiriman otomatis jika data alamat sudah terisi
 
 
 

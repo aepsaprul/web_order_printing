@@ -2,8 +2,15 @@
 
 @section('content_akun')
 
-<div class="bg-white p-3 rounded border">
-  <h3 class="font-bold text-lg">Data Diri</h3>
+<div class="bg-white p-3 rounded border flex justify-between">
+  <div class="font-bold text-lg">Data Diri</div>
+  <div>
+    @if (Auth::user()->segmen == "member")
+      <div class="capitalize font-bold text-emerald-500 rounded-full shadow px-2"><i class="fas fa-ribbon"></i> {{ Auth::user()->segmen }}</div>
+    @else
+      <button class="bg-emerald-600 text-white text-sm font-semibold rounded py-1 px-3">Daftar Member</button>
+    @endif
+  </div>
 </div>
 <div class="p-3 mt-1 border rounded bg-white flex">
   <div class="w-1/3">
@@ -87,13 +94,6 @@
         <div class="mr-5 text-slate-700">{{ Auth::user()->telepon }}</div>
       </div>            
     </div>
-    <div>
-      @if (Auth::user()->segmen == "member")
-        <div class="capitalize font-bold text-emerald-500">{{ Auth::user()->segmen }}</div>
-      @else
-        👉 <button class="bg-emerald-600 text-white text-sm font-semibold rounded py-1 px-3">Daftar Member</button>
-      @endif
-    </div>
     <div class="mt-5">
       <h5 class="font-semibold">Alamat</h5>
       <div>
@@ -108,7 +108,7 @@
       </div>
     </div>
     <div class="mt-5">
-      <button class="border py-2 px-7 rounded-lg font-bold text-sm">Ubah Kata Sandi</button>
+      <a class="border py-2 px-7 rounded-lg font-bold text-sm" href="{{ route('akun.ubahPassword') }}">Ubah Kata Sandi</a>
     </div>
   </div>
 </div>
@@ -222,7 +222,7 @@
             id="select_provinsi"
             data-te-select-init
             data-te-container="#modalAlamat"
-            data-te-select-filter="true">              
+            data-te-select-filter="true" required>              
           </select>
         </div>
         <div class="relative flex-auto p-2" data-te-modal-body-ref>
@@ -230,7 +230,7 @@
             id="select_kota"
             data-te-select-init
             data-te-container="#modalAlamat"
-            data-te-select-filter="true">              
+            data-te-select-filter="true" required>
           </select>
         </div>
         <div class="relative flex-auto p-2" data-te-modal-body-ref>
@@ -238,14 +238,14 @@
             id="select_kecamatan"
             data-te-select-init
             data-te-container="#modalAlamat"
-            data-te-select-filter="true">              
+            data-te-select-filter="true" required>      
           </select>
         </div>
         <div class="relative flex-auto p-2" data-te-modal-body-ref>
-          <textarea name="alamat" id="alamat" rows="3" class="w-full border border-slate-300 rounded p-2 outline-0" placeholder="Ketikkan alamat lengkap"></textarea>
+          <textarea name="alamat" id="alamat" rows="3" class="w-full border border-slate-300 rounded p-2 outline-0" placeholder="Ketikkan alamat lengkap" required></textarea>
         </div>
         <div class="relative flex-auto p-2" data-te-modal-body-ref>
-          <input type="text" name="kodepos" id="kodepos" class="w-full border border-slate-300 rounded px-2 py-1 outline-0" placeholder="Ketikkan kodepos">
+          <input type="text" name="kodepos" id="kodepos" class="w-full border border-slate-300 rounded px-2 py-1 outline-0" placeholder="Ketikkan kodepos" required>
         </div>
         <div
           class="flex flex-shrink-0 flex-wrap items-center justify-end rounded-b-md border-t-2 border-neutral-100 border-opacity-100 p-4">
@@ -543,9 +543,6 @@
         }
       })
     })
-    // $('#tes_select').on('change', function() {
-    //   console.log('tes');
-    // })
   })
 </script>
 @endsection

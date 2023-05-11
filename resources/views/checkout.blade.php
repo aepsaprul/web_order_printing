@@ -45,6 +45,9 @@
       {{-- produk --}}
       <div class="lg:mr-5">
         <input type="hidden" name="total_query" id="total_query" value="{{ count($keranjang) }}">
+        @php
+          $berat = 0;
+        @endphp
         @foreach ($keranjang as $key => $item)
           {{-- data hidden --}}
           <input type="hidden" name="harga_produk" id="harga_produk_{{ $key }}" value="{{ $item->produk->harga }}">
@@ -62,12 +65,15 @@
                   <div class="text-xs">
                     @php
                       $total_template = count($item->dataKeranjangTemplate) - 1;
+                      $hitung_berat = $item->produk->berat * $item->qty;
+                      $berat = $berat + $hitung_berat;
                     @endphp
                     @foreach ($item->dataKeranjangTemplate as $key_keranjang_template => $item_keranjang_template)
                       {{ $item_keranjang_template->dataTemplate->nama }} ({{ $item_keranjang_template->dataTemplateDetail->nama }}) 
                       {{ $key_keranjang_template != $total_template ? ',' : '' }}
                     @endforeach
                   </div>
+                  <div class="text-xs">Berat {{ $item->produk->berat * $item->qty }}gram</div>
                 </div>
               </div>
               <div class="flex items-end justify-end w-1/5">
@@ -87,9 +93,14 @@
           <div class="ml-3 lg:ml-0 mr-3 my-2 bg-white rounded border p-3">
             <p class="font-semibold text-sm border-b pb-3">Pilih Pengiriman</p>
             <div class="mt-3">
+              <label for="layanan_pengiriman_adt">
+                <input type="radio" name="layanan_pengiriman" id="layanan_pengiriman_adt" class="mr-3" value="0"> Ambil Di Tempat
+              </label>
+            </div>
+            <div class="mt-3">
               <div class="my-2">
+                <div class="text-sm mb-2">Atau menggunakan kurir</div>
                 <select name="origin" id="origin" class="border rounded py-2 px-2 w-full">
-                  <option value="">Pilih Cabang Abata</option>
                   <option value="41">Situmpur (Banyumas)</option>
                   <option value="41">HR Boenyamin (Banyumas)</option>
                   <option value="41">Dukuh Waluh (Banyumas)</option>
@@ -98,7 +109,10 @@
                   <option value="92">Bumiayu (Brebes)</option>
                 </select>
               </div>
-              <div class="my-2">
+              <input type="hidden" name="kabupaten" id="kabupaten" value="{{ Auth::user()->kabupaten }}">
+              <input type="hidden" name="destination" id="destination" value="{{ Auth::user()->kecamatan }}">
+              <input type="hidden" name="weight" id="weight" value="{{ $berat }}">
+              {{-- <div class="my-2">
                 <div class="flex justify-center">
                   <div class="w-full xl:w-96">
                     <select name="kabupaten" id="kabupaten" class="border rounded w-full" data-te-select-init data-te-select-filter="true">
@@ -118,10 +132,10 @@
                     </select>
                   </div>
                 </div>
-              </div>
-              <div class="my-2">
-                <input type="text" name="weight" id="weight" value="1" class="border rounded py-2 px-2 w-full" readonly>
-              </div>
+              </div> --}}
+              {{-- <div class="my-2">
+                <input type="text" name="weight" id="weight" class="border rounded py-2 px-2 w-full">
+              </div> --}}
               {{-- <div class="my-2">
                 <select name="courier" id="courier" class="border rounded py-2 px-2 w-full">
                   <option value="">Pilih Ekspedisi</option>
@@ -510,12 +524,17 @@
           $('#btn_cek_ongkir').removeClass('bg-sky-500');
         },
         success: function (response) {
-          // console.log(response)
+          console.log(response)
           const jne = response.jne.rajaongkir.results[0];
+          const jne_costs = jne.costs[0];
           const tiki = response.tiki.rajaongkir.results[0];
+          const tiki_costs = tiki.costs[0];
           const pos = response.pos.rajaongkir.results[0];
+          const pos_costs = pos.costs[0];
           const jnt = response.jnt.rajaongkir.results[0];
+          const jnt_costs = jnt.costs[0];
           const sicepat = response.sicepat.rajaongkir.results[0];
+          const sicepat_costs = sicepat.costs[0];
           setTimeout(() => {
             $('#loading_cek_ongkir').addClass('hidden');
             $('#btn_cek_ongkir').addClass('bg-sky-500');
@@ -526,25 +545,22 @@
             <div class="border-b py-2">
               <div class="text-sm">${jne.name}</div>
             </div>
-            <div class="my-2">`;    
-              $.each(jne.costs, function (index, item) {
-                val_jne += `
-                  <div class="text-sm">
-                    <label for="layanan_pengiriman_${jne.code}_${index}" class="flex justify-between">
-                      <div><input type="radio" name="layanan_pengiriman" id="layanan_pengiriman_${jne.code}_${index}" class="mr-3" `;
-                        $.each(item.cost, function(index_cost, item_cost) {
-                          val_jne += `value="${item_cost.value}"`;
-                        })
-                        val_jne += `>${item.service} (${item.description})</div>
-                      <div><span class="text-xs">Rp</span> `;                        
-                        $.each(item.cost, function(index_cost, item_cost) {
-                          val_jne += `${afRupiah(item_cost.value)}`;
-                        })
-                        val_jne += `</div>
-                    </label>
-                  </div>                
-                `;
-              })
+            <div class="my-2">
+              <div class="text-sm">
+                <label for="layanan_pengiriman_" class="flex justify-between">
+                  <div><input type="radio" name="layanan_pengiriman" id="layanan_pengiriman_" class="mr-3" `;
+                    $.each(jne_costs.cost, function(index_cost, item_cost) {
+                      val_jne += `value="${item_cost.value}"`;
+                    })
+                    val_jne += `>${jne_costs.service} (${jne_costs.description})</div>
+                  <div><span class="text-xs">Rp</span> `;                        
+                    $.each(jne_costs.cost, function(index_cost, item_cost) {
+                      val_jne += `${afRupiah(item_cost.value)}`;
+                    })
+                    val_jne += `</div>
+                </label>
+              </div>                
+            `;
             val_jne += `</div>
           `;
           $('.jne').html(val_jne)
@@ -554,25 +570,21 @@
             <div class="border-b py-2">
               <div class="text-sm">${tiki.name}</div>
             </div>
-            <div class="my-2">`;    
-              $.each(tiki.costs, function (index, item) {
-                val_tiki += `
-                  <div class="text-sm">
-                    <label for="layanan_pengiriman_${tiki.code}_${index}" class="flex justify-between">
-                      <div><input type="radio" name="layanan_pengiriman" id="layanan_pengiriman_${tiki.code}_${index}" class="mr-3" `;
-                        $.each(item.cost, function(index_cost, item_cost) {
-                          val_tiki += `value="${item_cost.value}"`;
-                        })
-                        val_tiki += `>${item.service} (${item.description})</div>
-                      <div><span class="text-xs">Rp</span> `;                        
-                        $.each(item.cost, function(index_cost, item_cost) {
-                          val_tiki += `${afRupiah(item_cost.value)}`;
-                        })
-                        val_tiki += `</div>
-                    </label>
-                  </div>                
-                `;
-              })
+            <div class="my-2">
+              <div class="text-sm">
+                <label for="layanan_pengiriman_${tiki.code}" class="flex justify-between">
+                  <div><input type="radio" name="layanan_pengiriman" id="layanan_pengiriman_${tiki.code}" class="mr-3" `;
+                    $.each(tiki_costs.cost, function(index_cost, item_cost) {
+                      val_tiki += `value="${item_cost.value}"`;
+                    })
+                    val_tiki += `>${tiki_costs.service} (${tiki_costs.description})</div>
+                  <div><span class="text-xs">Rp</span> `;                        
+                    $.each(tiki_costs.cost, function(index_cost, item_cost) {
+                      val_tiki += `${afRupiah(item_cost.value)}`;
+                    })
+                    val_tiki += `</div>
+                </label>
+              </div>`;
             val_tiki += `</div>
           `;
           $('.tiki').html(val_tiki)
@@ -582,25 +594,21 @@
             <div class="border-b py-2">
               <div class="text-sm">${pos.name}</div>
             </div>
-            <div class="my-2">`;    
-              $.each(pos.costs, function (index, item) {
-                val_pos += `
-                  <div class="text-sm">
-                    <label for="layanan_pengiriman_${pos.code}_${index}" class="flex justify-between">
-                      <div><input type="radio" name="layanan_pengiriman" id="layanan_pengiriman_${pos.code}_${index}" class="mr-3" `;
-                        $.each(item.cost, function(index_cost, item_cost) {
-                          val_pos += `value="${item_cost.value}"`;
-                        })
-                        val_pos += `>${item.service} (${item.description})</div>
-                      <div><span class="text-xs">Rp</span> `;                        
-                        $.each(item.cost, function(index_cost, item_cost) {
-                          val_pos += `${afRupiah(item_cost.value)}`;
-                        })
-                        val_pos += `</div>
-                    </label>
-                  </div>                
-                `;
-              })
+            <div class="my-2">
+              <div class="text-sm">
+                <label for="layanan_pengiriman_${pos.code}" class="flex justify-between">
+                  <div><input type="radio" name="layanan_pengiriman" id="layanan_pengiriman_${pos.code}" class="mr-3" `;
+                    $.each(pos_costs.cost, function(index_cost, item_cost) {
+                      val_pos += `value="${item_cost.value}"`;
+                    })
+                    val_pos += `>${pos_costs.service} (${pos_costs.description})</div>
+                  <div><span class="text-xs">Rp</span> `;                        
+                    $.each(pos_costs.cost, function(index_cost, item_cost) {
+                      val_pos += `${afRupiah(item_cost.value)}`;
+                    })
+                    val_pos += `</div>
+                </label>
+              </div>`;
             val_pos += `</div>
           `;
           $('.pos').html(val_pos)
@@ -610,25 +618,21 @@
             <div class="border-b py-2">
               <div class="text-sm">${jnt.name}</div>
             </div>
-            <div class="my-2">`;    
-              $.each(jnt.costs, function (index, item) {
-                val_jnt += `
-                  <div class="text-sm">
-                    <label for="layanan_pengiriman_${jnt.code}_${index}" class="flex justify-between">
-                      <div><input type="radio" name="layanan_pengiriman" id="layanan_pengiriman_${jnt.code}_${index}" class="mr-3" `;
-                        $.each(item.cost, function(index_cost, item_cost) {
-                          val_jnt += `value="${item_cost.value}"`;
-                        })
-                        val_jnt += `>${item.service} (${item.description})</div>
-                      <div><span class="text-xs">Rp</span> `;                        
-                        $.each(item.cost, function(index_cost, item_cost) {
-                          val_jnt += `${afRupiah(item_cost.value)}`;
-                        })
-                        val_jnt += `</div>
-                    </label>
-                  </div>                
-                `;
-              })
+            <div class="my-2">
+              <div class="text-sm">
+                <label for="layanan_pengiriman_${jnt.code}" class="flex justify-between">
+                  <div><input type="radio" name="layanan_pengiriman" id="layanan_pengiriman_${jnt.code}" class="mr-3" `;
+                    $.each(jnt_costs.cost, function(index_cost, item_cost) {
+                      val_jnt += `value="${item_cost.value}"`;
+                    })
+                    val_jnt += `>${jnt_costs.service} (${jnt_costs.description})</div>
+                  <div><span class="text-xs">Rp</span> `;                        
+                    $.each(jnt_costs.cost, function(index_cost, item_cost) {
+                      val_jnt += `${afRupiah(item_cost.value)}`;
+                    })
+                    val_jnt += `</div>
+                </label>
+              </div>`;
             val_jnt += `</div>
           `;
           $('.jnt').html(val_jnt)
@@ -638,25 +642,21 @@
             <div class="border-b py-2">
               <div class="text-sm">${sicepat.name}</div>
             </div>
-            <div class="my-2">`;    
-              $.each(sicepat.costs, function (index, item) {
-                val_sicepat += `
-                  <div class="text-sm">
-                    <label for="layanan_pengiriman_${sicepat.code}_${index}" class="flex justify-between">
-                      <div><input type="radio" name="layanan_pengiriman" id="layanan_pengiriman_${sicepat.code}_${index}" class="mr-3" `;
-                        $.each(item.cost, function(index_cost, item_cost) {
-                          val_sicepat += `value="${item_cost.value}"`;
-                        })
-                        val_sicepat += `>${item.service} (${item.description})</div>
-                      <div><span class="text-xs">Rp</span> `;                        
-                        $.each(item.cost, function(index_cost, item_cost) {
-                          val_sicepat += `${afRupiah(item_cost.value)}`;
-                        })
-                        val_sicepat += `</div>
-                    </label>
-                  </div>                
-                `;
-              })
+            <div class="my-2">
+              <div class="text-sm">
+                <label for="layanan_pengiriman_${sicepat.code}" class="flex justify-between">
+                  <div><input type="radio" name="layanan_pengiriman" id="layanan_pengiriman_${sicepat.code}" class="mr-3" `;
+                    $.each(sicepat_costs.cost, function(index_cost, item_cost) {
+                      val_sicepat += `value="${item_cost.value}"`;
+                    })
+                    val_sicepat += `>${sicepat_costs.service} (${sicepat_costs.description})</div>
+                  <div><span class="text-xs">Rp</span> `;                        
+                    $.each(sicepat_costs.cost, function(index_cost, item_cost) {
+                      val_sicepat += `${afRupiah(item_cost.value)}`;
+                    })
+                    val_sicepat += `</div>
+                </label>
+              </div>`;
             val_sicepat += `</div>
           `;
           $('.sicepat').html(val_sicepat)

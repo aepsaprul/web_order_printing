@@ -17,7 +17,7 @@
         </div>
       </div>
     </div>
-    <div>
+    {{-- <div>
       <div class="font-bold mt-5 p-3 text-base text-slate-500 bg-white">PROMO</div>
       <div class="bg-white">
         <div class="grid grid-cols-3 lg:grid-cols-6">
@@ -36,7 +36,7 @@
           @endforeach
         </div>
       </div>
-    </div>
+    </div> --}}
     <div>
       <h1 class="text-center font-bold mt-5 py-3 text-base text-slate-500 bg-white border-b">KATEGORI PRODUK</h1>
       <div class="grid grid-cols-5 bg-white">

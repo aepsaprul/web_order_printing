@@ -48,14 +48,15 @@
                       @if (count($item_keranjang->dataUlasan) > 0)
                         <div class="text-emerald-500 italic text-sm">Sudah di ulas</div>
                       @else
-                        <button class="btn-ulasan bg-sky-500 py-2 px-7 text-white font-bold text-sm rounded-full"
+                        {{-- <button class="btn-ulasan bg-sky-500 py-2 px-7 text-white font-bold text-sm rounded-full"
                           data-te-toggle="modal"
                           data-te-target="#modalUlasan"
                           data-te-ripple-init
                           data-te-ripple-color="light"
                           data-keranjang-id="{{ $item_keranjang->id }}"
                           data-produk-id="{{ $item_keranjang->produk_id }}"
-                        >Beri Ulasan</button>                          
+                        >Beri Ulasan</button>                           --}}
+                        <a href="{{ route('akun.ulasan.form', [$item_keranjang->id]) }}" class="btn-ulasan bg-sky-500 py-2 px-7 text-white font-bold text-sm rounded-full">Beri Ulasan</a>
                       @endif
                     @endif  
                   </div>         
@@ -70,7 +71,12 @@
             </div>
           </div>
         </div>
-        <div class="flex justify-end items-center">
+        <div class="flex justify-between items-center">
+          <div class="text-rose-500 italic text-sm font-bold">
+            @if ($item->status == 1)
+              *Setelah membayar, segera konfirmasi melalui menu Konfirmasi Bayar                
+            @endif
+          </div>
           <div>
             <button class="lihat-detail-{{ $key }} transaksi-detail font-bold text-sm mx-2 text-sky-400" 
                 data-id="{{ $item->id }}"
@@ -128,88 +134,6 @@
       </div>
       <div class="modal-content relative overflow-y-auto p-4">
         <!-- modal content -->
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- modal ulasan -->
-<div
-  data-te-modal-init
-  class="fixed top-0 left-0 z-[1055] hidden h-full w-full overflow-y-auto overflow-x-hidden outline-none"
-  id="modalUlasan"
-  tabindex="-1"
-  aria-labelledby="modalUlasanLabel"
-  aria-hidden="true">
-  <div
-    data-te-modal-dialog-ref
-    class="pointer-events-none relative h-[calc(100%-1rem)] w-auto translate-y-[-50px] opacity-0 transition-all duration-300 ease-in-out min-[576px]:mx-auto min-[576px]:mt-7 min-[576px]:h-[calc(100%-3.5rem)] min-[576px]:max-w-[500px]">
-    <div
-      class="pointer-events-auto relative flex max-h-[100%] w-full flex-col overflow-hidden rounded-md border-none bg-white bg-clip-padding text-current shadow-lg outline-none">
-      <div
-        class="flex flex-shrink-0 items-center justify-between rounded-t-md border-b-2 border-neutral-100 border-opacity-100 p-4">
-        
-        <!-- notif -->
-        <div id="notif" class="hidden fixed right-10 mt-10 z-40">
-          <div class="bg-emerald-500 w-86 py-2 px-5 rounded text-center text-white ease-in-out duration-300"><span class="font-bold">Berhasil</span>, Terimakasih atas ulasannya <i class="fa fa-check font-bold text-xl text-lime-300 ml-3"></i></div>
-        </div>
-
-        <h5
-          class="modal-title text-xl font-medium leading-normal text-neutral-800"
-          id="modalUlasanLabel">
-          <!-- title -->
-          Ulasan
-        </h5>
-        <button
-          type="button"
-          class="box-content rounded-none border-none hover:no-underline hover:opacity-75 focus:opacity-100 focus:shadow-none focus:outline-none"
-          data-te-modal-dismiss
-          aria-label="Close">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            class="h-6 w-6">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-      </div>
-      <div class="modal-content-ulasan modal-content relative overflow-y-auto p-4">
-        <!-- modal content -->
-        <input type="hidden" id="keranjang_id">
-        <input type="hidden" id="produk_id">
-        <div>
-          <div class="stars text-slate-300 text-2xl">
-            <i class="fas fa-star cursor-pointer" data-id="1"></i>
-            <i class="fas fa-star cursor-pointer" data-id="2"></i>
-            <i class="fas fa-star cursor-pointer" data-id="3"></i>
-            <i class="fas fa-star cursor-pointer" data-id="4"></i>
-            <i class="fas fa-star cursor-pointer" data-id="5"></i>
-          </div>
-          <em class="error-star text-rose-500 text-sm"></em>
-          <input type="hidden" id="star_val" value="0">
-        </div>
-        <div class="mt-4">
-          <textarea name="catatan" id="catatan" rows="3" placeholder="Catatan" class="border w-full p-2 rounded outline-none"></textarea>
-        </div>
-        <div class="mt-3 flex justify-end">
-          <div class="w-32 rounded relative flex items-center justify-center">
-            <div id="loading_kirim" class="hidden absolute">
-              <div class="flex items-center">
-                <div class="flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-tr from-indigo-500 to-slate-100 animate-spin mr-3">
-                  <div class="h-2 w-2 rounded-full bg-white"></div>
-                </div>
-                <span class="text-xs">Loading. . .</span>
-              </div>
-            </div>
-            <button id="ulasan_btn_kirim" class="w-44 bg-sky-500 border rounded text-white text-sm font-bold py-2"><i class="fa fa-paper-plane"></i> Kirim</button>
-          </div>
-        </div>
       </div>
     </div>
   </div>
@@ -324,7 +248,7 @@
                 <div class="text-sm font-semibold border-b pb-2">Pembayaran</div>
                 <div class="p-1 flex justify-between">
                   <div class="w-2/4 text-sm capitalize">${transaksi.data_rekening.grup}</div>
-                  <div class="w-2/4 text-sm">${transaksi.data_rekening.nama}</div>
+                  <div class="w-2/4 text-sm font-bold">${transaksi.data_rekening.nama} (${transaksi.data_rekening.nomor} a.n ${transaksi.data_rekening.atas_nama})</div>
                 </div>
                 <div class="p-1 flex justify-between">
                   <div class="w-2/4 text-sm capitalize">Total Harga</div>

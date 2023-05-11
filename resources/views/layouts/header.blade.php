@@ -61,13 +61,33 @@
         </div>
         <div class="notif-keranjang hidden">
           <div class="bg-red-600 absolute h-6 w-6 top-0 right-0 rounded-full flex items-center justify-center font-semibold text-white text-xs">
-            <span class="notif-keranjang-jml py-2 px-2">1</span>
+            <span class="notif-keranjang-jml py-2 px-2"></span>
           </div>
         </div>
       </div>
-      <div class="flex items-center justify-center w-8">
-        <i class="fa fa-bell mr-1 text-2xl"></i>
-      </div>
+      @auth
+        <div class="relative w-10 h-10 ml-3">
+          <div class="w-8 h-10 flex items-center">
+            <a href="#" class="notifikasi"><i class="fa fa-bell text-2xl"></i></a>
+          </div>
+          <div class=" 
+            @if ($boot_notif)
+              {{ count($boot_notif) > 0 ? "" : "hidden" }}
+            @else
+              hidden
+            @endif
+            ">
+            <div class="bg-red-600 absolute h-6 w-6 top-0 right-0 rounded-full flex items-center justify-center font-semibold text-white text-xs">
+              <span class="py-2 px-2">
+                @if ($boot_notif)
+                  {{ count($boot_notif) > 0 ? count($boot_notif) : "" }}                  
+                @endif
+              </span>
+            </div>
+          </div>
+          <div class="notif-list hidden absolute bg-white w-72 -ml-56 rounded mt-1 shadow border-t"></div>      
+        </div>
+      @endauth
       <div class="flex ml-10 items-center">
         @auth
           <a href="#" class="font-bold text-sm text-slate-700"><i class="fa fa-comment-dots"></i> Chat</a>
@@ -83,7 +103,6 @@
   </div>
 </div>
 
-@section('script')
 <script type="module">
   $(document).ready(function () {
     $.ajaxSetup({
@@ -127,7 +146,6 @@
         type: "post",
         data: formData,
         success: function(response) {
-          console.log(response)
           if (response.kategori.length > 0 || response.produk.length > 0) {
             let val = ``;
             $.each(response.produk, function (index, item) {
@@ -144,6 +162,36 @@
         }
       })
     })
+
+    // notifikasi
+    $('.notifikasi').on('click', function (e) {
+      e.preventDefault();
+      
+      $.ajax({
+        url: "{{ URL::route('notif.list') }}",
+        type: "get",
+        success: function (response) {
+          if (response.notif.length > 0) {
+            let val = ``;
+            $.each(response.notif, function (index, item) {
+              val += `
+              <a href="{{ url('${item.link}') }}">
+                <div class="text-sm bg-emerald-200 rounded p-2 m-1">
+                  ${item.deskripsi}
+                </div>
+              </a>
+              `;
+            })
+            $('.notif-list').html(val);
+            $('.notif-list').removeClass('hidden');
+          }
+        }
+      })
+    })
+    $('.notifikasi').on('blur', function () {
+      setTimeout(() => {
+        $('.notif-list').addClass('hidden');        
+      }, 200);
+    })
   })
 </script>
-@endsection

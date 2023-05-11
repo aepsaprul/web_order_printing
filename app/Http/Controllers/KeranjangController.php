@@ -11,6 +11,7 @@ use App\Models\Transaksi;
 use App\Models\TransaksiStatus;
 use App\Models\WilKabupaten;
 use App\Models\WilKecamatan;
+use App\Models\Notif;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -241,11 +242,12 @@ class KeranjangController extends Controller
   {
     $origin = $request->origin;
     $destination = $request->destination;
+    $weight = $request->weight;
 
     // jne
     $curl_jne = curl_init();
     curl_setopt_array($curl_jne, array(
-      CURLOPT_URL => "https://pro.rajaongkir.com/api/cost", CURLOPT_RETURNTRANSFER => true, CURLOPT_ENCODING => "", CURLOPT_MAXREDIRS => 10, CURLOPT_TIMEOUT => 30, CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1, CURLOPT_CUSTOMREQUEST => "POST", CURLOPT_POSTFIELDS => "origin=".$origin."&originType=city&destination=".$destination."&destinationType=subdistrict&weight=1&courier=jne",
+      CURLOPT_URL => "https://pro.rajaongkir.com/api/cost", CURLOPT_RETURNTRANSFER => true, CURLOPT_ENCODING => "", CURLOPT_MAXREDIRS => 10, CURLOPT_TIMEOUT => 30, CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1, CURLOPT_CUSTOMREQUEST => "POST", CURLOPT_POSTFIELDS => "origin=".$origin."&originType=city&destination=".$destination."&destinationType=subdistrict&weight=".$weight."&courier=jne",
       CURLOPT_HTTPHEADER => array(
         "content-type: application/x-www-form-urlencoded",
         "key: 06f5c93c31ef48c91c6260c011014d37"
@@ -259,7 +261,7 @@ class KeranjangController extends Controller
     // tiki
     $curl_tiki = curl_init();
     curl_setopt_array($curl_tiki, array(
-      CURLOPT_URL => "https://pro.rajaongkir.com/api/cost", CURLOPT_RETURNTRANSFER => true, CURLOPT_ENCODING => "", CURLOPT_MAXREDIRS => 10, CURLOPT_TIMEOUT => 30, CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1, CURLOPT_CUSTOMREQUEST => "POST", CURLOPT_POSTFIELDS => "origin=".$origin."&originType=city&destination=".$destination."&destinationType=subdistrict&weight=1&courier=tiki",
+      CURLOPT_URL => "https://pro.rajaongkir.com/api/cost", CURLOPT_RETURNTRANSFER => true, CURLOPT_ENCODING => "", CURLOPT_MAXREDIRS => 10, CURLOPT_TIMEOUT => 30, CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1, CURLOPT_CUSTOMREQUEST => "POST", CURLOPT_POSTFIELDS => "origin=".$origin."&originType=city&destination=".$destination."&destinationType=subdistrict&weight=".$weight."&courier=tiki",
       CURLOPT_HTTPHEADER => array(
         "content-type: application/x-www-form-urlencoded",
         "key: 06f5c93c31ef48c91c6260c011014d37"
@@ -273,7 +275,7 @@ class KeranjangController extends Controller
     // pos
     $curl_pos = curl_init();
     curl_setopt_array($curl_pos, array(
-      CURLOPT_URL => "https://pro.rajaongkir.com/api/cost", CURLOPT_RETURNTRANSFER => true, CURLOPT_ENCODING => "", CURLOPT_MAXREDIRS => 10, CURLOPT_TIMEOUT => 30, CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1, CURLOPT_CUSTOMREQUEST => "POST", CURLOPT_POSTFIELDS => "origin=".$origin."&originType=city&destination=".$destination."&destinationType=subdistrict&weight=1&courier=pos",
+      CURLOPT_URL => "https://pro.rajaongkir.com/api/cost", CURLOPT_RETURNTRANSFER => true, CURLOPT_ENCODING => "", CURLOPT_MAXREDIRS => 10, CURLOPT_TIMEOUT => 30, CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1, CURLOPT_CUSTOMREQUEST => "POST", CURLOPT_POSTFIELDS => "origin=".$origin."&originType=city&destination=".$destination."&destinationType=subdistrict&weight=".$weight."&courier=pos",
       CURLOPT_HTTPHEADER => array(
         "content-type: application/x-www-form-urlencoded",
         "key: 06f5c93c31ef48c91c6260c011014d37"
@@ -287,7 +289,7 @@ class KeranjangController extends Controller
     // jnt
     $curl_jnt = curl_init();
     curl_setopt_array($curl_jnt, array(
-      CURLOPT_URL => "https://pro.rajaongkir.com/api/cost", CURLOPT_RETURNTRANSFER => true, CURLOPT_ENCODING => "", CURLOPT_MAXREDIRS => 10, CURLOPT_TIMEOUT => 30, CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1, CURLOPT_CUSTOMREQUEST => "POST", CURLOPT_POSTFIELDS => "origin=".$origin."&originType=city&destination=".$destination."&destinationType=subdistrict&weight=1&courier=jnt",
+      CURLOPT_URL => "https://pro.rajaongkir.com/api/cost", CURLOPT_RETURNTRANSFER => true, CURLOPT_ENCODING => "", CURLOPT_MAXREDIRS => 10, CURLOPT_TIMEOUT => 30, CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1, CURLOPT_CUSTOMREQUEST => "POST", CURLOPT_POSTFIELDS => "origin=".$origin."&originType=city&destination=".$destination."&destinationType=subdistrict&weight=".$weight."&courier=jnt",
       CURLOPT_HTTPHEADER => array(
         "content-type: application/x-www-form-urlencoded",
         "key: 06f5c93c31ef48c91c6260c011014d37"
@@ -301,7 +303,7 @@ class KeranjangController extends Controller
     // sicepat
     $curl_sicepat = curl_init();
     curl_setopt_array($curl_sicepat, array(
-      CURLOPT_URL => "https://pro.rajaongkir.com/api/cost", CURLOPT_RETURNTRANSFER => true, CURLOPT_ENCODING => "", CURLOPT_MAXREDIRS => 10, CURLOPT_TIMEOUT => 30, CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1, CURLOPT_CUSTOMREQUEST => "POST", CURLOPT_POSTFIELDS => "origin=".$origin."&originType=city&destination=".$destination."&destinationType=subdistrict&weight=1&courier=sicepat",
+      CURLOPT_URL => "https://pro.rajaongkir.com/api/cost", CURLOPT_RETURNTRANSFER => true, CURLOPT_ENCODING => "", CURLOPT_MAXREDIRS => 10, CURLOPT_TIMEOUT => 30, CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1, CURLOPT_CUSTOMREQUEST => "POST", CURLOPT_POSTFIELDS => "origin=".$origin."&originType=city&destination=".$destination."&destinationType=subdistrict&weight=".$weight."&courier=sicepat",
       CURLOPT_HTTPHEADER => array(
         "content-type: application/x-www-form-urlencoded",
         "key: 06f5c93c31ef48c91c6260c011014d37"
@@ -329,11 +331,11 @@ class KeranjangController extends Controller
   public function bayar(Request $request)
   {
     $customer = Customer::find($request->customer_id);
-    // $ekspedisi = Ekspedisi::find($request->ekspedisi);
     $kode_unik = rand(000, 100);
+    $kode_transaksi = Str::random(8);
 
     $transaksi = new Transaksi;
-    $transaksi->kode = Str::random(8);
+    $transaksi->kode = $kode_transaksi;
     $transaksi->customer_id = $request->customer_id;
     $transaksi->status = 1;
     $transaksi->penerima = $customer->nama_lengkap;
@@ -363,6 +365,20 @@ class KeranjangController extends Controller
       $keranjang->transaksi_id = $transaksi->id;
       $keranjang->save();
     }
+
+    // notif
+    $notif = new Notif;
+    $notif->tipe = "pembayaran";
+    $notif->customer_id = $request->customer_id;
+    $notif->deskripsi = "Segera lakukan pembayaran, lalu konfirmasi dengan klik ";
+    $notif->link = "konfirmasi_bayar";
+    $notif->save();
+
+    $notif_admin = new Notif;
+    $notif_admin->tipe = "pesanan";
+    $notif_admin->deskripsi = "Pesanan Baru " . $kode_transaksi;
+    $notif_admin->link = "transaksi";
+    $notif_admin->save();
 
     $request->session()->forget('checkout');
     

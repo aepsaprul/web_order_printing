@@ -9,10 +9,12 @@ use App\Models\WilKabupaten;
 use App\Models\WilKecamatan;
 use App\Models\WilProvinsi;
 use App\Models\Ulasan;
+use App\Models\Produk;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Hash;
 
 class AkunController extends Controller
 {
@@ -117,6 +119,13 @@ class AkunController extends Controller
       'transaksi' => $transaksi
     ]);
   }
+  public function ulasanForm($id)
+  {
+    $keranjang = Keranjang::find($id);
+    $produk = Produk::find($keranjang->produk_id);
+    
+    return view('akun.ulasanForm', ['keranjang' => $keranjang, 'produk' => $produk]);
+  }
   public function ulasanStore(Request $request)
   {
     $ulasan = new Ulasan;
@@ -127,9 +136,36 @@ class AkunController extends Controller
     $ulasan->keterangan = $request->keterangan;
     $ulasan->save();
 
-    return response()->json([
-      'status' => 200
+    // return response()->json([
+    //   'status' => 200
+    // ]);
+    return redirect()->route('akun.ulasan');
+  }
+  public function ubahPassword()
+  {
+    return view('akun.ubahPassword');
+  }
+  public function ubahPasswordStore(Request $request)
+  {
+    // validation
+    $request->validate([
+      'old_password' => 'required',
+      'new_password' => 'required'
     ]);
+
+    // match old password
+    if (!Hash::check($request->old_password, auth()->user()->password)) {
+      return back()->with("error", "Password lama tidak cocok");
+    } else if ($request->new_password_confirmation != $request->new_password) {
+      return back()->with("error", "Password Konfirmasi tidak cocok");
+    }
+
+    // update password baru
+    Customer::whereId(auth()->user()->id)->update([
+      'password' => Hash::make($request->new_password)
+    ]);
+
+    return back()->with("status", "Password berhasil diperbaharui");
   }
 
   // mobile

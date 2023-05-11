@@ -9,6 +9,7 @@ use App\Http\Controllers\KonfirmasiBayarController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\NotifController;
 use Illuminate\Support\Facades\Route;
 use Monolog\Registry;
 use Whoops\Run;
@@ -74,7 +75,10 @@ Route::middleware(['auth'])->group(function() {
   Route::get('akun/transaksi', [AkunController::class, 'transaksi'])->name('akun.transaksi');
   Route::get('akun/transaksi/{id}/detail', [AkunController::class, 'transaksiDetail'])->name('akun.transaksiDetail');
   Route::get('akun/ulasan', [AkunController::class, 'ulasan'])->name('akun.ulasan');
+  Route::get('akun/ulasan/{id}/form', [AkunController::class, 'ulasanForm'])->name('akun.ulasan.form');
   Route::post('akun/ulasan/store', [AkunController::class, 'ulasanStore'])->name('akun.ulasan.store');
+  Route::get('akun/ubahPassword', [AkunController::class, 'ubahPassword'])->name('akun.ubahPassword');
+  Route::post('akun/ubahPasswordStore', [AkunController::class, 'ubahPasswordStore'])->name('akun.ubahPasswordStore');
 
   // akun mobile
   Route::get('mAkun', [AkunController::class, 'mAkun'])->name('mAkun');
@@ -84,5 +88,9 @@ Route::middleware(['auth'])->group(function() {
   // konfirmasi bayar
   Route::get('konfirmasi_bayar', [KonfirmasiBayarController::class, 'index'])->name('konfirmasi_bayar');
   Route::post('konfirmasi_bayar/store', [KonfirmasiBayarController::class, 'store'])->name('konfirmasi_bayar.store');
+
+  // notif
+  Route::get('notif', [NotifController::class, 'index'])->name('notif');
+  Route::get('notif/list', [NotifController::class, 'list'])->name('notif.list');
 });
 

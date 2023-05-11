@@ -58,14 +58,15 @@
                         <div class="ml-3">{{ $item_keranjang->produk->nama }}</div>
                       </div>
                       <div class="w-full h-1/2 flex items-center justify-center">
-                        <button class="btn-ulasan bg-sky-500 py-2 px-7 text-white font-bold text-sm rounded-full"
+                        {{-- <button class="btn-ulasan bg-sky-500 py-2 px-7 text-white font-bold text-sm rounded-full"
                           data-te-toggle="modal"
                           data-te-target="#modalUlasan"
                           data-te-ripple-init
                           data-te-ripple-color="light"
                           data-keranjang-id="{{ $item_keranjang->id }}"
                           data-produk-id="{{ $item_keranjang->produk_id }}"
-                        >Beri Ulasan</button>
+                        >Beri Ulasan</button> --}}
+                        <a href="{{ route('akun.ulasan.form', [$item_keranjang->id]) }}" class="btn-ulasan bg-sky-500 py-2 px-7 text-white font-bold text-sm rounded-full">Beri Ulasan</a>
                       </div>
                     </div>
                   </div>

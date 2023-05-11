@@ -21,15 +21,13 @@
           <div class="capitalize">{{ Auth::user()->nama_lengkap }}</div>
         </div>
         <div class="p-2">
-          <div class="px-3 py-2 text-sm font-light cursor-pointer {{ request()->is(['akun']) ? 'bg-sky-200' : '' }} rounded"><a href="{{ route('akun') }}">Data Diri</a></div>
-          <div class="px-3 py-2 text-sm font-light cursor-pointer {{ request()->is(['akun/transaksi']) ? 'bg-sky-200' : '' }}"><a href="{{ route('akun.transaksi') }}">Transaksi</a></div>
-          <div class="px-3 py-2 text-sm font-light cursor-pointer {{ request()->is(['akun/ulasan']) ? 'bg-sky-200' : '' }}"><a href="{{ route('akun.ulasan') }}">Ulasan</a></div>
-          <div class="px-3 py-2 text-sm font-semibold cursor-pointer underline">
-            <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
-            <form id="logout-form" action="{{ route('logout') }}" method="POST">
-              @csrf
-            </form>
-          </div>
+          <a href="{{ route('akun') }}"><div class="px-3 py-2 text-sm font-light cursor-pointer  {{ request()->is(['akun']) ? 'bg-sky-500 text-white' : 'hover:bg-sky-200' }} rounded">Data Diri</div></a>
+          <a href="{{ route('akun.transaksi') }}"><div class="px-3 py-2 text-sm font-light cursor-pointer {{ request()->is(['akun/transaksi']) ? 'bg-sky-500 text-white' : 'hover:bg-sky-200' }}">Transaksi</div></a>
+          <a href="{{ route('akun.ulasan') }}"><div class="px-3 py-2 text-sm font-light cursor-pointer {{ request()->is(['akun/ulasan']) ? 'bg-sky-500 text-white' : 'hover:bg-sky-200' }}">Ulasan</div></a>
+          <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><div class="px-3 py-2 text-sm font-semibold cursor-pointer hover:bg-sky-200 underline">Logout</div></a>
+          <form id="logout-form" action="{{ route('logout') }}" method="POST">
+            @csrf
+          </form>
         </div>
       </div>
     </div>
