@@ -202,7 +202,7 @@
               </div>
             </div>
             <!-- e-wallet -->
-            <div>
+            {{-- <div>
               <p class="text-sm py-2">Wallet</p>
               <div class="float-left">
               @foreach ($rekening_ewallet as $key => $item)
@@ -221,7 +221,7 @@
                 </div>
                 @endforeach
               </div>
-            </div> 
+            </div>  --}}
           </div>
         </div>
       </div>
