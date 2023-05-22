@@ -35,8 +35,8 @@
 
 {{-- header lg --}}
 <div id="header-wrapper" class="w-full h-14 border-b bg-white sticky top-0 z-20 lg:flex justify-center hidden">
-  <div class="w-10/12 2xl:w-3/5 flex justify-between items-center">
-    <div class="flex">
+  <div class="w-10/12 2xl:w-4/5 flex justify-between items-center">
+    <div class="flex 2xl:w-full">
       <div>
         <img src="{{ asset('assets/logo.png') }}" alt="logo" class="w-16">
       </div>
@@ -47,14 +47,14 @@
         <a href="{{ route('konfirmasi_bayar') }}" class="font-semibold mx-2">Konfirmasi Bayar</a>
       </div>
     </div>
-    <div>
+    <div class="2xl:w-full">
       <div class="relative mx-1">
-        <input type="text" name="cari" id="cari" placeholder="Cari produk" class="cari h-8 w-72 pl-3 border border-slate-500 rounded-3xl text-sm focus:outline-none" autocomplete="off">
+        <input type="text" name="cari" id="cari" placeholder="Cari produk" class="cari h-8 w-72 2xl:w-full pl-3 border border-slate-500 rounded-3xl text-sm focus:outline-none" autocomplete="off">
         <i class="fa fa-search absolute right-3 top-1.5 text-slate-400 text-sm"></i>
       </div>
       <div class="hidden cari-autocomplete absolute bg-white w-72 mx-1 rounded p-1 mt-1 shadow border-t"></div>
     </div>
-    <div class="flex">
+    <div class="flex justify-end 2xl:w-2/4">
       <div class="relative w-10 h-10">
         <div class="w-8 h-10 flex items-center">
           <a href="{{ route('keranjang') }}"><i class="fa fa-basket-shopping text-2xl"></i></a>

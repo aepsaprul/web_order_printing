@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Produk;
 use App\Models\ProdukTemplate;
 use App\Models\ProdukTemplateDetail;
+use App\Models\Promo;
 use App\Models\Template;
 use App\Models\TemplateDetail;
 use App\Models\Ulasan;
@@ -30,15 +31,29 @@ class ProdukController extends Controller
     $ulasan_total = Ulasan::select(DB::raw('SUM(rating) as total_rating'))
       ->where('produk_id', $id)
       ->first();
-
+    $promo = Promo::where('aktif', 'y')->first();
+    if ($promo) {
+      if ($promo->satuan == "persen") {
+        $diskon = $produk->harga * ($promo->diskon / 100);
+        $produk_harga = $produk->harga - $diskon;
+      } else {
+        $produk_harga = $produk->harga - $promo->diskon;
+      }
+    } else {
+      $produk_harga = $produk->harga;
+    }
+    
+    
     return view('produkDetail', [
       'produk' => $produk,
       'produk_template' => $produk_template,
+      'produk_harga' => $produk_harga,
       'produk_template_detail' => $produk_template_detail,
       'template' => $template,
       'template_detail' => $template_detail,
       'ulasan' => $ulasan,
-      'ulasan_total' => $ulasan_total
+      'ulasan_total' => $ulasan_total,
+      'promo' => $promo
     ]);
   }
 }

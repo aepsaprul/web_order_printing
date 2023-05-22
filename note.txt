@@ -19,7 +19,6 @@ prevent back history
   'prevent-back-history' => \App\Http\Middleware\PreventBackHistory::class,
 
 request update
-- spesifikasi promo
 - hapus dark mode
 - mobile version
 

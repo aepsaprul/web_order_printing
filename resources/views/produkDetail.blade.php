@@ -46,7 +46,6 @@
                 <input type="hidden" name="template[]" value="{{ $item->id }}">
                 <div class="font-semibold my-1">{{ $item->nama }}</div>
                 <select name="template_detail[]" id="template_{{ $key_produk_template }}" class="border text-slate-700 w-full p-2 rounded border-sky-600 outline-0 cursor-pointer">
-                  {{-- <option value="0" data-id="0" class="text-slate-700">Pilih {{ $item->nama }}</option> --}}
                   @foreach ($template_detail as $item_detail) <!-- loop tabel template_detail -->
                     @if ($item_detail->template_id == $item->id) <!-- jika template_id yg ada di tabel template_detail sama dengan id yg ada di tabel template -->
                       @foreach ($produk_template_detail as $item_produk_template_detail) <!-- loop tabel produk_template_detail -->
@@ -82,9 +81,9 @@
         </div>
         <div class="mt-4">
           <div class="flex justify-between py-1">
-            <input type="hidden" name="produk_harga" id="produk_harga" value="{{ $produk->harga }}">
+            <input type="hidden" name="produk_harga" id="produk_harga" value="{{ $produk_harga }}">
             <div>Harga Barang</div>
-            <div>Rp <span class="nominal_harga">{{ $produk->harga }}</span></div>
+            <div>Rp <span class="nominal_harga">{{ $produk_harga }}</span></div>
           </div>
           <div class="flex justify-between py-1">
             <div>Jumlah</div>
@@ -92,7 +91,7 @@
           </div>
           <div class="flex justify-between py-1">
             <div class="font-bold">Total</div>
-            <div class="font-bold">Rp <span class="nominal_total">{{ $produk->harga }}</span></div>
+            <div class="font-bold">Rp <span class="nominal_total">{{ $produk_harga }}</span></div>
           </div>
         </div>
         <div class="hidden w-full mt-2 lg:grid grid-cols-2 gap-4">

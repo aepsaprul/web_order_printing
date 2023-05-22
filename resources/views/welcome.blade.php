@@ -5,7 +5,7 @@
 @include('layouts.header')
 
 <div class="lg:flex lg:justify-center">  
-  <div class="lg:w-10/12 2xl:w-3/5">
+  <div class="lg:w-10/12 2xl:w-4/5">
     <div class="">
       <div class="swiper gambarSlider ">
         <div class="swiper-wrapper">
@@ -17,26 +17,48 @@
         </div>
       </div>
     </div>
-    {{-- <div>
-      <div class="font-bold mt-5 p-3 text-base text-slate-500 bg-white">PROMO</div>
+    @if ($promo)
+    <div>
+      <div class="text-center font-bold mt-5 py-3 text-base text-slate-500 bg-white border-b">PROMO</div>
       <div class="bg-white">
         <div class="grid grid-cols-3 lg:grid-cols-6">
-          @foreach ($produk as $item)
-            <a href="{{ route('produk.show', [$item->id]) }}" class="p-1">
+          @foreach ($promo->dataPromoProduk as $item)
+            <a href="{{ route('produk.show', [$item->dataProduk->id]) }}" class="p-1">
               <div>
-                <img src="{{ url(env('APP_URL_ADMIN') . '/img_produk/' . $item->gambar) }}" alt="gambar" class="w-full">
+                <img src="{{ url(env('APP_URL_ADMIN') . '/img_produk/' . $item->dataProduk->gambar) }}" alt="gambar" class="w-full">
               </div>
-              <div class="text-sm text-center">{{ $item->nama }}</div>
-              <div class="text-sm font-semibold"><span>Rp</span> <span class="text-lg">@currency($item->harga)</span></div>
+              <div class="text-sm text-center">{{ $item->dataProduk->nama }}</div>
+              <div class="text-sm font-semibold flex justify-between items-center">
+                <div>
+                  @if ($item->dataPromo->satuan == "persen")
+                    @php
+                      $diskon = $item->dataProduk->harga * ($item->dataPromo->diskon / 100);
+                    @endphp
+                    Rp. @currency($item->dataProduk->harga - $diskon)
+                  @else
+                    Rp. @currency($item->dataProduk->harga - $item->dataPromo->diskon)
+                  @endif
+                </div>
+                <div>
+                  <div class="line-through text-xs">Rp @currency($item->dataProduk->harga)</div>
+                </div>
+              </div>
               <div class="flex items-center">
-                <div class="mr-2"><span class="bg-rose-200 text-xs font-semibold text-rose-700 p-1 rounded">40%</span></div>
-                <div class="line-through text-xs">Rp @currency($item->harga)</div>
+                <div class="bg-red-500 w-full text-center">
+                  <span class="text-md font-semibold text-white p-1 rounded">Diskon 
+                    @if ($item->dataPromo->satuan == "persen")
+                      {{ $item->dataPromo->diskon }} %</span>
+                    @else
+                      @currency($item->dataPromo->diskon)</span>  
+                    @endif
+                </div>
               </div>
             </a>
-          @endforeach
+          @endforeach 
         </div>
       </div>
-    </div> --}}
+    </div>           
+    @endif
     <div>
       <h1 class="text-center font-bold mt-5 py-3 text-base text-slate-500 bg-white border-b">KATEGORI PRODUK</h1>
       <div class="grid grid-cols-5 bg-white">
@@ -58,14 +80,30 @@
       <h1 id="produk" class="text-center font-bold mb-1 mt-5 py-3 text-base text-slate-500 bg-white">PRODUK</h1>
       <div>
         <ul id="paginated-list" class="grid grid-cols-2 lg:grid-cols-6 gap-2 lg:m-0">
-          @foreach ($produk as $item)
+          @foreach ($produk as $item)            
             <li class="bg-white">
               <a href="{{ route('produk.show', [$item->id]) }}">
                 <div>
                   <img src="{{ url(env('APP_URL_ADMIN') . '/img_produk/' . $item->gambar) }}" alt="gambar" class="w-full">
                 </div>
                 <div class="text-sm text-center">{{ $item->nama }}</div>
-                <div class="text-sm text-center font-semibold"><span>Rp</span> <span class="text-lg">@currency($item->harga)</span></div>
+                <div class="text-sm text-center font-semibold">
+                  <span>Rp</span> 
+                  <span class="text-lg">
+                    @if (in_array($item->id, $promo_arr))
+                      @if ($promo->satuan == "persen")
+                        @php
+                          $diskon = $item->harga * ($promo->diskon / 100);
+                        @endphp
+                        @currency($item->harga - $diskon)
+                      @else
+                        @currency($item->harga - $promo->diskon)
+                      @endif  
+                    @else
+                      @currency($item->harga)
+                    @endif
+                  </span>
+                </div>
               </a>
             </li>
           @endforeach
@@ -113,16 +151,12 @@
     }
   });
 
-  // window.onscroll = function() {
-  //   myFunction();
-  // };
-
   // pagination
   const paginationNumbers = document.getElementById("pagination-numbers");
   const paginatedList = document.getElementById("paginated-list");
   const listItems = paginatedList.querySelectorAll("li");
 
-  const paginationLimit = 10;
+  const paginationLimit = 12;
   const pageCount = Math.ceil(listItems.length / paginationLimit);
   let currentPage = 1;
 

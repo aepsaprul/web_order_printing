@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Produk extends Model
+class Promo extends Model
 {
   use HasFactory;
 
   public function dataPromoProduk() {
-    return $this->hasMany(PromoProduk::class, 'produk_id', 'id');
+    return $this->hasMany(PromoProduk::class, 'promo_id', 'id');
   }
 }
