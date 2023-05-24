@@ -1,97 +1,91 @@
 @extends('akun.index')
 
 @section('content_akun')
+<!-- desktop -->
+<div class="hidden md:block">
+  <div class="bg-white p-3 rounded border">
+    <h3 class="font-bold text-lg">Transaksi</h3>
+  </div>
+  <div id="transaksi_page" class="flex">
+    <div class="w-full">
 
-<div class="bg-white p-3 rounded border">
-  <h3 class="font-bold text-lg">Transaksi</h3>
-</div>
-<div id="transaksi_page" class="flex">
-  <div class="w-full">
+      {{-- data hidden --}}
+      <input type="hidden" name="transaksi_total" id="transaksi_total" value="{{ $transaksi->count() }}">
 
-    {{-- data hidden --}}
-    <input type="hidden" name="transaksi_total" id="transaksi_total" value="{{ $transaksi->count() }}">
-
-    @foreach ($transaksi as $key => $item)
-      <div class="border rounded my-2 p-4 bg-white">
-        <div class="flex">
-          <div class="text-sm mr-3">
-            @php
-              $transaksi_tanggal = Carbon\Carbon::parse($item->created_at)->locale('id');
-              $transaksi_tanggal->settings(['formatFunction' => 'translatedFormat']);
-            @endphp
-            {{ $transaksi_tanggal->format('d F Y') }}
+      @foreach ($transaksi as $key => $item)
+        <div class="border rounded my-2 p-4 bg-white">
+          <div class="flex">
+            <div class="text-sm mr-3">
+              @php
+                $transaksi_tanggal = Carbon\Carbon::parse($item->created_at)->locale('id');
+                $transaksi_tanggal->settings(['formatFunction' => 'translatedFormat']);
+              @endphp
+              {{ $transaksi_tanggal->format('d F Y') }}
+            </div>
+            <div class="text-sm mr-3">{{ $item->kode }}</div>
+            <div class="{{ $item->status == 6 ? 'bg-green-600 rounded' : 'bg-rose-600 rounded' }} px-3 text-sm text-white font-semibold capitalize">{{ $item->dataStatus->nama }}</div>
           </div>
-          <div class="text-sm mr-3">{{ $item->kode }}</div>
-          <div class="{{ $item->status == 6 ? 'bg-green-600 rounded' : 'bg-rose-600 rounded' }} px-3 text-sm text-white font-semibold capitalize">{{ $item->dataStatus->nama }}</div>
-        </div>
-        <div class="flex justify-between mt-3">
-          <div class="w-4/5">
-            @foreach ($item->dataKeranjang as $item_keranjang)
-              <div class="flex my-3">
-                <div class="w-1/5">
-                  <img src="{{ url(env('APP_URL_ADMIN') . '/img_produk/' . $item_keranjang->produk->gambar) }}" alt="gambar produk" class="w-full">
-                </div>
-                <div class="mx-2 w-4/5">
-                  <div class="font-bold">{{ $item_keranjang->produk->nama }}</div>
-                  <div class="text-sm text-slate-700">{{ $item_keranjang->qty }} {{ $item_keranjang->produk->satuan }} x <span class="text-xs">Rp</span> @currency($item_keranjang->harga)</div>
-                  <div class="text-xs text-slate-700">
-                    @php
-                      $total_template = count($item_keranjang->dataKeranjangTemplate) - 1;
-                    @endphp
-                    @foreach ($item_keranjang->dataKeranjangTemplate as $key_keranjang_template => $item_keranjang_template)
-                      {{ $item_keranjang_template->dataTemplate->nama }} ({{ $item_keranjang_template->dataTemplateDetail->nama }}) 
-                      {{ $key_keranjang_template != $total_template ? ',' : '' }}
-                    @endforeach
+          <div class="flex justify-between mt-3">
+            <div class="w-4/5">
+              @foreach ($item->dataKeranjang as $item_keranjang)
+                <div class="flex my-3">
+                  <div class="w-1/5">
+                    <img src="{{ url(env('APP_URL_ADMIN') . '/img_produk/' . $item_keranjang->produk->gambar) }}" alt="gambar produk" class="w-full">
                   </div>
-                  <div class="mt-4">
-                    @if ($item->status == 6)
-                      @if ($item_keranjang->dataUlasan)
-                        @if (count($item_keranjang->dataUlasan) > 0)
-                          <div class="text-emerald-500 italic text-sm">Sudah di ulas</div>
-                        @else
-                          {{-- <button class="btn-ulasan bg-sky-500 py-2 px-7 text-white font-bold text-sm rounded-full"
-                            data-te-toggle="modal"
-                            data-te-target="#modalUlasan"
-                            data-te-ripple-init
-                            data-te-ripple-color="light"
-                            data-keranjang-id="{{ $item_keranjang->id }}"
-                            data-produk-id="{{ $item_keranjang->produk_id }}"
-                          >Beri Ulasan</button>                           --}}
-                          <a href="{{ route('akun.ulasan.form', [$item_keranjang->id]) }}" class="btn-ulasan bg-sky-500 py-2 px-7 text-white font-bold text-sm rounded-full">Beri Ulasan</a>
+                  <div class="mx-2 w-4/5">
+                    <div class="font-bold">{{ $item_keranjang->produk->nama }}</div>
+                    <div class="text-sm text-slate-700">{{ $item_keranjang->qty }} {{ $item_keranjang->produk->satuan }} x <span class="text-xs">Rp</span> @currency($item_keranjang->harga)</div>
+                    <div class="text-xs text-slate-700">
+                      @php
+                        $total_template = count($item_keranjang->dataKeranjangTemplate) - 1;
+                      @endphp
+                      @foreach ($item_keranjang->dataKeranjangTemplate as $key_keranjang_template => $item_keranjang_template)
+                        {{ $item_keranjang_template->dataTemplate->nama }} ({{ $item_keranjang_template->dataTemplateDetail->nama }}) 
+                        {{ $key_keranjang_template != $total_template ? ',' : '' }}
+                      @endforeach
+                    </div>
+                    <div class="mt-4">
+                      @if ($item->status == 6)
+                        @if ($item_keranjang->dataUlasan)
+                          @if (count($item_keranjang->dataUlasan) > 0)
+                            <div class="text-emerald-500 italic text-sm">Sudah di ulas</div>
+                          @else
+                            <a href="{{ route('akun.ulasan.form', [$item_keranjang->id]) }}" class="btn-ulasan bg-sky-500 py-2 px-7 text-white font-bold text-sm rounded-full">Beri Ulasan</a>
+                          @endif
                         @endif
-                      @endif
-                    @endif  
-                  </div>         
+                      @endif  
+                    </div>         
+                  </div>
                 </div>
+              @endforeach
+            </div>
+            <div class="border-l-2 h-16 w-1/5">
+              <div class="mx-4">
+                <div class="text-sm">Total Beli</div>
+                <div class="font-bold">Rp @currency($item->total)</div>
               </div>
-            @endforeach
+            </div>
           </div>
-          <div class="border-l-2 h-16 w-1/5">
-            <div class="mx-4">
-              <div class="text-sm">Total Beli</div>
-              <div class="font-bold">Rp @currency($item->total)</div>
+          <div class="flex justify-between items-center">
+            <div class="text-rose-500 italic text-sm font-bold">
+              @if ($item->status == 1)
+                *Setelah membayar, segera konfirmasi melalui menu Konfirmasi Bayar                
+              @endif
+            </div>
+            <div>
+              <button class="lihat-detail-{{ $key }} transaksi-detail font-bold text-sm mx-2 text-sky-400" 
+                  data-id="{{ $item->id }}"
+                  data-te-toggle="modal"
+                  data-te-target="#modalTransaksiDetail"
+                  data-te-ripple-init
+                  data-te-ripple-color="light"
+                >Detail Transaksi
+              </button>
             </div>
           </div>
         </div>
-        <div class="flex justify-between items-center">
-          <div class="text-rose-500 italic text-sm font-bold">
-            @if ($item->status == 1)
-              *Setelah membayar, segera konfirmasi melalui menu Konfirmasi Bayar                
-            @endif
-          </div>
-          <div>
-            <button class="lihat-detail-{{ $key }} transaksi-detail font-bold text-sm mx-2 text-sky-400" 
-                data-id="{{ $item->id }}"
-                data-te-toggle="modal"
-                data-te-target="#modalTransaksiDetail"
-                data-te-ripple-init
-                data-te-ripple-color="light"
-              >Detail Transaksi
-            </button>
-          </div>
-        </div>
-      </div>
-    @endforeach
+      @endforeach
+    </div>
   </div>
 </div>
 
@@ -140,6 +134,24 @@
     </div>
   </div>
 </div>
+
+<script>
+  /* Storing user's device details in a variable*/
+  let details = navigator.userAgent;
+  
+  /* Creating a regular expression
+  containing some mobile devices keywords
+  to search it in details string*/
+  let regexp = /android|iphone|kindle|ipad/i;
+  
+  /* Using test() method to search regexp in details
+  it returns boolean value*/
+  let isMobileDevice = regexp.test(details);
+  
+  if (isMobileDevice) {
+    window.location.href = "{{ route('mTransaksi') }}";
+  }
+</script>
 @endsection
 
 @section('script')
@@ -250,7 +262,8 @@
                 <div class="text-sm font-semibold border-b pb-2">Pembayaran</div>
                 <div class="p-1 flex justify-between">
                   <div class="w-2/4 text-sm capitalize">${transaksi.data_rekening.grup}</div>
-                  <div class="w-2/4 text-sm font-bold">${transaksi.data_rekening.nama} (${transaksi.data_rekening.nomor} a.n ${transaksi.data_rekening.atas_nama})</div>
+                  <div class="w-2/4 text-sm font-bold">${transaksi.data_rekening.nama} (${transaksi.data_rekening.nomor} a.n ${transaksi.data_rekening.atas_nama})
+                  </div>
                 </div>
                 <div class="p-1 flex justify-between">
                   <div class="w-2/4 text-sm capitalize">Total Harga</div>

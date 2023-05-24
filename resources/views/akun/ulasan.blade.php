@@ -5,7 +5,7 @@
 <div class="bg-white p-3 rounded border">
   <h3 class="font-bold text-lg">Ulasan</h3>
 </div>
-<div id="transaksi_page" class="flex mt-2">
+<div id="ulasan_page" class="flex mt-2">
   <div class="w-full">
     <ul
       class="flex list-none flex-col flex-wrap border-b-0 pl-0 md:flex-row bg-white border"
@@ -194,6 +194,23 @@
   </div>
 </div>
 
+<script>
+  /* Storing user's device details in a variable*/
+  let details = navigator.userAgent;
+  
+  /* Creating a regular expression
+  containing some mobile devices keywords
+  to search it in details string*/
+  let regexp = /android|iphone|kindle|ipad/i;
+  
+  /* Using test() method to search regexp in details
+  it returns boolean value*/
+  let isMobileDevice = regexp.test(details);
+  
+  if (isMobileDevice) {
+    window.location.href = "{{ route('mUlasan') }}";
+  }
+</script>
 @endsection
 
 @section('script')

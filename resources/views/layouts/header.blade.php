@@ -3,9 +3,16 @@
     <div class="{{ request()->is(['/', 'home', 'home/*']) ? 'hidden' : '' }}">
       <a href="{{ url('/') }}"><i class="fa fa-arrow-left pl-3 text-xl text-slate-500"></i></a>
     </div>
-    <div class="relative mx-1">
-      <input type="text" name="cari" id="cari" placeholder="Cari produk" class="cari h-8 w-64 pl-3 border rounded-3xl text-sm">
+    <!-- <div class="relative mx-1">
+      <input type="text" name="cari" placeholder="Cari produk" class="cari h-8 w-64 pl-3 border rounded-3xl text-sm focus:outline-none" autocomplete="off">
       <i class="fa fa-search absolute right-3 top-1.5 text-slate-400 text-sm"></i>
+    </div> -->
+    <div class="2xl:w-full">
+      <div class="relative mx-1">
+        <input type="text" name="cari" placeholder="Cari produk" class="cari h-8 w-44 2xl:w-full pl-3 border border-slate-500 rounded-3xl text-sm focus:outline-none" autocomplete="off">
+        <i class="fa fa-search absolute right-3 top-1.5 text-slate-400 text-sm"></i>
+      </div>
+      <div class="hidden cari-autocomplete absolute bg-white w-72 mx-1 rounded p-1 mt-1 shadow border-t"></div>
     </div>
     <div class="relative w-10 h-10">
       <div class="w-8 h-10 flex items-center">
@@ -17,7 +24,7 @@
         </div>
       </div>
     </div>
-    <div class="{{ request()->is([
+    <!-- <div class="{{ request()->is([
       'produk', 
       'produk/*', 
       'kategori', 
@@ -28,7 +35,30 @@
       'mAkun/*'
       ]) ? 'hidden' : '' }}">
       <i class="fa fa-bell mr-1 text-2xl"></i>
-    </div>
+    </div> -->
+    @auth
+        <div class="relative w-10 h-10">
+          <div class="w-8 h-10 flex items-center">
+            <a href="#" class="notifikasi"><i class="fa fa-bell text-2xl"></i></a>
+          </div>
+          <div class=" 
+            @if ($boot_notif)
+              {{ count($boot_notif) > 0 ? "" : "hidden" }}
+            @else
+              hidden
+            @endif
+            ">
+            <div class="bg-red-600 absolute h-6 w-6 top-0 right-0 rounded-full flex items-center justify-center font-semibold text-white text-xs">
+              <span class="py-2 px-2">
+                @if ($boot_notif)
+                  {{ count($boot_notif) > 0 ? count($boot_notif) : "" }}                  
+                @endif
+              </span>
+            </div>
+          </div>
+          <div class="notif-list hidden absolute bg-white w-72 -ml-56 rounded mt-1 shadow border-t"></div>      
+        </div>
+      @endauth
     <i id="menu" class="fa fa-bars mr-2 text-2xl"></i>
   </div>
 </div>
@@ -49,7 +79,7 @@
     </div>
     <div class="2xl:w-full">
       <div class="relative mx-1">
-        <input type="text" name="cari" id="cari" placeholder="Cari produk" class="cari h-8 w-72 2xl:w-full pl-3 border border-slate-500 rounded-3xl text-sm focus:outline-none" autocomplete="off">
+        <input type="text" name="cari" placeholder="Cari produk" class="cari h-8 w-72 2xl:w-full pl-3 border border-slate-500 rounded-3xl text-sm focus:outline-none" autocomplete="off">
         <i class="fa fa-search absolute right-3 top-1.5 text-slate-400 text-sm"></i>
       </div>
       <div class="hidden cari-autocomplete absolute bg-white w-72 mx-1 rounded p-1 mt-1 shadow border-t"></div>

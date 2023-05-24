@@ -122,16 +122,16 @@
       </div>
     </div>
   </div>
-  <div class="lg:flex lg:justify-center my-5 lg:pb-5">
+  <div class="lg:flex lg:justify-center my-5 pb-5">
     <div class="lg:w-4/5 2xl:w-3/5 p-5 bg-white">
       <ul
-        class="mb-5 flex list-none flex-col flex-wrap border-b-0 pl-0 md:flex-row"
+        class="mb-5 flex list-none flex-row flex-wrap border-b-0 pl-0"
         role="tablist"
         data-te-nav-ref>
         <li role="presentation">
           <a
             href="#tabs-home"
-            class="my-2 block border-x-0 border-t-0 border-b-2 border-transparent px-7 pt-4 pb-3.5 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-neutral-100 focus:isolate focus:border-transparent data-[te-nav-active]:border-primary data-[te-nav-active]:text-primary dark:text-neutral-400 dark:hover:bg-transparent dark:data-[te-nav-active]:border-primary-400 dark:data-[te-nav-active]:text-primary-400"
+            class="my-2 block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-neutral-100 focus:isolate focus:border-transparent data-[te-nav-active]:border-primary data-[te-nav-active]:text-primary dark:text-neutral-400 dark:hover:bg-transparent dark:data-[te-nav-active]:border-primary-400 dark:data-[te-nav-active]:text-primary-400"
             data-te-toggle="pill"
             data-te-target="#tabs-home"
             data-te-nav-active

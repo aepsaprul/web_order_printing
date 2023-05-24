@@ -105,7 +105,7 @@ class AkunController extends Controller
   }
   public function transaksi()
   {
-    $transaksi = Transaksi::where('customer_id', Auth::user()->id)->limit(7)->orderBy('id', 'desc')->get();
+    $transaksi = Transaksi::where('customer_id', Auth::user()->id)->limit(10)->orderBy('id', 'desc')->get();
 
     return view('akun.transaksi', ['transaksi' => $transaksi]);
   }
@@ -136,9 +136,6 @@ class AkunController extends Controller
     $ulasan->keterangan = $request->keterangan;
     $ulasan->save();
 
-    // return response()->json([
-    //   'status' => 200
-    // ]);
     return redirect()->route('akun.ulasan');
   }
   public function ubahPassword()
@@ -177,7 +174,7 @@ class AkunController extends Controller
   }
   public function mTransaksi()
   {
-    $transaksi = Transaksi::where('customer_id', Auth::user()->id)->limit(10)->get();
+    $transaksi = Transaksi::where('customer_id', Auth::user()->id)->orderBy('id', 'desc')->limit(10)->get();
 
     return view('akun.mobile.transaksi', ['transaksi' => $transaksi]);
   }
@@ -204,5 +201,60 @@ class AkunController extends Controller
       'transaksi' => $transaksi,
       'keranjang_total' => $keranjang_total
     ]);
+  }
+  public function mUlasan()
+  {
+    $ulasan = Ulasan::where('customer_id', Auth::user()->id)->get();
+    $transaksi = Transaksi::where('customer_id', Auth::user()->id)->where('status', '6')->get();
+
+    return view('akun.mobile.ulasan', [
+      'ulasan' => $ulasan,
+      'transaksi' => $transaksi
+    ]);
+  }
+  public function mUlasanForm($id)
+  {
+    $keranjang = Keranjang::find($id);
+    $produk = Produk::find($keranjang->produk_id);
+    
+    return view('akun.mobile.ulasanForm', ['keranjang' => $keranjang, 'produk' => $produk]);
+  }
+  public function mUlasanStore(Request $request)
+  {
+    $ulasan = new Ulasan;
+    $ulasan->customer_id = Auth::user()->id;
+    $ulasan->keranjang_id = $request->keranjang_id;
+    $ulasan->produk_id = $request->produk_id;
+    $ulasan->rating = $request->rating;
+    $ulasan->keterangan = $request->keterangan;
+    $ulasan->save();
+
+    return redirect()->route('mUlasan');
+  }
+  public function mUbahPassword()
+  {
+    return view('akun.mobile.ubahPassword');
+  }
+  public function mUbahPasswordStore(Request $request)
+  {
+    // validation
+    $request->validate([
+      'old_password' => 'required',
+      'new_password' => 'required'
+    ]);
+
+    // match old password
+    if (!Hash::check($request->old_password, auth()->user()->password)) {
+      return back()->with("error", "Password lama tidak cocok");
+    } else if ($request->new_password_confirmation != $request->new_password) {
+      return back()->with("error", "Password Konfirmasi tidak cocok");
+    }
+
+    // update password baru
+    Customer::whereId(auth()->user()->id)->update([
+      'password' => Hash::make($request->new_password)
+    ]);
+
+    return back()->with("status", "Password berhasil diperbaharui");
   }
 }

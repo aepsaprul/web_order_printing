@@ -84,6 +84,11 @@ Route::middleware(['auth'])->group(function() {
   Route::get('mAkun', [AkunController::class, 'mAkun'])->name('mAkun');
   Route::get('mAkun/transaksi', [AkunController::class, 'mTransaksi'])->name('mTransaksi');
   Route::get('mAkun/transaksi/{id}/detail', [AkunController::class, 'mTransaksiDetail'])->name('mTransaksi.detail');
+  Route::get('mAkun/ulasan', [AkunController::class, 'mUlasan'])->name('mUlasan');
+  Route::get('mAkun/ulasan/{id}/form', [AkunController::class, 'mUlasanForm'])->name('mUlasan.form');
+  Route::post('mAkun/ulasan/store', [AkunController::class, 'mUlasanStore'])->name('mUlasan.store');
+  Route::get('mAkun/ubahPassword', [AkunController::class, 'mUbahPassword'])->name('mUbahPassword');
+  Route::post('mAkun/ubahPasswordStore', [AkunController::class, 'mUbahPasswordStore'])->name('mUbahPasswordStore');
 
   // konfirmasi bayar
   Route::get('konfirmasi_bayar', [KonfirmasiBayarController::class, 'index'])->name('konfirmasi_bayar');

@@ -10,7 +10,7 @@
 
   @foreach ($transaksi as $key => $item)
   <div class="m-3">
-    <div class="border rounded-md">
+    <div class="border rounded-md bg-white">
       <div class="flex justify-between border-b p-2">
         <div>
           <div class="text-sm">
@@ -59,9 +59,22 @@
             <div class="text-sm font-semibold">Rp @currency($item->total)</div>
           </div>
           <div class="flex">
-            <button class="bg-sky-500 text-white text-sm font-semibold rounded px-3 ml-2 w-24">Ulas</button>
+            @if ($item->status == 6)
+              @if ($item_keranjang->dataUlasan)
+                @if (count($item_keranjang->dataUlasan) > 0)
+                  <div class="text-emerald-500 italic text-sm">Sudah di ulas</div>
+                @else
+                  <a href="{{ route('mUlasan.form', [$item_keranjang->id]) }}" class="btn-ulasan bg-sky-500 py-2 px-7 text-white font-bold text-sm rounded-full">Beri Ulasan</a>
+                @endif
+              @endif
+            @endif
           </div>
         </div>
+      </div>
+      <div class="text-rose-500 italic text-sm font-bold p-2">
+        @if ($item->status == 1)
+          *Setelah membayar, segera konfirmasi melalui menu Konfirmasi Bayar                
+        @endif
       </div>
     </div>
   </div>
@@ -115,6 +128,24 @@
 </div>
 @include('layouts.navBawah')
 
+<script>
+  /* Storing user's device details in a variable*/
+  let details = navigator.userAgent;
+  
+  /* Creating a regular expression
+  containing some mobile devices keywords
+  to search it in details string*/
+  let regexp = /android|iphone|kindle|ipad/i;
+  
+  /* Using test() method to search regexp in details
+  it returns boolean value*/
+  let isMobileDevice = regexp.test(details);
+  
+  if (!isMobileDevice) {
+    window.location.href = "{{ route('akun.transaksi') }}";
+  }
+</script>
+
 @endsection
 
 @section('script')
@@ -154,6 +185,28 @@
               <div class="flex justify-between border mb-2 rounded p-2">
                 <div>${response.transaksi.kode}</div>
                 <div>${tgl_indo}</div>
+              </div>
+              <div>
+                <ol class="border-l border-neutral-300">`;
+                  $.each(transaksi.data_transaksi_status, function (index_status, item_status) {
+                    val += `
+                      <li>
+                        <div class="flex-start flex items-center pt-3">
+                          <div
+                            class="-ml-[5px] mr-3 h-[9px] w-[9px] rounded-full bg-neutral-300"></div>
+                          <p class="text-sm text-neutral-500 capitalize">
+                            ${item_status.data_status.nama}                                                                                                                          
+                          </p>
+                        </div>
+                        <div class="mt-2 ml-4 mb-6">
+                          <p class="mb-3 text-neutral-500 text-sm italic">
+                            ${item_status.keterangan}
+                          </p>
+                        </div>
+                      </li>                    
+                    `;
+                  })
+                val += `</ol>
               </div>
               <div class="border my-2 rounded p-2">
                 <div class="text-sm font-semibold border-b pb-2">Detail Produk</div>`;
@@ -197,7 +250,8 @@
                 <div class="text-sm font-semibold border-b pb-2">Pembayaran</div>
                 <div class="p-1 flex justify-between">
                   <div class="w-2/4 text-sm capitalize">${transaksi.data_rekening.grup}</div>
-                  <div class="w-2/4 text-sm">${transaksi.data_rekening.nama}</div>
+                  <div class="w-2/4 text-sm font-bold">${transaksi.data_rekening.nama} (${transaksi.data_rekening.nomor} a.n ${transaksi.data_rekening.atas_nama})
+                  </div>
                 </div>
                 <div class="p-1 flex justify-between">
                   <div class="w-2/4 text-sm capitalize">Total Harga</div>

@@ -6,7 +6,7 @@
 
 <div class="lg:flex lg:justify-center">  
   <div class="lg:w-10/12 2xl:w-4/5">
-    <div class="">
+    <div>
       <div class="swiper gambarSlider ">
         <div class="swiper-wrapper">
           @foreach ($slide as $item)
@@ -21,7 +21,7 @@
     <div>
       <div class="text-center font-bold mt-5 py-3 text-base text-slate-500 bg-white border-b">PROMO</div>
       <div class="bg-white">
-        <div class="grid grid-cols-3 lg:grid-cols-6">
+        <div class="grid grid-cols-2 lg:grid-cols-6 gap-2 lg:m-0">
           @foreach ($promo->dataPromoProduk as $item)
             <a href="{{ route('produk.show', [$item->dataProduk->id]) }}" class="p-1">
               <div>
@@ -120,7 +120,7 @@
           <img src="{{ url(env('APP_URL_ADMIN') . '/img_cara_pesan_gambar/' . $cara_pesan_gambar->gambar) }}" alt="gambar cara pesan" class="hidden lg:block lg:w-60 h-80">
         </div>
         <div class="lg:w-2/4 lg:flex lg:items-center lg:justify-center">
-          <div class="lg:w-4/5">
+          <div class="lg:w-4/5 py-2">
             @foreach ($cara_pesan as $key => $item)
               <div class="bg-slate-600 text-white m-3 p-2 rounded-sm"><p>{{ $key + 1 }}. {{ $item->nama }}</p></div>
             @endforeach          
@@ -128,6 +128,7 @@
         </div>
       </div>
     </div>
+    <div class="md:hidden w-full h-14"></div>
   </div>
 </div> 
 

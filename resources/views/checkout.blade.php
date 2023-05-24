@@ -112,38 +112,6 @@
               <input type="hidden" name="kabupaten" id="kabupaten" value="{{ Auth::user()->kabupaten }}">
               <input type="hidden" name="destination" id="destination" value="{{ Auth::user()->kecamatan }}">
               <input type="hidden" name="weight" id="weight" value="{{ $berat }}">
-              {{-- <div class="my-2">
-                <div class="flex justify-center">
-                  <div class="w-full xl:w-96">
-                    <select name="kabupaten" id="kabupaten" class="border rounded w-full" data-te-select-init data-te-select-filter="true">
-                      <option value="0">Pilih Kabupaten/Kota Tujuan</option>
-                      @foreach ($kabupaten as $item)
-                        <option value="{{ $item->id }}">{{ $item->kabupaten }}</option>
-                      @endforeach
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <div class="my-2">
-                <div class="flex justify-center">
-                  <div class="w-full xl:w-96">
-                    <select name="destination" id="destination" class="border rounded w-full" data-te-select-init data-te-select-filter="true">
-                      <option value="0">Pilih Kecamatan</option>
-                    </select>
-                  </div>
-                </div>
-              </div> --}}
-              {{-- <div class="my-2">
-                <input type="text" name="weight" id="weight" class="border rounded py-2 px-2 w-full">
-              </div> --}}
-              {{-- <div class="my-2">
-                <select name="courier" id="courier" class="border rounded py-2 px-2 w-full">
-                  <option value="">Pilih Ekspedisi</option>
-                  <option value="jne">JNE</option>
-                  <option value="tiki">Tiki</option>
-                  <option value="pos">POS Indonesia</option>
-                </select>
-              </div> --}}
               <div class="my-2">
                 <div class="relative flex items-center justify-center h-full">
                   <div id="loading_cek_ongkir" class="hidden absolute">
@@ -170,7 +138,7 @@
         </div>
         
         {{-- rekening --}}
-        <div class="ml-3 mr-3 lg:mr-0 my-2 lg:w-2/4 bg-white rounded border p-3">
+        <div class="ml-3 mr-3 lg:mr-0 my-2 lg:w-2/4 bg-white h-56 rounded border p-3">
           {{-- data hidden --}}
           <input type="hidden" id="total_rekening" value="{{ count($rekening) }}">
           <input type="hidden" id="total_rekening_bank" value="{{ count($rekening_bank) }}">

@@ -8,7 +8,7 @@
     <span class="text-xs">Transaksi</span>
   </a>
   @auth
-    <a href="#" class="flex flex-col text-center w-full">
+    <a href="https://api.whatsapp.com/send/?phone=6285726269500&text=Assalamu%27alaikum+&app_absent=0" class="flex flex-col text-center w-full">
       <i class="fa fa-comment-dots"></i>
       <span class="text-xs">Chat</span>
     </a>

@@ -20,14 +20,8 @@ prevent back history
 
 request update
 - hapus dark mode
-- mobile version
-
-
-
-
------------------------ pertanyaan -----------------
-* untuk ukuran banner atau spanduk ada standar ukurannya atau tidak?
-* untuk ukurannya mau di tentukan di produk langsung atau custom?
-* produk yg sama ketika diinput lagi akan menambah qty atau dihitung produk yg berbeda?
-* logo pembayaran dan pengiriman perlu dibuat sendiri atau gak?
-* wilayah mau pakai raja ongkir atau gak, raja ongkir yg free belum sampai kecamatan
+- mobile version (notif)
+- title page disesuaikan
+- cek file layouts ada yg perlu dihapus kayanya
+- tombol upload desain tambah loading
+- setiap ajax tambah error handling

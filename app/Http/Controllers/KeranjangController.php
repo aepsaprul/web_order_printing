@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\File;
 
 class KeranjangController extends Controller
 {
@@ -145,6 +146,10 @@ class KeranjangController extends Controller
 
     $keranjang_template = KeranjangTemplate::where('keranjang_id', $request->id);
     $keranjang_template->delete();
+
+    if (file_exists("img_desain/" . $keranjang->gambar)) {
+      File::delete("img_desain/" . $keranjang->gambar);
+    }
 
     $keranjang->delete();
 

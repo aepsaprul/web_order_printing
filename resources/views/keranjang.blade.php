@@ -194,7 +194,7 @@
                 <p class="text-sm px-2 mt-4 text-slate-600">*Jika ukuran file lebih dari 10Mb, silahkan upload file di dropbox / google drive dan masukkkan link file anda <a href="#" id="btn_disini" class="text-sky-600">disini</a>.</p>
               </div>
               <div class="flex justify-center mt-3">
-                <div class="w-full relative flex items-center justify-center">
+                <!-- <div class="w-full relative flex items-center justify-center">
                   <div id="loading_kirim" class="hidden absolute">
                     <div class="flex items-center">
                       <div class="flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-tr from-indigo-500 to-slate-100 animate-spin mr-3">
@@ -210,6 +210,16 @@
                     data-te-ripple-color="light">
                     <i class="fa fa-paper-plane"></i> Kirim
                   </button>
+                </div> -->
+                <div class="relative flex items-center justify-center w-2/4 h-full">
+                  <div id="loading_kirim" class="hidden absolute">
+                    <div class="flex items-center justify-center">
+                      <div class="flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-tr from-sky-500 to-slate-100 animate-spin">
+                        <div class="h-2 w-2 rounded-full bg-white"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <button type="button" class="btn-kirim-upload bg-sky-500 border text-center text-white w-full h-full px-1 py-3 lg:h-10 rounded-md font-bold">Kirim</button>
                 </div>
               </div>
             </form>
@@ -223,7 +233,7 @@
                     <input type="text" name="link" id="link" class="w-60 border p-2" placeholder="Masukkan Link">
                   </div>
                   <div class="flex justify-center mt-3">
-                    <div class="w-full relative flex items-center justify-center">
+                    <!-- <div class="w-full relative flex items-center justify-center">
                       <div id="loading_kirim" class="hidden absolute">
                         <div class="flex items-center">
                           <div class="flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-tr from-indigo-500 to-slate-100 animate-spin mr-3">
@@ -239,6 +249,16 @@
                         data-te-ripple-color="light">
                         <i class="fa fa-paper-plane"></i> Kirim
                       </button>
+                    </div> -->
+                    <div class="relative flex items-center justify-center w-2/4 h-full">
+                      <div id="loading_link" class="hidden absolute">
+                        <div class="flex items-center justify-center">
+                          <div class="flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-tr from-sky-500 to-slate-100 animate-spin">
+                            <div class="h-2 w-2 rounded-full bg-white"></div>
+                          </div>
+                        </div>
+                      </div>
+                      <button type="button" class="btn-kirim-link bg-sky-500 border text-center text-white w-full h-full px-1 py-3 lg:h-10 rounded-md font-bold">Kirim</button>
                     </div>
                   </div>
                 </div>
@@ -539,7 +559,6 @@
     // btn kirim upload
     $(document).on('click', '.btn-kirim-upload', function (e) {
       e.preventDefault();
-      console.log('tes')
       let formData = new FormData($('#form_upload')[0]);
 
       $.ajax({
@@ -548,6 +567,10 @@
         data: formData,
         contentType: false,
         processData: false,
+        beforeSend: function () {
+          $('#loading_kirim').removeClass('hidden');
+          $('.btn-kirim-upload').removeClass('bg-sky-500');
+        },
         success: function (response) {
           window.location.reload();
         }
@@ -565,6 +588,10 @@
         data: formData,
         contentType: false,
         processData: false,
+        beforeSend: function () {
+          $('#loading_link').removeClass('hidden');
+          $('.btn-kirim-link').removeClass('bg-sky-500');
+        },
         success: function (response) {
           window.location.reload();
         }
