@@ -20,4 +20,17 @@ class NotifController extends Controller
       'notif' => $notif
     ]);
   }
+  public function tandai()
+  {
+    $notif = Notif::where('customer_id', Auth::user()->id)->whereNull('status')->get();
+    foreach ($notif as $key => $item) {
+      $notif_ = Notif::find($item->id);
+      $notif_->status = "read";
+      $notif_->save();
+    }
+
+    return response()->json([
+      'status' => 200
+    ]);
+  }
 }

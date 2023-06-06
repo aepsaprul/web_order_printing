@@ -203,7 +203,7 @@
           <span>Loading. . .</span>
         </div>
       </div>
-      <button class="btn-beli w-full m-3 p-2 rounded border-2 border-sky-600 font-bold text-sm">Beli</button>
+      <button class="btn-beli w-full m-3 p-2 rounded border border-sky-500 ring-offset-1 ring-1 ring-sky-500 font-bold text-sm">Beli</button>
     </div>
     <div class="w-full relative flex items-center justify-center">
       <div id="loading_keranjang_sm" class="hidden absolute">
@@ -214,9 +214,8 @@
           <span class="text-white">Loading. . .</span>
         </div>
       </div>
-      <button class="btn-keranjang w-full bg-sky-600 m-3 p-2 rounded text-white font-bold text-sm"><i class="fa fa-shopping-cart"></i> Keranjang</button>
+      <button class="btn-keranjang w-full bg-sky-600 ring-offset-1 ring-1 ring-sky-500 m-3 p-2 rounded text-white font-bold text-sm"><i class="fa fa-shopping-cart"></i> Keranjang</button>
     </div>
-    {{-- <button class="btn-keranjang w-full bg-sky-600 m-3 p-1 rounded text-white font-bold"><i class="fa fa-shopping-cart"></i> Keranjang</button> --}}
   </div>
 </form>
 

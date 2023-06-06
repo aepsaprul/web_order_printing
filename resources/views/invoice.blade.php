@@ -52,7 +52,7 @@
       </div>
       <div>
         <div class="mx-3 flex justify-center">
-          <button id="btn_ok" class="bg-sky-600 text-white font-bold w-2/4 mt-4 py-2 rounded border">OK</button>
+          <button id="btn_ok" class="bg-sky-600 text-white font-bold w-2/4 mt-4 py-2 rounded border ring-offset-1 ring-1 ring-sky-500">OK</button>
         </div>
       </div>
     </div>

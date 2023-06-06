@@ -17,7 +17,7 @@ class HomeController extends Controller
   {
     $slide = Slide::get();
     $kategori = Kategori::get();
-    $produk = Produk::orderBy('id', 'desc')->get();
+    $produk = Produk::where('tampil', 'y')->orderBy('id', 'desc')->get();
     $cara_pesan = CaraPesan::get();
     $cara_pesan_gambar = CaraPesanGambar::first();
     $promo = Promo::where('aktif', 'y')->first();

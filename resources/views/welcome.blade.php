@@ -20,42 +20,49 @@
     @if ($promo)
     <div>
       <div class="text-center font-bold mt-5 py-3 text-base text-slate-500 bg-white border-b">PROMO</div>
-      <div class="bg-white">
-        <div class="grid grid-cols-2 lg:grid-cols-6 gap-2 lg:m-0">
-          @foreach ($promo->dataPromoProduk as $item)
-            <a href="{{ route('produk.show', [$item->dataProduk->id]) }}" class="p-1">
-              <div>
-                <img src="{{ url(env('APP_URL_ADMIN') . '/img_produk/' . $item->dataProduk->gambar) }}" alt="gambar" class="w-full">
-              </div>
-              <div class="text-sm text-center">{{ $item->dataProduk->nama }}</div>
-              <div class="text-sm font-semibold flex justify-between items-center">
+      <div>
+        <ul id="promo-list" class="grid grid-cols-2 lg:grid-cols-6 gap-2 lg:m-0">
+          @foreach ($promo->dataPromoProduk as $item)          
+            <li class="promo-li bg-white">
+              <a href="{{ route('produk.show', [$item->dataProduk->id]) }}">
                 <div>
-                  @if ($item->dataPromo->satuan == "persen")
-                    @php
-                      $diskon = $item->dataProduk->harga * ($item->dataPromo->diskon / 100);
-                    @endphp
-                    Rp. @currency($item->dataProduk->harga - $diskon)
-                  @else
-                    Rp. @currency($item->dataProduk->harga - $item->dataPromo->diskon)
-                  @endif
+                  <img src="{{ url(env('APP_URL_ADMIN') . '/img_produk/' . $item->dataProduk->gambar) }}" alt="gambar" class="w-full">
                 </div>
-                <div>
-                  <div class="line-through text-xs">Rp @currency($item->dataProduk->harga)</div>
+                <div class="text-sm text-center">{{ $item->dataProduk->nama }}</div>
+                <div class="m-2">
+                  <div class="text-sm font-semibold flex items-center">
+                    <div class="bg-red-500 text-center mr-3">
+                      <span class="text-md font-semibold text-white p-1 rounded"> 
+                        @if ($item->dataPromo->satuan == "persen")
+                          {{ $item->dataPromo->diskon }} %</span>
+                        @else
+                          @currency($item->dataPromo->diskon)</span>  
+                        @endif
+                    </div>
+                    <div>
+                      <div class="line-through text-xs">Rp @currency($item->dataProduk->harga)</div>
+                    </div>
+                  </div>
+                  <div class="mt-2">
+                    <div class="font-bold text-emerald-900">
+                      @if ($item->dataPromo->satuan == "persen")
+                        @php
+                          $diskon = $item->dataProduk->harga * ($item->dataPromo->diskon / 100);
+                        @endphp
+                        Rp. @currency($item->dataProduk->harga - $diskon)
+                      @else
+                        Rp. @currency($item->dataProduk->harga - $item->dataPromo->diskon)
+                      @endif
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <div class="flex items-center">
-                <div class="bg-red-500 w-full text-center">
-                  <span class="text-md font-semibold text-white p-1 rounded">Diskon 
-                    @if ($item->dataPromo->satuan == "persen")
-                      {{ $item->dataPromo->diskon }} %</span>
-                    @else
-                      @currency($item->dataPromo->diskon)</span>  
-                    @endif
-                </div>
-              </div>
-            </a>
+              </a>
+            </li>
           @endforeach 
-        </div>
+        </ul>
+        <nav class="promo-pagination-container my-3">  
+          <div id="promo-pagination-numbers" class="text-center"></div>
+        </nav>
       </div>
     </div>           
     @endif
@@ -87,7 +94,7 @@
                   <img src="{{ url(env('APP_URL_ADMIN') . '/img_produk/' . $item->gambar) }}" alt="gambar" class="w-full">
                 </div>
                 <div class="text-sm text-center">{{ $item->nama }}</div>
-                <div class="text-sm text-center font-semibold">
+                <div class="text-sm font-semibold text-emerald-900 m-2">
                   <span>Rp</span> 
                   <span class="text-lg">
                     @if (in_array($item->id, $promo_arr))
@@ -153,13 +160,51 @@
   });
 
   // pagination
+  const promoPaginationNumbers = document.getElementById('promo-pagination-numbers');
+  const promoList = document.getElementById('promo-list');
+  const promoListItems = promoList.querySelectorAll('.promo-li');
+
   const paginationNumbers = document.getElementById("pagination-numbers");
   const paginatedList = document.getElementById("paginated-list");
   const listItems = paginatedList.querySelectorAll("li");
 
-  const paginationLimit = 12;
+  /* Storing user's device details in a variable*/
+  let details = navigator.userAgent;
+  
+  /* Creating a regular expression
+  containing some mobile devices keywords
+  to search it in details string*/
+  let regexp = /android|iphone|kindle|ipad/i;
+  
+  /* Using test() method to search regexp in details
+  it returns boolean value*/
+  let isMobileDevice = regexp.test(details);
+  
+  let promoPaginationLimit;
+  let paginationLimit;
+  if (isMobileDevice) {
+    promoPaginationLimit = 10;
+    paginationLimit = 10;
+  } else {
+    promoPaginationLimit = 12;
+    paginationLimit = 18;
+  }
+  
+  const promoPageCount = Math.ceil(promoListItems.length / promoPaginationLimit);
   const pageCount = Math.ceil(listItems.length / paginationLimit);
+
+  let promoCurrentPage = 1;
   let currentPage = 1;
+
+  const promoAppendPageNumber = (index) => {
+    const pageNumber = document.createElement("button");
+    pageNumber.className = "promo-pagination-number px-3 m-0.5 border border-slate-600";
+    pageNumber.innerHTML = index;
+    pageNumber.setAttribute("promo-page-index", index);
+    pageNumber.setAttribute("aria-label", "Page " + index);
+
+    promoPaginationNumbers.appendChild(pageNumber);
+  };
 
   const appendPageNumber = (index) => {
     const pageNumber = document.createElement("button");
@@ -171,10 +216,26 @@
     paginationNumbers.appendChild(pageNumber);
   };
 
+  const promoGetPaginationNumbers = () => {
+    for (let i = 1; i <= promoPageCount; i++) {
+      promoAppendPageNumber(i);
+    }
+  };
+
   const getPaginationNumbers = () => {
     for (let i = 1; i <= pageCount; i++) {
       appendPageNumber(i);
     }
+  };
+
+  const promoHandleActivePageNumber = () => {
+    document.querySelectorAll(".promo-pagination-number").forEach((button) => {
+      button.classList.remove("active", "bg-yellow-400");
+      const pageIndex = Number(button.getAttribute("promo-page-index"));
+      if (pageIndex == promoCurrentPage) {
+        button.classList.add("active", "bg-yellow-400");
+      }
+    });
   };
 
   const handleActivePageNumber = () => {
@@ -183,6 +244,21 @@
       const pageIndex = Number(button.getAttribute("page-index"));
       if (pageIndex == currentPage) {
         button.classList.add("active", "bg-yellow-400");
+      }
+    });
+  };
+
+  const promoSetCurrentPage = (pageNum) => {
+    promoCurrentPage = pageNum;
+    promoHandleActivePageNumber();
+
+    const prevRange = (pageNum - 1) * promoPaginationLimit;
+    const currRange = pageNum * promoPaginationLimit;
+
+    promoListItems.forEach((item, index) => {
+      item.classList.add("hidden");
+      if (index >= prevRange && index < currRange) {
+        item.classList.remove("hidden");
       }
     });
   };
@@ -203,8 +279,20 @@
   };
 
   window.addEventListener("load", () => {
+    promoGetPaginationNumbers();
     getPaginationNumbers();
+    promoSetCurrentPage(1);
     setCurrentPage(1);
+
+    document.querySelectorAll(".promo-pagination-number").forEach((button) => {
+      const promoPageIndex = Number(button.getAttribute("promo-page-index"));
+
+      if (promoPageIndex) {
+        button.addEventListener("click", () => {
+          promoSetCurrentPage(promoPageIndex);
+        });
+      }
+    });
 
     document.querySelectorAll(".pagination-number").forEach((button) => {
       const pageIndex = Number(button.getAttribute("page-index"));
@@ -216,6 +304,11 @@
       }
     });
   });
+
+  const btn_page_promo = document.getElementById('promo-pagination-numbers').onclick = function() {
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+  };
 
   const btn_page = document.getElementById('pagination-numbers').onclick = function() {
     document.body.scrollTop = 0;

@@ -73,7 +73,7 @@
       <div class="ml-10 flex items-center">
         <a href="{{ url('/') }}" class="font-semibold mx-2">Home</a>
         <a href="{{ route('produk') }}" class="font-semibold mx-2">Produk</a>
-        <a href="#" class="font-semibold mx-2">Cara Pesan</a>
+        <!-- <a href="#" class="font-semibold mx-2">Cara Pesan</a> -->
         <a href="{{ route('konfirmasi_bayar') }}" class="font-semibold mx-2">Konfirmasi Bayar</a>
       </div>
     </div>
@@ -102,7 +102,7 @@
           </div>
           <div class=" 
             @if ($boot_notif)
-              {{ count($boot_notif) > 0 ? "" : "hidden" }}
+              {{ count($boot_notif) > 0 ? '' : 'hidden' }}
             @else
               hidden
             @endif
@@ -212,6 +212,11 @@
               </a>
               `;
             })
+            val += `
+              <div class="text-center my-2">
+                <a href="#" class="notif-tandai-sudah-dibaca text-sky-500">Tandai sudah dibaca</a>
+              </div>
+            `;
             $('.notif-list').html(val);
             $('.notif-list').removeClass('hidden');
           }
@@ -222,6 +227,16 @@
       setTimeout(() => {
         $('.notif-list').addClass('hidden');        
       }, 200);
+    })
+    
+    $('body').on('click', '.notif-tandai-sudah-dibaca', function (e) {
+      e.preventDefault();
+      $.ajax({
+        url: "{{ URL::route('notif.tandai') }}",
+        success: function (response) {
+          window.location.reload();
+        }
+      })
     })
   })
 </script>

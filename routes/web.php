@@ -80,6 +80,11 @@ Route::middleware(['auth'])->group(function() {
   Route::get('akun/ubahPassword', [AkunController::class, 'ubahPassword'])->name('akun.ubahPassword');
   Route::post('akun/ubahPasswordStore', [AkunController::class, 'ubahPasswordStore'])->name('akun.ubahPasswordStore');
 
+  // member
+  Route::get('akun/member/form', [AkunController::class, 'memberForm'])->name('akun.memberForm');
+  Route::post('akun/member/store', [AkunController::class, 'memberStore'])->name('akun.memberStore');
+  Route::get('akun/member/bayar', [AkunController::class, 'memberBayar'])->name('akun.memberBayar');
+
   // akun mobile
   Route::get('mAkun', [AkunController::class, 'mAkun'])->name('mAkun');
   Route::get('mAkun/transaksi', [AkunController::class, 'mTransaksi'])->name('mTransaksi');
@@ -97,5 +102,6 @@ Route::middleware(['auth'])->group(function() {
   // notif
   Route::get('notif', [NotifController::class, 'index'])->name('notif');
   Route::get('notif/list', [NotifController::class, 'list'])->name('notif.list');
+  Route::get('notif/tandai', [NotifController::class, 'tandai'])->name('notif.tandai');
 });
 

@@ -69,7 +69,7 @@
           <div class="flex justify-between items-center">
             <div class="text-rose-500 italic text-sm font-bold">
               @if ($item->status == 1)
-                *Setelah membayar, segera konfirmasi melalui menu Konfirmasi Bayar                
+                *Setelah membayar, segera konfirmasi melalui menu Konfirmasi Bayar / <a href="{{ route('konfirmasi_bayar') }}" class="bg-sky-500 ml-2 rounded-full py-1 px-3 text-white ring-offset-1 ring-1 ring-sky-500">Klik Disini</a>               
               @endif
             </div>
             <div>

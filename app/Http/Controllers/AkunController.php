@@ -10,6 +10,8 @@ use App\Models\WilKecamatan;
 use App\Models\WilProvinsi;
 use App\Models\Ulasan;
 use App\Models\Produk;
+use App\Models\Notif;
+use App\Models\Rekening;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -256,5 +258,55 @@ class AkunController extends Controller
     ]);
 
     return back()->with("status", "Password berhasil diperbaharui");
+  }
+
+  // member
+  public function memberForm()
+  {
+    $customer = Customer::find(Auth::user()->id);
+
+    return view('memberForm', ['customer' => $customer]);
+  }
+  public function memberStore(Request $request)
+  {
+    $customer = Customer::find(Auth::user()->id);
+    
+    if ($request->member_title == "baru") {
+      $customer->nik = $request->nik;
+      $customer->email = $request->email;
+    }
+
+    $customer->nama_lengkap = $request->nama;
+    $customer->telepon = $request->telepon;    
+    $customer->segmen = "proses_" . $request->member_title;
+    $customer->save();
+
+    // notif
+    $notif = new Notif;
+    $notif->tipe = "member_" . $request->member_title;
+    $notif->link = "akun";
+    $notif->customer_id = Auth::user()->id;
+
+    if ($request->member_title == "baru") {
+      $notif->deskripsi = "Segera lakukan pembayaran sejumlah Rp 15.000 untuk jadi member";
+    } else {
+      $notif->deskripsi = "Data Anda sedang di cek oleh Admin";
+    }
+    
+    $notif->save();
+
+    $notif_admin = new Notif;
+    $notif_admin->tipe = "member";
+    $notif_admin->deskripsi = $request->nama . " daftar member " . $request->member_title;
+    $notif_admin->link = "customer";
+    $notif_admin->save();
+
+    return redirect()->route('akun.memberBayar');
+  }
+  public function memberBayar()
+  {
+    $rekening = Rekening::first();
+
+    return view('memberBayar', ['rekening' => $rekening]);
   }
 }

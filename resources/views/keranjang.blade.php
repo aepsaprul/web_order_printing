@@ -102,12 +102,38 @@
     </div>
 
     {{-- total --}}
-    <div class="w-full lg:w-2/6">
-      <div class="lg:fixed lg:w-1/4 lg:right-32 2xl:right-64">
-        <div class="bg-white w-full fixed lg:relative bottom-0 lg:shadow">
-          <div class="border-t lg:border-0 flex lg:block justify-between m-3 lg:m-0 lg:px-5 lg:py-3">
-            <div class="w-full mt-3 lg:flex lg:justify-between">
-              <div class="text-sm lg:text-lg">Total Harga</div>
+    <!-- mobile -->
+    <div class="lg:hidden">
+      <div class="fixed bottom-0 right-0 left-0 bg-white">
+        <div class="border flex justify-between px-2 pt-2 pb-4">
+          <div>
+            <div class="text-sm">Total Harga</div>
+            <div class="text-lg font-bold"><span class="text-sm">Rp</span> <span id="total_harga">@currency($keranjang_total->total_harga)</span></div>
+          </div>
+          <div class="w-1/3">
+            <div class="relative flex items-center justify-center h-full">
+              <div id="loading_beli" class="hidden absolute">
+                <div class="flex items-center justify-center">
+                  <div class="flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-tr from-sky-500 to-slate-100 animate-spin">
+                    <div class="h-2 w-2 rounded-full bg-white"></div>
+                  </div>
+                </div>
+              </div>
+              <button class="btn-beli bg-sky-300 border text-center text-white font-bold w-full h-10 rounded-md ring-offset-1 ring-1 ring-sky-500" disabled>Beli</button>
+            </div>
+            <div class="text-xs italic text-rose-700">*Upload Desain Terlebih Dahulu</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- desktop -->
+    <div class="hidden lg:block w-2/6">
+      <div class="fixed lg:w-1/4 lg:right-32 2xl:right-64">
+        <div class="bg-white w-full relative bottom-0 shadow">
+          <div class="block px-5 py-3">
+            <div class="w-full mt-3 flex justify-between">
+              <div class="text-lg">Total Harga</div>
               <div class="text-lg font-semibold"><span class="text-sm">Rp</span> <span id="total_harga">@currency($keranjang_total->total_harga)</span></div>
             </div>
             <div class="w-full mt-3">
@@ -119,7 +145,7 @@
                     </div>
                   </div>
                 </div>
-                <button id="btn_beli" class="bg-sky-300 border text-center text-white font-bold w-full h-full lg:h-10 rounded-md" disabled>Beli</button>
+                <button class="btn-beli bg-sky-300 border text-center text-white font-bold w-full h-10 rounded-md" disabled>Beli</button>
               </div>
               <div class="mt-5 text-xs italic text-rose-700">*Upload Desain Terlebih Dahulu</div>
             </div>
@@ -194,23 +220,6 @@
                 <p class="text-sm px-2 mt-4 text-slate-600">*Jika ukuran file lebih dari 10Mb, silahkan upload file di dropbox / google drive dan masukkkan link file anda <a href="#" id="btn_disini" class="text-sky-600">disini</a>.</p>
               </div>
               <div class="flex justify-center mt-3">
-                <!-- <div class="w-full relative flex items-center justify-center">
-                  <div id="loading_kirim" class="hidden absolute">
-                    <div class="flex items-center">
-                      <div class="flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-tr from-indigo-500 to-slate-100 animate-spin mr-3">
-                        <div class="h-2 w-2 rounded-full bg-white"></div>
-                      </div>
-                      <span class="text-white">Loading. . .</span>
-                    </div>
-                  </div>
-                  <button
-                    type="button"
-                    class="btn-kirim-upload bg-primary rounded my-2 px-5 py-2 text-white "
-                    data-te-ripple-init
-                    data-te-ripple-color="light">
-                    <i class="fa fa-paper-plane"></i> Kirim
-                  </button>
-                </div> -->
                 <div class="relative flex items-center justify-center w-2/4 h-full">
                   <div id="loading_kirim" class="hidden absolute">
                     <div class="flex items-center justify-center">
@@ -233,23 +242,6 @@
                     <input type="text" name="link" id="link" class="w-60 border p-2" placeholder="Masukkan Link">
                   </div>
                   <div class="flex justify-center mt-3">
-                    <!-- <div class="w-full relative flex items-center justify-center">
-                      <div id="loading_kirim" class="hidden absolute">
-                        <div class="flex items-center">
-                          <div class="flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-tr from-indigo-500 to-slate-100 animate-spin mr-3">
-                            <div class="h-2 w-2 rounded-full bg-white"></div>
-                          </div>
-                          <span class="text-white">Loading. . .</span>
-                        </div>
-                      </div>
-                      <button
-                        type="button"
-                        class="btn-kirim-link bg-primary rounded my-2 px-5 py-2 text-white "
-                        data-te-ripple-init
-                        data-te-ripple-color="light">
-                        <i class="fa fa-paper-plane"></i> Kirim
-                      </button>
-                    </div> -->
                     <div class="relative flex items-center justify-center w-2/4 h-full">
                       <div id="loading_link" class="hidden absolute">
                         <div class="flex items-center justify-center">
@@ -497,7 +489,7 @@
     const upload_cek = upload_status.includes('belum');
     if (upload_status_jml.length > 0) {
       if (!upload_cek) {
-        $('#btn_beli').prop('disabled', false).removeClass('bg-sky-300').addClass('bg-sky-500');
+        $('.btn-beli').prop('disabled', false).removeClass('bg-sky-300').addClass('bg-sky-500');
       }      
     }
     
@@ -634,7 +626,7 @@
     $('#btn-ulasan').addClass('bg-slate-100');
 
     // btn beli
-    $('#btn_beli').on('click', function (e) {
+    $('.btn-beli').on('click', function (e) {
       e.preventDefault();
 
       $.ajax({
@@ -642,7 +634,7 @@
         type: "get",
         beforeSend: function () {
           $('#loading_beli').removeClass('hidden');
-          $('#btn_beli').removeClass('bg-sky-500');
+          $('.btn-beli').removeClass('bg-sky-500');
         },
         success: function (response) {
           setTimeout(() => {

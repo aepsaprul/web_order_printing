@@ -375,7 +375,7 @@ class KeranjangController extends Controller
     $notif = new Notif;
     $notif->tipe = "pembayaran";
     $notif->customer_id = $request->customer_id;
-    $notif->deskripsi = "Segera lakukan pembayaran, lalu konfirmasi dengan klik ";
+    $notif->deskripsi = "Segera lakukan pembayaran, lalu konfirmasi dengan klik disini";
     $notif->link = "konfirmasi_bayar";
     $notif->save();
 

@@ -6,28 +6,14 @@
 
 <div class="md:hidden pb-10">
   <div class="m-3">
-    <div class="flex justify-between">
-      <div class="py-2 w-full border bg-white rounded-lg flex justify-center items-center">
-        <div class="w-32 h-32 border rounded-full flex justify-center items-center bg-slate-100 p-2">
-          @if (Auth::user()->gambar)
-            <img src="{{ asset('img_customer/' . Auth::user()->gambar) }}" alt="img" class="object-cover rounded-full border">
-          @else
-            <img src="{{ asset('assets/1665988705.jpg') }}" id="preview_image" alt="img" class="object-cover rounded-full border">
-          @endif
-        </div>
+    <div class="py-2 w-full border bg-white rounded-lg flex justify-center items-center">
+      <div class="w-32 h-32 border rounded-full flex justify-center items-center bg-slate-100 p-2">
+        @if (Auth::user()->gambar)
+          <img src="{{ asset('img_customer/' . Auth::user()->gambar) }}" alt="img" class="object-cover rounded-full border">
+        @else
+          <img src="{{ asset('assets/1665988705.jpg') }}" id="preview_image" alt="img" class="object-cover rounded-full border">
+        @endif
       </div>
-      {{-- <div class="py-2 w-2/4 ml-3 p-2 bg-white rounded-lg border">
-        <div><span class="capitalize font-bold">{{ $customer->nama_lengkap }}</span> <span class="text-sky-600 text-sm underline">ubah</span></div>
-        <div class="text-sm my-1">{{ $customer->telepon }} <span class="text-sky-600 underline">ubah</span></div>
-        <div class="text-sm my-1">{{ $customer->email }} <span class="text-sky-600 underline">ubah</span></div>
-        <div class="mt-4">
-          @if ($customer->segmen == "member")
-          <div class="capitalize font-bold text-emerald-500">{{ Auth::user()->segmen }}</div>
-          @else
-          👉 <button class="bg-emerald-600 text-white text-sm font-semibold rounded py-1 px-3">Daftar Member</button>
-          @endif
-        </div>
-      </div> --}}
     </div>
     <div class="my-2 bg-white border rounded-lg p-2">
       <div class="flex justify-between">
@@ -57,19 +43,31 @@
         <div>{{ $customer->email }}</div>
       </div>
     </div>
-    <div class="p-1 my-5 flex justify-between">
+    <div class="p-1 my-3 flex justify-between">
       <div>
-        <a href="{{ route('mUlasan') }}" class="text-sm text-white rounded px-5 py-2 bg-sky-500">Ulasan</a>
+        <a href="{{ route('mUlasan') }}" class="text-sm text-white rounded px-5 py-2 bg-sky-500 ring-offset-2 ring-2 ring-sky-500">Ulasan</a>
       </div>
       <div>
-        <a href="{{ route('mUbahPassword') }}" class="text-sm text-white rounded px-5 py-2 bg-sky-500">Ubah Password</a>
+        <a href="{{ route('mUbahPassword') }}" class="text-sm text-white rounded px-5 py-2 bg-sky-500 ring-offset-2 ring-2 ring-sky-500">Ubah Password</a>
       </div>
       <div>
-        <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="text-sm text-white rounded px-5 py-2 bg-rose-500">Logout</a>
+        <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="text-sm text-white rounded px-5 py-2 bg-rose-500 ring-offset-2 ring-2 ring-rose-500">Logout</a>
         <form id="logout-form" action="{{ route('logout') }}" method="POST">
           @csrf
         </form>
       </div>
+    </div>
+    <hr class="border-2">
+    <div class="p-1 my-3">
+      @if (Auth::user()->segmen == "member")
+        <div>{{ Auth::user()->segmen }}</div>
+      @elseif (Auth::user()->segmen == "proses_baru" || Auth::user()->segmen == "proses_baru")
+        <div class="text-rose-500 italic text-center"><a href="{{ route('akun.memberBayar') }}" class="bg-sky-500 ml-2 rounded-full py-1 px-3 text-white ring-offset-1 ring-1 ring-sky-500">Klik Disini</a> untuk detail daftar member</div>
+      @else
+        <a href="{{ route('akun.memberForm') }}">
+          <button class="w-full text-base text-white font-bold rounded py-2 bg-emerald-500 ring-offset-2 ring-2 ring-emerald-500">Daftar Member</button>
+        </a>
+      @endif
     </div>
     <div class="bg-white border rounded-lg p-2">
       <div class="border-b">

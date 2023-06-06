@@ -7,8 +7,10 @@
   <div>
     @if (Auth::user()->segmen == "member")
       <div class="capitalize font-bold text-emerald-500 rounded-full shadow px-2"><i class="fas fa-ribbon"></i> {{ Auth::user()->segmen }}</div>
+    @elseif (Auth::user()->segmen == "proses_baru" || Auth::user()->segmen == "proses_baru")
+      <div class="capitalize font-bold text-rose-500 px-2 italic"><a href="{{ route('akun.memberBayar') }}" class="bg-sky-500 ml-2 rounded-full py-1 px-3 text-white ring-offset-1 ring-1 ring-sky-500">Klik Disini</a> untuk detail daftar member</div>
     @else
-      <button class="bg-emerald-600 text-white text-sm font-semibold rounded py-1 px-3">Daftar Member</button>
+      <a href="{{ route('akun.memberForm') }}" class="bg-emerald-600 text-white text-sm font-semibold rounded py-2 px-3">Daftar Member</a>
     @endif
   </div>
 </div>

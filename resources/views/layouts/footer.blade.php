@@ -31,11 +31,7 @@
       <div class="w-full">
         <h3 class="font-semibold py-3">Pembayaran</h3>
         <div class="grid grid-cols-6 gap-2 mb-3">
-          <div><img src="{{ asset('assets/pembayaran-bca.png') }}" alt="pembayaran" class="bg-white w-18 h-5 border p-0.5"></div>
           <div><img src="{{ asset('assets/pembayaran-mandiri.png') }}" alt="pembayaran" class="bg-white w-18 h-5 border p-0.5"></div>
-          <div><img src="{{ asset('assets/pembayaran-bsi.png') }}" alt="pembayaran" class="bg-white w-18 h-5 border p-0.5"></div>
-          <div><img src="{{ asset('assets/pembayaran-bni.png') }}" alt="pembayaran" class="bg-white w-18 h-5 border p-0.5"></div>
-          <div><img src="{{ asset('assets/pembayaran-bri.png') }}" alt="pembayaran" class="bg-white w-18 h-5 border p-0.5"></div>
         </div>
         <h3 class="font-semibold py-3">Pengiriman</h3>
         <div class="grid grid-cols-6">

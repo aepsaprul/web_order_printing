@@ -121,7 +121,7 @@
                       </div>
                     </div>
                   </div>
-                  <button id="btn_cek_ongkir" class="bg-sky-500 border rounded py-2 px-4 text-white texk-sm font-bold">Cek Ongkir</button>
+                  <button id="btn_cek_ongkir" class="bg-sky-500 border rounded py-2 px-4 text-white texk-sm font-bold ring-offset-1 ring-1 ring-sky-500">Cek Ongkir</button>
                 </div>
               </div>
             </div>
@@ -170,7 +170,7 @@
               </div>
             </div>
             <!-- e-wallet -->
-            {{-- <div>
+            <!-- <div>
               <p class="text-sm py-2">Wallet</p>
               <div class="float-left">
               @foreach ($rekening_ewallet as $key => $item)
@@ -189,34 +189,74 @@
                 </div>
                 @endforeach
               </div>
-            </div>  --}}
+            </div> -->
           </div>
         </div>
       </div>
     </div>
 
-    {{-- total --}}
-    <div class="w-full lg:w-2/6">
-      <div class="lg:fixed lg:w-1/4 lg:right-32 2xl:right-60">
-        <div class="bg-white w-full fixed lg:relative bottom-0 lg:shadow">
-          <div class="mx-3 pt-3 hidden lg:block">
+    <!-- total -->
+    <!-- mobile -->
+    <div class="lg:hidden">
+      <div class="fixed bottom-0 right-0 left-0 bg-white">
+        <div class="wrap-total-detail hidden p-2">
+          <div class="flex justify-between">
+            <div class="text-slate-600">Total Harga Produk</div>
+            <div class="text-slate-600"><span class="text-sm">Rp</span> <span id="total_harga_produk" class="total-harga-produk">@currency($keranjang_total->total_harga)</span></div>
+          </div>
+          <div class="flex justify-between">
+            <div class="text-slate-600">Ongkos Kirim</div>
+            <div class="text-slate-600"><span class="text-sm">+ Rp</span> <span id="total_ongkos_kirim" class="total-ongkos-kirim">0</span></div>
+          </div>
+          <div class="flex justify-between">
+            <div class="text-slate-600">Diskon</div>
+            <div class="text-slate-600"><span class="text-sm">- Rp</span> <span class="nominal_diskon">@currency($diskon)</div>
+          </div>
+        </div>
+        <div class="border flex justify-between p-2">
+          <div>
+            <div class="label-total text-sm">Total Harga <i class="fas fa-sort-up"></i></div>
+            <div class="text-lg font-bold"><span class="text-sm">Rp</span> <span id="total_harga" class="total-harga">@currency($transaksi_total)</span></div>
+          </div>
+          <div class="w-1/3">
+            <div class="relative flex items-center justify-center h-full">
+              <div id="loading" class="hidden absolute">
+                <div class="flex items-center justify-center">
+                  <div class="flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-tr from-sky-500 to-slate-100 animate-spin">
+                    <div class="h-2 w-2 rounded-full bg-white"></div>
+                  </div>
+                </div>
+              </div>
+              <button id="btn_bayar" disabled class="bg-sky-300 border text-center text-white font-bold w-full h-10 rounded-md ring-offset-1 ring-1 ring-sky-500">Bayar</button>
+            </div>
+          </div>
+        </div>
+        <div id="error_cek_alamat"></div>
+      </div>
+    </div>
+
+    <!-- desktop -->
+    <div class="hidden lg:block lg:w-2/6">
+      <div class="fixed w-1/4 right-32 2xl:right-60">
+        <div class="bg-white relative shadow">
+          <div class="mx-3 pt-3">
             <div class="flex justify-between">
               <div class="text-slate-600">Total Harga</div>
-              <div class="text-slate-600"><span class="text-sm">Rp</span> <span id="total_harga_produk">@currency($keranjang_total->total_harga)</span></div>
+              <div class="text-slate-600"><span class="text-sm">Rp</span> <span id="total_harga_produk" class="total-harga-produk">@currency($keranjang_total->total_harga)</span></div>
             </div>
             <div class="flex justify-between">
               <div class="text-slate-600">Ongkos Kirim</div>
-              <div class="text-slate-600"><span class="text-sm">+ Rp</span> <span id="total_ongkos_kirim">0</span></div>
+              <div class="text-slate-600"><span class="text-sm">+ Rp</span> <span id="total_ongkos_kirim" class="total-ongkos-kirim">0</span></div>
             </div>
             <div class="flex justify-between">
               <div class="text-slate-600">Diskon</div>
               <div class="text-slate-600"><span class="text-sm">- Rp</span> <span class="nominal_diskon">@currency($diskon)</div>
             </div>
           </div>
-          <div class="border-t lg:border-0 flex lg:block justify-between mx-3 lg:mx-0 lg:px-3 lg:py-3">
+          <div class="mx-3 py-3">
             <div class="w-full mt-2 lg:flex lg:justify-between">
               <div class="text-sm lg:text-lg lg:font-semibold">Total Harga</div>
-              <div class="text-lg font-semibold"><span class="text-sm">Rp</span> <span id="total_harga">@currency($transaksi_total)</span></div>
+              <div class="text-lg font-semibold"><span class="text-sm">Rp</span> <span id="total_harga" class="total-harga">@currency($transaksi_total)</span></div>
             </div>
             <div class="w-full mt-3">
               <div class="relative flex items-center justify-center h-full">
@@ -471,165 +511,172 @@
 
     $('#btn_cek_ongkir').on('click', function (e) {
       e.preventDefault();
-      const origin = $('#origin').val();
-      const destination = $('#destination').val();
-      const weight = $('#weight').val();
-      const courier = $('#courier').val();
 
-      let formData = {
-        origin: origin,
-        destination: destination,
-        weight: weight,
-        courier: courier
-      }
+      const cek_alamat = Number($('#cek_alamat').val());
 
-      $.ajax({
-        url: "{{ URL::route('keranjang.ongkir') }}",
-        type: "post",
-        data: formData,
-        beforeSend: function () {
-          $('#loading_cek_ongkir').removeClass('hidden');
-          $('#btn_cek_ongkir').removeClass('bg-sky-500');
-        },
-        success: function (response) {
-          console.log(response)
-          const jne = response.jne.rajaongkir.results[0];
-          const jne_costs = jne.costs[0];
-          const tiki = response.tiki.rajaongkir.results[0];
-          const tiki_costs = tiki.costs[0];
-          const pos = response.pos.rajaongkir.results[0];
-          const pos_costs = pos.costs[0];
-          const jnt = response.jnt.rajaongkir.results[0];
-          const jnt_costs = jnt.costs[0];
-          const sicepat = response.sicepat.rajaongkir.results[0];
-          const sicepat_costs = sicepat.costs[0];
-          setTimeout(() => {
-            $('#loading_cek_ongkir').addClass('hidden');
-            $('#btn_cek_ongkir').addClass('bg-sky-500');
-          }, 500);
+      if (cek_alamat == 0) {
+        alert('Alamat Pengiriman Harus Diisi.');
+      } else {
+        const origin = $('#origin').val();
+        const destination = $('#destination').val();
+        const weight = $('#weight').val();
+        const courier = $('#courier').val();
 
-          // jne
-          let val_jne = `
-            <div class="border-b py-2">
-              <div class="text-sm">${jne.name}</div>
-            </div>
-            <div class="my-2">
-              <div class="text-sm">
-                <label for="layanan_pengiriman_" class="flex justify-between">
-                  <div><input type="radio" name="layanan_pengiriman" id="layanan_pengiriman_" class="mr-3" `;
-                    $.each(jne_costs.cost, function(index_cost, item_cost) {
-                      val_jne += `value="${item_cost.value}"`;
-                    })
-                    val_jne += `>${jne_costs.service} (${jne_costs.description})</div>
-                  <div><span class="text-xs">Rp</span> `;                        
-                    $.each(jne_costs.cost, function(index_cost, item_cost) {
-                      val_jne += `${afRupiah(item_cost.value)}`;
-                    })
-                    val_jne += `</div>
-                </label>
-              </div>                
-            `;
-            val_jne += `</div>
-          `;
-          $('.jne').html(val_jne)
-
-          // tiki
-          let val_tiki = `
-            <div class="border-b py-2">
-              <div class="text-sm">${tiki.name}</div>
-            </div>
-            <div class="my-2">
-              <div class="text-sm">
-                <label for="layanan_pengiriman_${tiki.code}" class="flex justify-between">
-                  <div><input type="radio" name="layanan_pengiriman" id="layanan_pengiriman_${tiki.code}" class="mr-3" `;
-                    $.each(tiki_costs.cost, function(index_cost, item_cost) {
-                      val_tiki += `value="${item_cost.value}"`;
-                    })
-                    val_tiki += `>${tiki_costs.service} (${tiki_costs.description})</div>
-                  <div><span class="text-xs">Rp</span> `;                        
-                    $.each(tiki_costs.cost, function(index_cost, item_cost) {
-                      val_tiki += `${afRupiah(item_cost.value)}`;
-                    })
-                    val_tiki += `</div>
-                </label>
-              </div>`;
-            val_tiki += `</div>
-          `;
-          $('.tiki').html(val_tiki)
-
-          // pos
-          let val_pos = `
-            <div class="border-b py-2">
-              <div class="text-sm">${pos.name}</div>
-            </div>
-            <div class="my-2">
-              <div class="text-sm">
-                <label for="layanan_pengiriman_${pos.code}" class="flex justify-between">
-                  <div><input type="radio" name="layanan_pengiriman" id="layanan_pengiriman_${pos.code}" class="mr-3" `;
-                    $.each(pos_costs.cost, function(index_cost, item_cost) {
-                      val_pos += `value="${item_cost.value}"`;
-                    })
-                    val_pos += `>${pos_costs.service} (${pos_costs.description})</div>
-                  <div><span class="text-xs">Rp</span> `;                        
-                    $.each(pos_costs.cost, function(index_cost, item_cost) {
-                      val_pos += `${afRupiah(item_cost.value)}`;
-                    })
-                    val_pos += `</div>
-                </label>
-              </div>`;
-            val_pos += `</div>
-          `;
-          $('.pos').html(val_pos)
-
-          // jnt
-          let val_jnt = `
-            <div class="border-b py-2">
-              <div class="text-sm">${jnt.name}</div>
-            </div>
-            <div class="my-2">
-              <div class="text-sm">
-                <label for="layanan_pengiriman_${jnt.code}" class="flex justify-between">
-                  <div><input type="radio" name="layanan_pengiriman" id="layanan_pengiriman_${jnt.code}" class="mr-3" `;
-                    $.each(jnt_costs.cost, function(index_cost, item_cost) {
-                      val_jnt += `value="${item_cost.value}"`;
-                    })
-                    val_jnt += `>${jnt_costs.service} (${jnt_costs.description})</div>
-                  <div><span class="text-xs">Rp</span> `;                        
-                    $.each(jnt_costs.cost, function(index_cost, item_cost) {
-                      val_jnt += `${afRupiah(item_cost.value)}`;
-                    })
-                    val_jnt += `</div>
-                </label>
-              </div>`;
-            val_jnt += `</div>
-          `;
-          $('.jnt').html(val_jnt)
-
-          // sicepat
-          let val_sicepat = `
-            <div class="border-b py-2">
-              <div class="text-sm">${sicepat.name}</div>
-            </div>
-            <div class="my-2">
-              <div class="text-sm">
-                <label for="layanan_pengiriman_${sicepat.code}" class="flex justify-between">
-                  <div><input type="radio" name="layanan_pengiriman" id="layanan_pengiriman_${sicepat.code}" class="mr-3" `;
-                    $.each(sicepat_costs.cost, function(index_cost, item_cost) {
-                      val_sicepat += `value="${item_cost.value}"`;
-                    })
-                    val_sicepat += `>${sicepat_costs.service} (${sicepat_costs.description})</div>
-                  <div><span class="text-xs">Rp</span> `;                        
-                    $.each(sicepat_costs.cost, function(index_cost, item_cost) {
-                      val_sicepat += `${afRupiah(item_cost.value)}`;
-                    })
-                    val_sicepat += `</div>
-                </label>
-              </div>`;
-            val_sicepat += `</div>
-          `;
-          $('.sicepat').html(val_sicepat)
+        let formData = {
+          origin: origin,
+          destination: destination,
+          weight: weight,
+          courier: courier
         }
-      })
+
+        $.ajax({
+          url: "{{ URL::route('keranjang.ongkir') }}",
+          type: "post",
+          data: formData,
+          beforeSend: function () {
+            $('#loading_cek_ongkir').removeClass('hidden');
+            $('#btn_cek_ongkir').removeClass('bg-sky-500');
+          },
+          success: function (response) {
+            console.log(response)
+            const jne = response.jne.rajaongkir.results[0];
+            const jne_costs = jne.costs[0];
+            const tiki = response.tiki.rajaongkir.results[0];
+            const tiki_costs = tiki.costs[0];
+            const pos = response.pos.rajaongkir.results[0];
+            const pos_costs = pos.costs[0];
+            const jnt = response.jnt.rajaongkir.results[0];
+            const jnt_costs = jnt.costs[0];
+            const sicepat = response.sicepat.rajaongkir.results[0];
+            const sicepat_costs = sicepat.costs[0];
+            setTimeout(() => {
+              $('#loading_cek_ongkir').addClass('hidden');
+              $('#btn_cek_ongkir').addClass('bg-sky-500');
+            }, 500);
+
+            // jne
+            let val_jne = `
+              <div class="border-b py-2">
+                <div class="text-sm">${jne.name}</div>
+              </div>
+              <div class="my-2">
+                <div class="text-sm">
+                  <label for="layanan_pengiriman_" class="flex justify-between">
+                    <div><input type="radio" name="layanan_pengiriman" id="layanan_pengiriman_" class="mr-3" `;
+                      $.each(jne_costs.cost, function(index_cost, item_cost) {
+                        val_jne += `value="${item_cost.value}"`;
+                      })
+                      val_jne += `>${jne_costs.service} (${jne_costs.description})</div>
+                    <div><span class="text-xs">Rp</span> `;                        
+                      $.each(jne_costs.cost, function(index_cost, item_cost) {
+                        val_jne += `${afRupiah(item_cost.value)}`;
+                      })
+                      val_jne += `</div>
+                  </label>
+                </div>                
+              `;
+              val_jne += `</div>
+            `;
+            $('.jne').html(val_jne)
+
+            // tiki
+            let val_tiki = `
+              <div class="border-b py-2">
+                <div class="text-sm">${tiki.name}</div>
+              </div>
+              <div class="my-2">
+                <div class="text-sm">
+                  <label for="layanan_pengiriman_${tiki.code}" class="flex justify-between">
+                    <div><input type="radio" name="layanan_pengiriman" id="layanan_pengiriman_${tiki.code}" class="mr-3" `;
+                      $.each(tiki_costs.cost, function(index_cost, item_cost) {
+                        val_tiki += `value="${item_cost.value}"`;
+                      })
+                      val_tiki += `>${tiki_costs.service} (${tiki_costs.description})</div>
+                    <div><span class="text-xs">Rp</span> `;                        
+                      $.each(tiki_costs.cost, function(index_cost, item_cost) {
+                        val_tiki += `${afRupiah(item_cost.value)}`;
+                      })
+                      val_tiki += `</div>
+                  </label>
+                </div>`;
+              val_tiki += `</div>
+            `;
+            $('.tiki').html(val_tiki)
+
+            // pos
+            let val_pos = `
+              <div class="border-b py-2">
+                <div class="text-sm">${pos.name}</div>
+              </div>
+              <div class="my-2">
+                <div class="text-sm">
+                  <label for="layanan_pengiriman_${pos.code}" class="flex justify-between">
+                    <div><input type="radio" name="layanan_pengiriman" id="layanan_pengiriman_${pos.code}" class="mr-3" `;
+                      $.each(pos_costs.cost, function(index_cost, item_cost) {
+                        val_pos += `value="${item_cost.value}"`;
+                      })
+                      val_pos += `>${pos_costs.service} (${pos_costs.description})</div>
+                    <div><span class="text-xs">Rp</span> `;                        
+                      $.each(pos_costs.cost, function(index_cost, item_cost) {
+                        val_pos += `${afRupiah(item_cost.value)}`;
+                      })
+                      val_pos += `</div>
+                  </label>
+                </div>`;
+              val_pos += `</div>
+            `;
+            $('.pos').html(val_pos)
+
+            // jnt
+            let val_jnt = `
+              <div class="border-b py-2">
+                <div class="text-sm">${jnt.name}</div>
+              </div>
+              <div class="my-2">
+                <div class="text-sm">
+                  <label for="layanan_pengiriman_${jnt.code}" class="flex justify-between">
+                    <div><input type="radio" name="layanan_pengiriman" id="layanan_pengiriman_${jnt.code}" class="mr-3" `;
+                      $.each(jnt_costs.cost, function(index_cost, item_cost) {
+                        val_jnt += `value="${item_cost.value}"`;
+                      })
+                      val_jnt += `>${jnt_costs.service} (${jnt_costs.description})</div>
+                    <div><span class="text-xs">Rp</span> `;                        
+                      $.each(jnt_costs.cost, function(index_cost, item_cost) {
+                        val_jnt += `${afRupiah(item_cost.value)}`;
+                      })
+                      val_jnt += `</div>
+                  </label>
+                </div>`;
+              val_jnt += `</div>
+            `;
+            $('.jnt').html(val_jnt)
+
+            // sicepat
+            let val_sicepat = `
+              <div class="border-b py-2">
+                <div class="text-sm">${sicepat.name}</div>
+              </div>
+              <div class="my-2">
+                <div class="text-sm">
+                  <label for="layanan_pengiriman_${sicepat.code}" class="flex justify-between">
+                    <div><input type="radio" name="layanan_pengiriman" id="layanan_pengiriman_${sicepat.code}" class="mr-3" `;
+                      $.each(sicepat_costs.cost, function(index_cost, item_cost) {
+                        val_sicepat += `value="${item_cost.value}"`;
+                      })
+                      val_sicepat += `>${sicepat_costs.service} (${sicepat_costs.description})</div>
+                    <div><span class="text-xs">Rp</span> `;                        
+                      $.each(sicepat_costs.cost, function(index_cost, item_cost) {
+                        val_sicepat += `${afRupiah(item_cost.value)}`;
+                      })
+                      val_sicepat += `</div>
+                  </label>
+                </div>`;
+              val_sicepat += `</div>
+            `;
+            $('.sicepat').html(val_sicepat)
+          }
+        })
+      }
     })
 
     $(document).on('click', 'input[name="layanan_pengiriman"]', function () {
@@ -637,8 +684,8 @@
       const total_harga_produk = $('#total_harga_produk').text().replace(/\./g, '');
       const calcTotal = (parseInt(total_harga_produk) + parseInt(val)) - diskon;
       
-      $('#total_ongkos_kirim').html(afRupiah(val));
-      $('#total_harga').html(afRupiah(calcTotal));
+      $('.total-ongkos-kirim').html(afRupiah(val));
+      $('.total-harga').html(afRupiah(calcTotal));
 
       const rekening_check = $('input[name="radio_rekening"]:checked').val();
       if (rekening_check) {
@@ -679,6 +726,15 @@
         }
       })
     }
+
+    // total detail
+    const labelTotal = document.querySelector('.label-total');
+    const wrapTotalDetail = document.querySelector('.wrap-total-detail');
+
+    labelTotal.addEventListener('click', function(e) {
+      e.preventDefault();
+      wrapTotalDetail.classList.toggle('hidden');
+    })
     
     // btn bayar
     $('#btn_bayar').on('click', function (e) {
