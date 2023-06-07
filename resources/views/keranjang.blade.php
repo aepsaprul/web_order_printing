@@ -112,7 +112,7 @@
           </div>
           <div class="w-1/3">
             <div class="relative flex items-center justify-center h-full">
-              <div id="loading_beli" class="hidden absolute">
+              <div id="loading_beli" class="loading-beli hidden absolute">
                 <div class="flex items-center justify-center">
                   <div class="flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-tr from-sky-500 to-slate-100 animate-spin">
                     <div class="h-2 w-2 rounded-full bg-white"></div>
@@ -138,7 +138,7 @@
             </div>
             <div class="w-full mt-3">
               <div class="relative flex items-center justify-center h-full">
-                <div id="loading_beli" class="hidden absolute">
+                <div id="loading_beli" class="loading-beli hidden absolute">
                   <div class="flex items-center justify-center">
                     <div class="flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-tr from-sky-500 to-slate-100 animate-spin">
                       <div class="h-2 w-2 rounded-full bg-white"></div>
@@ -228,7 +228,7 @@
                       </div>
                     </div>
                   </div>
-                  <button type="button" class="btn-kirim-upload bg-sky-500 border text-center text-white w-full h-full px-1 py-3 lg:h-10 rounded-md font-bold">Kirim</button>
+                  <button type="button" class="btn-kirim-upload bg-sky-500 border text-center text-white w-full h-full px-1 py-3 rounded-md font-bold">Kirim</button>
                 </div>
               </div>
             </form>
@@ -250,7 +250,7 @@
                           </div>
                         </div>
                       </div>
-                      <button type="button" class="btn-kirim-link bg-sky-500 border text-center text-white w-full h-full px-1 py-3 lg:h-10 rounded-md font-bold">Kirim</button>
+                      <button type="button" class="btn-kirim-link bg-sky-500 border text-center text-white w-full h-full px-1 py-3 rounded-md font-bold">Kirim</button>
                     </div>
                   </div>
                 </div>
@@ -633,7 +633,7 @@
         url: "{{ URL::route('keranjang.beli') }}",
         type: "get",
         beforeSend: function () {
-          $('#loading_beli').removeClass('hidden');
+          $('.loading-beli').removeClass('hidden');
           $('.btn-beli').removeClass('bg-sky-500');
         },
         success: function (response) {

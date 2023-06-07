@@ -16,7 +16,7 @@ class ProdukController extends Controller
 {
   public function index()
   {
-    $produk = Produk::get();
+    $produk = Produk::where('tampil', 'y')->orderBy('id', 'desc')->get();
 
     return view('produk', ['produk' => $produk]);
   }

@@ -59,7 +59,7 @@
       }
     });
     
-    $('#form_bayar').on('submit', function (e) {
+    $(document).on('submit', '#form_bayar', function (e) {
       e.preventDefault();
       let formData = new FormData($('#form_bayar')[0]);
 

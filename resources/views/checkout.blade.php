@@ -220,14 +220,14 @@
           </div>
           <div class="w-1/3">
             <div class="relative flex items-center justify-center h-full">
-              <div id="loading" class="hidden absolute">
+              <div id="loading" class="loading hidden absolute">
                 <div class="flex items-center justify-center">
                   <div class="flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-tr from-sky-500 to-slate-100 animate-spin">
                     <div class="h-2 w-2 rounded-full bg-white"></div>
                   </div>
                 </div>
               </div>
-              <button id="btn_bayar" disabled class="bg-sky-300 border text-center text-white font-bold w-full h-10 rounded-md ring-offset-1 ring-1 ring-sky-500">Bayar</button>
+              <button id="btn_bayar" disabled class="btn-bayar bg-sky-300 border text-center text-white font-bold w-full h-10 rounded-md ring-offset-1 ring-1 ring-sky-500">Bayar</button>
             </div>
           </div>
         </div>
@@ -260,14 +260,14 @@
             </div>
             <div class="w-full mt-3">
               <div class="relative flex items-center justify-center h-full">
-                <div id="loading" class="hidden absolute">
+                <div id="loading" class="loading hidden absolute">
                   <div class="flex items-center justify-center">
                     <div class="flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-tr from-sky-500 to-slate-100 animate-spin">
                       <div class="h-2 w-2 rounded-full bg-white"></div>
                     </div>
                   </div>
                 </div>
-                <button id="btn_bayar" disabled class="bg-sky-300 border text-center text-white w-full h-full lg:h-10 rounded-md font-bold">Bayar</button>
+                <button id="btn_bayar" disabled class="btn-bayar bg-sky-300 border text-center text-white w-full h-full lg:h-10 rounded-md font-bold">Bayar</button>
               </div>
             </div>
           </div>
@@ -689,11 +689,11 @@
 
       const rekening_check = $('input[name="radio_rekening"]:checked').val();
       if (rekening_check) {
-        $('#btn_bayar').prop('disabled', false);
-        $('#btn_bayar').removeClass('bg-sky-300').addClass('bg-sky-500');
+        $('.btn-bayar').prop('disabled', false);
+        $('.btn-bayar').removeClass('bg-sky-300').addClass('bg-sky-500');
       } else {
-        $('#btn_bayar').prop('disabled', true);
-        $('#btn_bayar').removeClass('bg-sky-500').addClass('bg-sky-300');
+        $('.btn-bayar').prop('disabled', true);
+        $('.btn-bayar').removeClass('bg-sky-500').addClass('bg-sky-300');
       }
     })
 
@@ -703,11 +703,11 @@
       $('#radio_rekening_bank_' + index_bank).on('change', function () {
         const ekspedisi_check = $('input[name="layanan_pengiriman"]:checked').val();
         if (ekspedisi_check) {
-          $('#btn_bayar').prop('disabled', false);
-          $('#btn_bayar').removeClass('bg-sky-300').addClass('bg-sky-500');
+          $('.btn-bayar').prop('disabled', false);
+          $('.btn-bayar').removeClass('bg-sky-300').addClass('bg-sky-500');
         } else {
-          $('#btn_bayar').prop('disabled', true);
-          $('#btn_bayar').removeClass('bg-sky-500').addClass('bg-sky-300');
+          $('.btn-bayar').prop('disabled', true);
+          $('.btn-bayar').removeClass('bg-sky-500').addClass('bg-sky-300');
         }
       })
     }
@@ -718,11 +718,11 @@
       $('#radio_rekening_ewallet_' + index_ewallet).on('change', function () {
         const ekspedisi_check = $('input[name="layanan_pengiriman"]:checked').val();
         if (ekspedisi_check) {
-          $('#btn_bayar').prop('disabled', false);
-          $('#btn_bayar').removeClass('bg-sky-300').addClass('bg-sky-500');
+          $('.btn-bayar').prop('disabled', false);
+          $('.btn-bayar').removeClass('bg-sky-300').addClass('bg-sky-500');
         } else {
-          $('#btn_bayar').prop('disabled', true);
-          $('#btn_bayar').removeClass('bg-sky-500').addClass('bg-sky-300');
+          $('.btn-bayar').prop('disabled', true);
+          $('.btn-bayar').removeClass('bg-sky-500').addClass('bg-sky-300');
         }
       })
     }
@@ -737,7 +737,7 @@
     })
     
     // btn bayar
-    $('#btn_bayar').on('click', function (e) {
+    $('.btn-bayar').on('click', function (e) {
       const customer_id = $('#customer_id').val();
       const keranjang_id_total = $('#total_query').val();
       const total_harga_fix = $('#total_harga').text().replace(/\./g, '');
@@ -771,8 +771,8 @@
           type: "post",
           data: formData,
           beforeSend: function () {
-            $('#loading').removeClass('hidden');
-            $('#btn_bayar').removeClass('bg-sky-500');
+            $('.loading').removeClass('hidden');
+            $('.btn-bayar').removeClass('bg-sky-500');
           },
           success: function (response) {
             var kode = response.status;
@@ -780,8 +780,8 @@
             url = url.replace(':kode', kode);
             window.location.href = url;
             setTimeout(() => {
-              $('#loading').addClass('hidden');
-              $('#btn_bayar').addClass('bg-sky-500');
+              $('.loading').addClass('hidden');
+              $('.btn-bayar').addClass('bg-sky-500');
             }, 3000);
           }
         })        
