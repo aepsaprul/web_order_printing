@@ -22,42 +22,44 @@
       <div class="text-center font-bold mt-5 py-3 text-base text-slate-500 bg-white border-b">PROMO</div>
       <div>
         <ul id="promo-list" class="grid grid-cols-2 lg:grid-cols-6 gap-2 lg:m-0">
-          @foreach ($promo->dataPromoProduk as $item)          
-            <li class="promo-li bg-white">
-              <a href="{{ route('produk.show', [$item->dataProduk->id]) }}">
-                <div>
-                  <img src="{{ url(env('APP_URL_ADMIN') . '/img_produk/' . $item->dataProduk->gambar) }}" alt="gambar" class="w-full">
-                </div>
-                <div class="text-sm text-center">{{ $item->dataProduk->nama }}</div>
-                <div class="m-2">
-                  <div class="text-sm font-semibold flex items-center">
-                    <div class="bg-red-500 text-center mr-3">
-                      <span class="text-md font-semibold text-white p-1 rounded"> 
+          @foreach ($promo->dataPromoProduk as $item)
+            @if ($item->dataProduk)
+              <li class="promo-li bg-white">
+                <a href="{{ route('produk.show', [$item->dataProduk->id]) }}">
+                  <div>
+                    <img src="{{ url(env('APP_URL_ADMIN') . '/img_produk/' . $item->dataProduk->gambar) }}" alt="gambar" class="w-full">
+                  </div>
+                  <div class="text-sm text-center">{{ $item->dataProduk->nama }}</div>
+                  <div class="m-2">
+                    <div class="text-sm font-semibold flex items-center">
+                      <div class="bg-red-500 text-center mr-3">
+                        <span class="text-md font-semibold text-white p-1 rounded"> 
+                          @if ($item->dataPromo->satuan == "persen")
+                            {{ $item->dataPromo->diskon }} %</span>
+                          @else
+                            @currency($item->dataPromo->diskon)</span>  
+                          @endif
+                      </div>
+                      <div>
+                        <div class="line-through text-xs">Rp @currency($item->dataProduk->harga)</div>
+                      </div>
+                    </div>
+                    <div class="mt-2">
+                      <div class="font-bold text-emerald-900">
                         @if ($item->dataPromo->satuan == "persen")
-                          {{ $item->dataPromo->diskon }} %</span>
+                          @php
+                            $diskon = $item->dataProduk->harga * ($item->dataPromo->diskon / 100);
+                          @endphp
+                          Rp. @currency($item->dataProduk->harga - $diskon)
                         @else
-                          @currency($item->dataPromo->diskon)</span>  
+                          Rp. @currency($item->dataProduk->harga - $item->dataPromo->diskon)
                         @endif
-                    </div>
-                    <div>
-                      <div class="line-through text-xs">Rp @currency($item->dataProduk->harga)</div>
+                      </div>
                     </div>
                   </div>
-                  <div class="mt-2">
-                    <div class="font-bold text-emerald-900">
-                      @if ($item->dataPromo->satuan == "persen")
-                        @php
-                          $diskon = $item->dataProduk->harga * ($item->dataPromo->diskon / 100);
-                        @endphp
-                        Rp. @currency($item->dataProduk->harga - $diskon)
-                      @else
-                        Rp. @currency($item->dataProduk->harga - $item->dataPromo->diskon)
-                      @endif
-                    </div>
-                  </div>
-                </div>
-              </a>
-            </li>
+                </a>
+              </li>
+            @endif
           @endforeach 
         </ul>
         <nav class="promo-pagination-container my-3">  

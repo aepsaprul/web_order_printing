@@ -25,4 +25,4 @@ request update
 - cek file layouts ada yg perlu dihapus kayanya
 - tombol upload desain tambah loading
 - setiap ajax tambah error handling
-- percantik tampilan produk
+- ulasan di produk detail di batasi
