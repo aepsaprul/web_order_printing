@@ -41,7 +41,7 @@ class AkunController extends Controller
     $customer->save();
 
     return response()->json([
-      'status' => $request->all()
+      'status' => 200
     ]);
   }
   public function editDataDiri($id)
@@ -258,6 +258,73 @@ class AkunController extends Controller
     ]);
 
     return back()->with("status", "Password berhasil diperbaharui");
+  }
+  public function mUbahGambar()
+  {
+    return view('akun.mobile.editGambar');
+  }
+  public function mUbahGambarUpdate(Request $request)
+  {
+    $customer = Customer::find($request->akun_id);
+
+    if($request->hasFile('gambar')) {
+      if (file_exists("img_customer/" . $customer->gambar)) {
+        File::delete("img_customer/" . $customer->gambar);
+      }
+      $file = $request->file('gambar');
+      $extension = $file->getClientOriginalExtension();
+      $filename = time() . "." . $extension;
+      $file->move('img_customer/', $filename);
+      $customer->gambar = $filename;
+    }
+    $customer->save();
+
+    return response()->json([
+      'status' => 200
+    ]);
+  }
+  public function mUbahBio()
+  {
+    $customer = Customer::find(Auth::user()->id);
+
+    return view('akun.mobile.editBio', ['customer' => $customer]);
+  }
+  public function mUbahBioUpdate(Request $request)
+  {
+    $customer = Customer::find(Auth::user()->id);
+    $customer->nama_lengkap = $request->nama;
+    $customer->telepon = $request->telepon;
+    $customer->jenis_kelamin = $request->jenis_kelamin;
+    $customer->tanggal_lahir = $request->tanggal_lahir;
+    $customer->save();
+
+    return redirect()->route('mAkun');
+  }
+  public function mUbahAlamat()
+  {
+    $customer = Customer::find(Auth::user()->id);
+    $provinsi = WilProvinsi::get();
+    $kota = WilKabupaten::get();
+    $kecamatan = WilKecamatan::get();
+    
+    return view('akun.mobile.editAlamat', [
+      'customer' => $customer,
+      'provinsi' => $provinsi,
+      'kota' => $kota,
+      'kecamatan' => $kecamatan
+    ]);
+  }
+  public function mUbahAlamatUpdate(Request $request)
+  {
+    $customer = Customer::find(Auth::user()->id);
+    $customer->provinsi = $request->select_provinsi;
+    $customer->kabupaten = $request->select_kota;
+    $customer->kecamatan = $request->select_kecamatan;
+    $customer->alamat = $request->alamat;
+    $customer->kodepos = $request->kodepos;
+    $customer->save();
+
+    return redirect()->route('mAkun');
   }
 
   // member

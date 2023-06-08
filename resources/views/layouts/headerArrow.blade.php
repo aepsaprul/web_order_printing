@@ -1,4 +1,4 @@
-<div id="header-wrapper" class="w-full h-12 border-b flex justify-center items-center bg-white sticky top-0 lg:hidden z-20">
+<!-- <div id="header-wrapper" class="w-full h-12 border-b flex justify-center items-center bg-white sticky top-0 lg:hidden z-20">
   <div class="bg-white w-full flex justify-between items-center">
     <a href="{{ url('/') }}"><i class="fa fa-arrow-left pl-3 text-xl text-slate-500"></i></a>
     <div class="relative mx-1">
@@ -15,4 +15,4 @@
     </div>
     <i id="menu" class="fa fa-bars mr-2 text-xl"></i>
   </div>
-</div>
+</div> -->

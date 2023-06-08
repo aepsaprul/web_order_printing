@@ -1,10 +1,12 @@
 @extends('layouts.app')
 
+@section('title') {{ 'Ubah Password' }} @endsection
+
 @section('content')
 
 @include('layouts.header')
 
-<div class="bg-white p-3 rounded border">
+<div class="p-3 rounded">
   <div class="font-bold text-lg text-center">Ubah Kata Sandi</div>
 </div>
 <div class="m-3 p-3 border rounded-lg bg-white flex justify-center">

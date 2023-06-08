@@ -1,5 +1,7 @@
 @extends('akun.index')
 
+@section('title') {{ 'Ubah Password' }} @endsection
+
 @section('content_akun')
 
 <div class="bg-white p-3 rounded border">

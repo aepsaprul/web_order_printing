@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title') {{ 'Konfirmasi Bayar' }} @endsection
+
 @section('content')
 
 @include('layouts.header')

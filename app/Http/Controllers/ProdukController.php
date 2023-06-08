@@ -27,7 +27,7 @@ class ProdukController extends Controller
     $produk_template_detail = ProdukTemplateDetail::where('produk_id', $id)->get();
     $template = Template::get();
     $template_detail = TemplateDetail::get();
-    $ulasan = Ulasan::where('produk_id', $id)->get();
+    $ulasan = Ulasan::where('produk_id', $id)->limit(20)->get();
     $ulasan_total = Ulasan::select(DB::raw('SUM(rating) as total_rating'))
       ->where('produk_id', $id)
       ->first();

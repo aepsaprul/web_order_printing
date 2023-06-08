@@ -19,10 +19,5 @@ prevent back history
   'prevent-back-history' => \App\Http\Middleware\PreventBackHistory::class,
 
 request update
-- hapus dark mode
-- mobile version (update data customer)
-- title page disesuaikan
-- cek file layouts ada yg perlu dihapus kayanya
-- tombol upload desain tambah loading
 - setiap ajax tambah error handling
 - ulasan di produk detail di batasi

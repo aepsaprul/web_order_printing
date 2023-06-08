@@ -1,11 +1,16 @@
 @extends('layouts.app')
 
+@section('title') {{ 'Data Diri' }} @endsection
+
 @section('content')
 
 @include('layouts.header')
 
 <div class="md:hidden pb-10">
-  <div class="m-3">
+  <div class="m-3 relative">
+    <div class="absolute text-sky-500 pl-3 pr-2 pt-2 pb-3 right-0">
+      <a href="{{ route('mUbahGambar') }}">edit</a>
+    </div>
     <div class="py-2 w-full border bg-white rounded-lg flex justify-center items-center">
       <div class="w-32 h-32 border rounded-full flex justify-center items-center bg-slate-100 p-2">
         @if (Auth::user()->gambar)
@@ -15,10 +20,16 @@
         @endif
       </div>
     </div>
-    <div class="my-2 bg-white border rounded-lg p-2">
+    <div class="my-2 bg-white border rounded-lg p-3">
+      <div>
+        <a href="{{ route('mUbahBio') }}" class="flex justify-between border-b-2 mb-3">
+          <div class="font-bold text-base text-slate-800">Data Diri</div>
+          <div class="text-sky-500">edit</div>
+        </a>
+      </div>
       <div class="flex justify-between">
         <div>Nama</div>
-        <div class="font-bold">{{ $customer->nama_lengkap }}</div>
+        <div class="font-bold capitalize">{{ $customer->nama_lengkap }}</div>
       </div>
       <div class="flex justify-between">
         <div>Tanggal Lahir</div>
@@ -32,7 +43,7 @@
       </div>
       <div class="flex justify-between">
         <div>Jenis Kelamin</div>
-        <div>{{ $customer->jenis_kelamin }}</div>
+        <div class="capitalize">{{ $customer->jenis_kelamin ? $customer->jenis_kelamin : '-' }}</div>
       </div>
       <div class="flex justify-between">
         <div>Telepon</div>
@@ -70,8 +81,11 @@
       @endif
     </div>
     <div class="bg-white border rounded-lg p-2">
-      <div class="border-b">
-        <div class="font-semibold">Alamat</div>
+      <div>
+        <a href="{{ route('mUbahAlamat') }}" class="flex justify-between border-b-2 mb-3">
+          <div class="font-bold text-base text-slate-800">Alamat</div>
+          <div class="text-sky-500">edit</div>
+        </a>
       </div>
       <div class="my-2">
         <div class="uppercase text-sm">{{ Auth::user()->alamat ? Auth::user()->alamat : '-' }}, Kecamatan {{ Auth::user()->kecamatan ? Auth::user()->dataKecamatan->kecamatan : '-' }}, Kabupaten/Kota {{ Auth::user()->kabupaten ? Auth::user()->dataKabupaten->kabupaten : '-' }}, Provinsi {{ Auth::user()->provinsi ? Auth::user()->dataProvinsi->provinsi : '-' }}, Kodepos {{ Auth::user()->kodepos ? Auth::user()->kodepos : '-' }}</div>

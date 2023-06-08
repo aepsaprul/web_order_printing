@@ -1,5 +1,7 @@
 @extends('akun.index')
 
+@section('title') {{ 'Ulasan Form' }} @endsection
+
 @section('content_akun')
 
 <div class="bg-white p-3 rounded border flex justify-between">

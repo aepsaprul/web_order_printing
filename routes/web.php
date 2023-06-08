@@ -94,6 +94,12 @@ Route::middleware(['auth'])->group(function() {
   Route::post('mAkun/ulasan/store', [AkunController::class, 'mUlasanStore'])->name('mUlasan.store');
   Route::get('mAkun/ubahPassword', [AkunController::class, 'mUbahPassword'])->name('mUbahPassword');
   Route::post('mAkun/ubahPasswordStore', [AkunController::class, 'mUbahPasswordStore'])->name('mUbahPasswordStore');
+  Route::get('mAkun/ubahGambar', [AkunController::class, 'mUbahGambar'])->name('mUbahGambar');
+  Route::post('mAkun/ubahGambar/update', [AkunController::class, 'mUbahGambarUpdate'])->name('mUbahGambarUpdate');
+  Route::get('mAkun/ubahBio', [AkunController::class, 'mUbahBio'])->name('mUbahBio');
+  Route::post('mAkun/ubahBio/update', [AkunController::class, 'mUbahBioUpdate'])->name('mUbahBioUpdate');
+  Route::get('mAkun/ubahAlamat', [AkunController::class, 'mUbahAlamat'])->name('mUbahAlamat');
+  Route::post('mAkun/ubahAlamat/update', [AkunController::class, 'mUbahAlamatUpdate'])->name('mUbahAlamatUpdate');
 
   // konfirmasi bayar
   Route::get('konfirmasi_bayar', [KonfirmasiBayarController::class, 'index'])->name('konfirmasi_bayar');

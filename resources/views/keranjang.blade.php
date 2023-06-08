@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title') {{ 'Cart' }} @endsection
+
 @section('content')
 
 @include('layouts.header')

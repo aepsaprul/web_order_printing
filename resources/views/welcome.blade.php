@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title') {{ 'Beranda' }} @endsection
+
 @section('content')
 
 @include('layouts.header')

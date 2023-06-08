@@ -1,5 +1,7 @@
 @extends('akun.index')
 
+@section('title') {{ 'Transaksi' }} @endsection
+
 @section('content_akun')
 <!-- desktop -->
 <div class="hidden md:block">

@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title') {{ 'Inovice' }} @endsection
+
 @section('content')
 <div id="header-wrapper" class="flex justify-center items-center border-b h-12 lg:h-14 sticky top-0 bg-white z-10">
   <div class="w-full lg:w-4/5 flex items-center lg:mt-2">

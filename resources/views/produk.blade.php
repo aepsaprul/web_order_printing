@@ -1,9 +1,10 @@
 @extends('layouts.app')
 
+@section('title') {{ 'Produk' }} @endsection
+
 @section('content')
 
 @include('layouts.header')
-{{-- @include('layouts.headerLg') --}}
 
 <div class="lg:flex lg:justify-center mt-4">
   <div class="lg:w-4/5 2xl:w-3/5">

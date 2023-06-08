@@ -1,4 +1,4 @@
-<div id="header-wrapper" class="w-full h-14 border-b bg-white sticky top-0 z-20 lg:flex justify-center hidden">
+<!-- <div id="header-wrapper" class="w-full h-14 border-b bg-white sticky top-0 z-20 lg:flex justify-center hidden">
   <div class="w-4/5 flex justify-between items-center">
     <div class="flex">
       <div>
@@ -33,4 +33,4 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->

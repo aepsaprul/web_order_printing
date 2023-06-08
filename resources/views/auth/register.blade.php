@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title') {{ 'Daftar' }} @endsection
+
 @section('content')
 <div class="lg:flex lg:justify-center lg:items-center lg:min-h-screen">
   <div class="bg-white lg:w-1/4 lg:border lg:border-slate-200 lg:rounded">
