@@ -341,6 +341,34 @@ class AkunController extends Controller
     if ($request->member_title == "baru") {
       $customer->nik = $request->nik;
       $customer->email = $request->email;
+
+      $route = "akun.memberBayar";
+    } elseif ($request->member_title == "perpanjang") {
+      $route = "akun.memberBayar";
+    } else {
+      $route = "akun";
+    }
+
+    if ($request->nomor_id_member_lama) {
+      $customer->nomor_member = $request->nomor_id_member_lama;
+    }
+    if ($request->nomor_id_member_perpanjang) {
+      $customer->nomor_member = $request->nomor_id_member_perpanjang;
+    }
+
+    if($request->hasFile('upload_ktp_perpanjang')) {
+      $file = $request->file('upload_ktp_perpanjang');
+      $extension = $file->getClientOriginalExtension();
+      $filename = time() . "." . $extension;
+      $file->move('img_ktp/', $filename);
+      $customer->foto_ktp = $filename;
+    }
+    if($request->hasFile('upload_ktp_lama')) {
+      $file = $request->file('upload_ktp_lama');
+      $extension = $file->getClientOriginalExtension();
+      $filename = time() . "." . $extension;
+      $file->move('img_ktp/', $filename);
+      $customer->foto_ktp = $filename;
     }
 
     $customer->nama_lengkap = $request->nama;
@@ -368,7 +396,7 @@ class AkunController extends Controller
     $notif_admin->link = "customer";
     $notif_admin->save();
 
-    return redirect()->route('akun.memberBayar');
+    return redirect()->route($route);
   }
   public function memberBayar()
   {

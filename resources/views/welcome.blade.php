@@ -23,7 +23,7 @@
     <div>
       <div class="text-center font-bold mt-5 py-3 text-base text-slate-500 bg-white border-b">PROMO</div>
       <div>
-        <ul id="promo-list" class="grid grid-cols-2 lg:grid-cols-6 gap-2 lg:m-0">
+        <ul id="promo-list" class="grid grid-cols-2 lg:grid-cols-5 gap-2 lg:m-0">
           @foreach ($promo->dataPromoProduk as $item)
             @if ($item->dataProduk)
               <li class="promo-li bg-white">
@@ -90,7 +90,7 @@
     <div>
       <h1 id="produk" class="text-center font-bold mb-1 mt-5 py-3 text-base text-slate-500 bg-white">PRODUK</h1>
       <div>
-        <ul id="paginated-list" class="grid grid-cols-2 lg:grid-cols-6 gap-2 lg:m-0">
+        <ul id="paginated-list" class="grid grid-cols-2 lg:grid-cols-5 gap-2 lg:m-0">
           @foreach ($produk as $item)            
             <li class="bg-white">
               <a href="{{ route('produk.show', [$item->id]) }}">
@@ -98,22 +98,41 @@
                   <img src="{{ url(env('APP_URL_ADMIN') . '/img_produk/' . $item->gambar) }}" alt="gambar" class="w-full">
                 </div>
                 <div class="text-sm text-center">{{ $item->nama }}</div>
-                <div class="text-sm font-semibold text-emerald-900 m-2">
-                  <span>Rp</span> 
-                  <span class="text-lg">
-                    @if (in_array($item->id, $promo_arr))
-                      @if ($promo->satuan == "persen")
-                        @php
-                          $diskon = $item->harga * ($promo->diskon / 100);
-                        @endphp
-                        @currency($item->harga - $diskon)
-                      @else
-                        @currency($item->harga - $promo->diskon)
-                      @endif  
-                    @else
-                      @currency($item->harga)
-                    @endif
-                  </span>
+                @if (in_array($item->id, $promo_arr))
+                  @if ($promo->satuan == "persen")
+                    @php
+                      $diskon = $item->harga * ($promo->diskon / 100);
+                      $harga = $item->harga - $diskon;
+                      $diskon_member = $harga * 0.05;
+                      $harga_member = $harga - $diskon_member;
+                    @endphp
+                  @else
+                    @php
+                      $harga = $item->harga - $promo->diskon;
+                      $diskon_member = $harga * 0.05;
+                      $harga_member = $harga - $diskon_member;
+                    @endphp
+                  @endif  
+                @else
+                  @php
+                    $harga = $item->harga;
+                    $diskon_member = $harga * 0.05;
+                    $harga_member = $harga - $diskon_member;
+                  @endphp
+                @endif
+                <div class="mt-2 flex justify-between">
+                  <div>
+                    <div class="text-xs font-semibold text-emerald-900 mx-2"><span>Rp</span> <span class="text-base">@currency($harga)</span></div>
+                    <div class="mx-2 text-xs">
+                      Non Member
+                    </div>
+                  </div>
+                  <div class="text-right">
+                    <div class="text-xs font-semibold text-rose-500 mx-2"><span>Rp</span> <span class="text-base">@currency($harga_member)</span></div>
+                    <div class="mx-2 text-xs">
+                      Harga Member
+                    </div>
+                  </div>
                 </div>
               </a>
             </li>
@@ -191,7 +210,7 @@
     paginationLimit = 10;
   } else {
     promoPaginationLimit = 12;
-    paginationLimit = 18;
+    paginationLimit = 15;
   }
   
   const promoPageCount = Math.ceil(promoListItems.length / promoPaginationLimit);

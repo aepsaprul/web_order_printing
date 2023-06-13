@@ -21,3 +21,4 @@ prevent back history
 request update
 - setiap ajax tambah error handling
 - ulasan di produk detail di batasi
+- data kosong kasih keterangan

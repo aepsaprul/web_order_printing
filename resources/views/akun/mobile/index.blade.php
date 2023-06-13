@@ -72,8 +72,10 @@
     <div class="p-1 my-3">
       @if (Auth::user()->segmen == "member")
         <div>{{ Auth::user()->segmen }}</div>
-      @elseif (Auth::user()->segmen == "proses_baru" || Auth::user()->segmen == "proses_baru")
+      @elseif (Auth::user()->segmen == "proses_baru" || Auth::user()->segmen == "proses_perpanjang")
         <div class="text-rose-500 italic text-center"><a href="{{ route('akun.memberBayar') }}" class="bg-sky-500 ml-2 rounded-full py-1 px-3 text-white ring-offset-1 ring-1 ring-sky-500">Klik Disini</a> untuk detail daftar member</div>
+      @elseif (Auth::user()->segmen == "proses_lama")
+        <div class="text-rose-500 italic text-center">Proses member sedang dicek</div>
       @else
         <a href="{{ route('akun.memberForm') }}">
           <button class="w-full text-base text-white font-bold rounded py-2 bg-emerald-500 ring-offset-2 ring-2 ring-emerald-500">Daftar Member</button>
