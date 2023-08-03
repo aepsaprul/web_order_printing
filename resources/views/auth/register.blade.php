@@ -13,22 +13,22 @@
       <form action="{{ route('register.store') }}" method="POST">
         @csrf
         <div class="m-2">
-          <input type="text" name="nama_lengkap" id="nama_lengkap" class="w-full h-8 pl-3 border rounded text-sm outline-none @error('nama_lengkap') is-invalid @enderror" placeholder="Nama Lengkap" autofocus required>
+          <input type="text" name="nama_lengkap" id="nama_lengkap" class="w-full h-8 pl-3 border rounded text-sm outline-none @error('nama_lengkap') is-invalid @enderror" maxlength="30" value="{{ old('nama_lengkap') }}" placeholder="Nama Lengkap" autofocus required>
           <em class="text-xs text-slate-400 pl-1">min 3, max 30 karakter </em>
           <em class="text-red-400 text-xs">@error('nama_lengkap') {{ $message }} @enderror</em>
         </div>
         <div class="m-2">
-          <input type="text" name="nik" id="nik" class="w-full h-8 pl-3 border rounded text-sm outline-none @error('nik') is-invalid @enderror" placeholder="NIK (Nomor Induk KTP)" autofocus required>
+          <input type="text" name="nik" id="nik" class="w-full h-8 pl-3 border rounded text-sm outline-none @error('nik') is-invalid @enderror" value="{{ old('nik') }}" maxlength="16" placeholder="NIK (Nomor Induk KTP)" autofocus required>
           <em class="text-xs text-slate-400 pl-1">min 3, max 16 karakter </em>
           <em class="text-red-400 text-xs">@error('nik') {{ $message }} @enderror</em>
         </div>
         <div class="m-2">
-          <input type="text" name="telepon" id="telepon" class="w-full h-8 pl-3 border rounded text-sm outline-none @error('telepon') is-invalid @enderror" placeholder="Telepon" autofocus required>
+          <input type="text" name="telepon" id="telepon" class="w-full h-8 pl-3 border rounded text-sm outline-none @error('telepon') is-invalid @enderror" maxlength="15" value="{{ old('telepon') }}" placeholder="Telepon" autofocus required>
           <em class="text-xs text-slate-400 pl-1">min 3, max 15 karakter </em>
           <em class="text-red-400 text-xs">@error('telepon') {{ $message }} @enderror</em>
         </div>
         <div class="m-2">
-          <input type="email" name="email" id="email" class="w-full h-8 pl-3 border rounded text-sm outline-0 @error('email') is-invalid @enderror" placeholder="Email" required>
+          <input type="email" name="email" id="email" class="w-full h-8 pl-3 border rounded text-sm outline-0 @error('email') is-invalid @enderror" maxlength="50" value="{{ old('email') }}" placeholder="Email" required>
           <em class="text-xs text-slate-400 pl-1">berupa alamat email</em>
           <em class="text-red-400 text-xs">@error('email') {{ $message }} @enderror</em>
         </div>
