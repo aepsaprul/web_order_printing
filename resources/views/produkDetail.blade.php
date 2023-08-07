@@ -45,10 +45,9 @@
           <div class="my-3">
             @foreach ($produk_template as $key_produk_template => $item_produk_template) <!-- loop tabel produk_template -->
               @if ($item_produk_template->template_id == $item->id) <!-- jika template_id yg ada di tabel produk_template sama dengan template_id yg ada di tabel template -->
-                <input type="hidden" name="template[]" value="{{ $item->id }}" data-id="{{ $item->nama }}">
+                <input type="hidden" name="template[]" value="{{ $item->id }}">
                 <div class="font-semibold my-1">{{ $item->nama }}</div>
                 <select name="template_detail[]" id="template_{{ $key_produk_template }}" class="border text-slate-700 w-full p-2 rounded border-sky-600 outline-0 cursor-pointer">
-                  <option value="0">Pilih</option>
                   @foreach ($template_detail as $item_detail) <!-- loop tabel template_detail -->
                     @if ($item_detail->template_id == $item->id) <!-- jika template_id yg ada di tabel template_detail sama dengan id yg ada di tabel template -->
                       @foreach ($produk_template_detail as $item_produk_template_detail) <!-- loop tabel produk_template_detail -->
@@ -276,7 +275,7 @@
 
         let template_hasil = 0;
         for (let i_template_hasil = 0; i_template_hasil < template_awal.length; i_template_hasil++) { // perhitungan tambah untuk array dasar yg sudah di override
-          template_hasil += parseInt(template_awal[i_template_hasil]);
+          template_hasil += parseInt(template_awal[i_template_hasil]) - parseInt(template_awal[i_template_hasil]);
         }
 
         const templateCalc = parseInt($('#produk_harga').val()) + template_hasil;
@@ -302,7 +301,7 @@
           template_hasil += parseInt(template_awal[i_template_hasil]);
         }
 
-        const templateCalc = parseInt($('#produk_harga').val()) + template_hasil;
+        const templateCalc = template_hasil;
         const input_counter = $('#input_counter').val();
         const templateTotalCalc = templateCalc * input_counter;
         $('.nominal_harga').html(afRupiah(templateCalc));
@@ -354,31 +353,31 @@
     })
     // input
     $('#input_counter').on('keyup', function () {
-        const val = $(this).val();
-        let updateVal;
+      const val = $(this).val();
+      let updateVal;
 
-        if (!val || isNaN(val) || parseInt(val) < 2) {
-          $('#input_counter').val(1);
+      if (!val || isNaN(val) || parseInt(val) < 2) {
+        $('#input_counter').val(1);
 
-          $('#btn_minus').prop('disabled', true);
-          $('#btn_minus').removeClass('bg-rose-600');
-          $('#btn_minus').addClass('bg-rose-400');
+        $('#btn_minus').prop('disabled', true);
+        $('#btn_minus').removeClass('bg-rose-600');
+        $('#btn_minus').addClass('bg-rose-400');
 
-          updateVal = 1;
-        } else {
-          updateVal = val;
+        updateVal = 1;
+      } else {
+        updateVal = val;
 
-          $('#btn_minus').prop('disabled', false);
-          $('#btn_minus').removeClass('bg-rose-400');
-          $('#btn_minus').addClass('bg-rose-600');
-        }
+        $('#btn_minus').prop('disabled', false);
+        $('#btn_minus').removeClass('bg-rose-400');
+        $('#btn_minus').addClass('bg-rose-600');
+      }
 
-        const harga = parseInt($('.nominal_harga').text().replace(/\./g, ''));
-        const harga_counter = harga * updateVal;
-        
-        $('#nominal_jumlah').html(updateVal);
-        $('.nominal_total').html(afRupiah(harga_counter));
-      })
+      const harga = parseInt($('.nominal_harga').text().replace(/\./g, ''));
+      const harga_counter = harga * updateVal;
+      
+      $('#nominal_jumlah').html(updateVal);
+      $('.nominal_total').html(afRupiah(harga_counter));
+    })
 
     // btn beli
     $('.btn-beli').on('click', function (e) {
@@ -448,77 +447,62 @@
     // btn keranjang
     $('.btn-keranjang').on('click', function (e) {
       e.preventDefault();
+      
+      const produk_id = $('#produk_id').val();
+      const keterangan = $('#keterangan').val();
+      const input_counter = $('#input_counter').val();
+      const harga = $('.nominal_harga').text().replace(/\./g, '');
+      const total = $('.nominal_total').text().replace(/\./g,'');
 
-      const template_dataId = new Array();
+      const template_val = new Array();
       $('input[name="template[]"]').each(function () {
-        template_dataId.push($(this).attr('data-id'));
+        template_val.push($(this).val());
       })
 
-      let cekTemplateDetail = true;
-      template_detail_val.forEach(function(item, index) {
-        if (template_detail_val[index] === undefined) {
-          alert(`Formulir ${template_dataId[index]} harus diisi`)
-          cekTemplateDetail = false;
-        }
-      })
-
-      if (cekTemplateDetail === true) {
-        const produk_id = $('#produk_id').val();
-        const keterangan = $('#keterangan').val();
-        const input_counter = $('#input_counter').val();
-        const harga = $('.nominal_harga').text().replace(/\./g, '');
-        const total = $('.nominal_total').text().replace(/\./g,'');
-  
-        const template_val = new Array();
-        $('input[name="template[]"]').each(function () {
-          template_val.push($(this).val());
-        })
-  
-        let formData = {
-          produk_id: produk_id,
-          harga: harga,
-          template: template_val,
-          template_detail: template_detail_val,
-          keterangan: keterangan,
-          qty: input_counter,
-          total: total
-        }
-        
-        $.ajax({
-          url: "{{ URL::route('keranjang.store') }}",
-          type: "post",
-          data: formData,
-          beforeSend: function () {
-            $('#loading_keranjang').removeClass('hidden');
-            $('#loading_keranjang_sm').removeClass('hidden');
-            $('.btn-keranjang').removeClass('text-white');
-            $('.btn-keranjang').addClass('text-sky-600');
-          },
-          success: function (response) {
-            const jml_keranjang = response.jml_keranjang.length;          
-            if (jml_keranjang > 0) {
-              $('.notif-keranjang').removeClass('hidden');
-              $('.notif-keranjang-jml').html(jml_keranjang);            
-            }
-  
-            setTimeout(() => {
-              $('#loading_keranjang').addClass('hidden');
-              $('#loading_keranjang_sm').addClass('hidden');
-              $('.btn-keranjang').addClass('text-white');
-              $('.btn-keranjang').removeClass('text-sky-600');
-              $('#notif').removeClass('hidden');
-            }, 1000);
-            setTimeout(() => {
-              $('#notif').addClass('hidden');        
-            }, 3000);
-          },
-          error: function (response) {
-            if (response.status == 401) {
-              window.location.href = "{{ URL::route('login') }}";
-            }
-          }
-        })
+      let formData = {
+        produk_id: produk_id,
+        harga: harga,
+        template: template_val,
+        template_detail: template_detail_val,
+        keterangan: keterangan,
+        qty: input_counter,
+        total: total
       }
+      
+      $.ajax({
+        url: "{{ URL::route('keranjang.store') }}",
+        type: "post",
+        data: formData,
+        beforeSend: function () {
+          $('#loading_keranjang').removeClass('hidden');
+          $('#loading_keranjang_sm').removeClass('hidden');
+          $('.btn-keranjang').removeClass('text-white');
+          $('.btn-keranjang').addClass('text-sky-600');
+        },
+        success: function (response) {
+          const jml_keranjang = response.jml_keranjang.length;          
+          if (jml_keranjang > 0) {
+            $('.notif-keranjang').removeClass('hidden');
+            $('.notif-keranjang-jml').html(jml_keranjang);            
+          }
+
+          setTimeout(() => {
+            $('#loading_keranjang').addClass('hidden');
+            $('#loading_keranjang_sm').addClass('hidden');
+            $('.btn-keranjang').addClass('text-white');
+            $('.btn-keranjang').removeClass('text-sky-600');
+            $('#notif').removeClass('hidden');
+          }, 1000);
+          setTimeout(() => {
+            $('#notif').addClass('hidden');        
+          }, 3000);
+        },
+        error: function (response) {
+          if (response.status == 401) {
+            window.location.href = "{{ URL::route('login') }}";
+          }
+        }
+      })      
     })
   })
 </script>
