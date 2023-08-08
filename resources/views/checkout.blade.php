@@ -564,7 +564,7 @@
               <div class="my-2">
                 <div class="text-sm">
                   <label for="layanan_pengiriman_" class="flex justify-between">
-                    <div><input type="radio" name="layanan_pengiriman" id="layanan_pengiriman_" class="mr-3" `;
+                    <div><input type="radio" name="layanan_pengiriman" id="layanan_pengiriman_" data-name="${jne.name}" class="mr-3" `;
                       $.each(jne_costs.cost, function(index_cost, item_cost) {
                         val_jne += `value="${item_cost.value}"`;
                       })
@@ -589,7 +589,7 @@
               <div class="my-2">
                 <div class="text-sm">
                   <label for="layanan_pengiriman_${tiki.code}" class="flex justify-between">
-                    <div><input type="radio" name="layanan_pengiriman" id="layanan_pengiriman_${tiki.code}" class="mr-3" `;
+                    <div><input type="radio" name="layanan_pengiriman" id="layanan_pengiriman_${tiki.code}" data-name="${tiki.name}" class="mr-3" `;
                       $.each(tiki_costs.cost, function(index_cost, item_cost) {
                         val_tiki += `value="${item_cost.value}"`;
                       })
@@ -613,7 +613,7 @@
               <div class="my-2">
                 <div class="text-sm">
                   <label for="layanan_pengiriman_${pos.code}" class="flex justify-between">
-                    <div><input type="radio" name="layanan_pengiriman" id="layanan_pengiriman_${pos.code}" class="mr-3" `;
+                    <div><input type="radio" name="layanan_pengiriman" id="layanan_pengiriman_${pos.code}" data-name="${pos.name}" class="mr-3" `;
                       $.each(pos_costs.cost, function(index_cost, item_cost) {
                         val_pos += `value="${item_cost.value}"`;
                       })
@@ -637,7 +637,7 @@
               <div class="my-2">
                 <div class="text-sm">
                   <label for="layanan_pengiriman_${jnt.code}" class="flex justify-between">
-                    <div><input type="radio" name="layanan_pengiriman" id="layanan_pengiriman_${jnt.code}" class="mr-3" `;
+                    <div><input type="radio" name="layanan_pengiriman" id="layanan_pengiriman_${jnt.code}" data-name="${jnt.name}" class="mr-3" `;
                       $.each(jnt_costs.cost, function(index_cost, item_cost) {
                         val_jnt += `value="${item_cost.value}"`;
                       })
@@ -661,7 +661,7 @@
               <div class="my-2">
                 <div class="text-sm">
                   <label for="layanan_pengiriman_${sicepat.code}" class="flex justify-between">
-                    <div><input type="radio" name="layanan_pengiriman" id="layanan_pengiriman_${sicepat.code}" class="mr-3" `;
+                    <div><input type="radio" name="layanan_pengiriman" id="layanan_pengiriman_${sicepat.code}" data-name="${sicepat.name}" class="mr-3" `;
                       $.each(sicepat_costs.cost, function(index_cost, item_cost) {
                         val_sicepat += `value="${item_cost.value}"`;
                       })
@@ -743,7 +743,7 @@
       const customer_id = $('#customer_id').val();
       const keranjang_id_total = $('#total_query').val();
       const total_harga_fix = $('#total_harga').text().replace(/\./g, '');
-      const ekspedisi = $('#courier').val();
+      const ekspedisi = $('input[name="layanan_pengiriman"]:checked').attr('data-name');
       const ekspedisi_harga = $('input[name="layanan_pengiriman"]:checked').val();
       const rekening_val = $('input[name="radio_rekening"]:checked').val();
       const keranjang_id = [];
