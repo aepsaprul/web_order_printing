@@ -6,6 +6,7 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\KeranjangController;
 use App\Http\Controllers\KonfirmasiBayarController;
+use App\Http\Controllers\LandingController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\RegisterController;
@@ -42,6 +43,9 @@ Route::get('kategori/{id}/show', [KategoriController::class, 'show'])->name('kat
 // produk detail
 Route::get('produk', [ProdukController::class, 'index'])->name('produk');
 Route::get('produk/{id}/show', [ProdukController::class, 'show'])->name('produk.show');
+
+// landing
+Route::get('landing-satu', [LandingController::class, 'index'])->name('landing.satu');
 
 Route::middleware(['auth'])->group(function() {
   // keranjang
